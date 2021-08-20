@@ -1,4 +1,5 @@
 import bent, { NodeResponse } from 'bent';
+import { Without } from '../types/Without';
 
 export { api }
 
@@ -84,14 +85,17 @@ type urlParams = {
     [key in string]: string | number;
 }
 
-type getOptions = {
-    headers?: { [key in string]: string | number },
+type apiOptions = {
+    headers?: { [key in string]: string | number > },
     params?: urlParams;
     /**
      * Request Promises will be rejected if the response does not include this code(s).
      */
     statusCode?: number | number[];
+    body?: any;
 }
+
+type getOptions = Without<apiOptions, 'body'>
 
 type postOptions = getOptions & {
     body?: any;
