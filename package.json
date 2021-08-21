@@ -7,22 +7,21 @@
         "clean": "tsc --build --clean",
         "build": "tsc",
         "start": "node dist/index.js",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "jest --notify"
     },
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "@types/gulp": "^4.0.9",
-        "@types/node-fetch": "^2.5.12",
         "bent": "^7.3.12",
         "dotenv": "^10.0.0",
-        "gulp": "^4.0.2",
-        "gulp-cli": "^2.3.0",
-        "gulp-typescript": "^6.0.0-alpha.1",
+        "jest": "^27.0.6",
+        "node-notifier": "^10.0.0",
+        "ts-jest": "^27.0.5",
         "ts-node": "^10.1.0",
         "typescript": "^4.3.5"
     },
     "devDependencies": {
-        "@types/bent": "^7.3.2"
+        "@types/bent": "^7.3.2",
+        "@types/jest": "^27.0.1"
     }
 }
