@@ -2,7 +2,8 @@ import { Dto } from "../types/Dto";
 
 export { parcel };
 /**
- * class object for parcel being tracked
+ * class object for parcel being tracked.
+ * TODO: add inactive/delivered parcels
  */
 class parcel {
     /**

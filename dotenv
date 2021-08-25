@@ -2,3 +2,5 @@
 DIGITAL_API=
 # api key 
 API_KEY=
+# application port number
+PORT=3000
