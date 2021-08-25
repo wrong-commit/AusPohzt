@@ -7,5 +7,5 @@ module.exports = {
     moduleFileExtensions: ['ts', 'js', 'json', 'node'],
     moduleNameMapper: {
     },
-    setupFilesAfterEnv: ["<rootDir>/setupTests.t1s"],
+    setupFilesAfterEnv: ["<rootDir>/setupTests.ts"],
 }

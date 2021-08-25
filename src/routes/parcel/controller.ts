@@ -1,4 +1,5 @@
 import express from 'express';
+import { pool } from '../../database/pool';
 
 const router = express.Router();
 export default router;
@@ -11,8 +12,20 @@ export default router;
  */
 router.get('/', (_, res) => {
     console.log('Get current parcels');
-    res.statusCode = 200;
-    res.end();
+
+    pool.query('SELECT trackingId FROM parcel;').then(x => {
+        res.statusCode = 200;
+        res.json(x.rows.map(r => r['trackingid']));
+    }).catch(x => {
+        console.error(x)
+        res.statusCode = 500;
+        res.end()
+    })
+    // res.json('yolo');
+    // res.write('yolo', () => {
+    //     res.end();
+    // })
+    // res.end();
 });
 
 /**
@@ -41,7 +54,7 @@ router.post('/add', (_, res) => {
  * 
  * @returns 404 if parcel doesn't exist
  */
-router.post('/:id/nickname', (req, res) => {
+router.put('/:id/nickname', (req, res) => {
     const nickname = req.query['nickname'];
     console.log(`Setting Parcel ${req.params.id} nickname to ${nickname}`);
     res.statusCode = 200;
