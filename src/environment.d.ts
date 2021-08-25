@@ -1,6 +1,4 @@
-/**
- * Configure process.env variables from dotenv file
- */
+
 declare global {
     namespace NodeJS {
         interface ProcessEnv {
@@ -22,6 +20,27 @@ declare global {
              * AusPost API in format `protocol://hostname:port/`.
              */
             DIGITAL_API: string;
+            /**
+             * Postgres Username
+             */
+            PG_USER: string;
+            /**
+             * Postgres Password
+             */
+            PG_PASSWORD: string;
+            /**
+             * Postgres Database
+             */
+            PG_DATABASE: string;
+
+            /**
+             * Postgres Hostname. Defaults to `localhost`
+             */
+            PG_HOST?: string;
+            /**
+             * Postgres Port. Defaults to `5432`
+             */
+            PG_PORT?: number;
         }
     }
 }
