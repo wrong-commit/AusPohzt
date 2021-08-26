@@ -1,4 +1,4 @@
-import { pool } from './database/pool'
+import { pool } from './database/database'
 
 // clean all databases
 async function cleanUpTables() {
@@ -7,7 +7,7 @@ async function cleanUpTables() {
     const tables = await pool.query('SELECT table_name FROM information_schema.tables WHERE table_schema = current_schema();')
 
     console.log(tables)
-    // await pool.query(`TRUNCATE ${tables.rows.join(', ')};`);
+    await pool.query(`TRUNCATE ${tables.rows.join(', ')};`);
 }
 
 module.exports = async () => {

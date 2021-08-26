@@ -1,5 +1,7 @@
 import express from 'express';
-import { pool } from '../../database/pool';
+import { parcelDao } from '../../dao/parcelDao';
+import { parcel } from '../../models/parcel';
+import { Dto } from '../../types/Dto';
 
 const router = express.Router();
 export default router;
@@ -13,19 +15,30 @@ export default router;
 router.get('/', (_, res) => {
     console.log('Get current parcels');
 
-    pool.query('SELECT trackingId FROM parcel;').then(x => {
-        res.statusCode = 200;
-        res.json(x.rows.map(r => r['trackingid']));
-    }).catch(x => {
-        console.error(x)
-        res.statusCode = 500;
-        res.end()
+    parcelDao.findAll().then(parcels => {
+        if (!parcels) {
+            res.statusCode = 500;
+            res.end()
+        } else {
+            res.statusCode = 200;
+            res.json(parcels?.map(x => x.toData()));
+        }
     })
-    // res.json('yolo');
-    // res.write('yolo', () => {
-    //     res.end();
-    // })
-    // res.end();
+});
+
+router.get('/:id', (req, res) => {
+    console.log(`Get parcel with Id ${req.params.id}`);
+
+    parcelDao.find(Number.parseInt(req.params.id)).then(parcel => {
+        if (!parcel) {
+            res.statusCode = 404;
+            res.end()
+        } else {
+            res.statusCode = 200;
+            res.json(parcel);
+        }
+    })
+
 });
 
 /**
@@ -33,9 +46,16 @@ router.get('/', (_, res) => {
  * @returns 404 if parcel doesn't exist
  */
 router.delete('/:id', (req, res) => {
-    console.log(`Get parcel ${req.params.id}`);
-    res.statusCode = 200;
-    res.end();
+    console.log(`Delete parcel with Id ${req.params.id}`);
+
+    parcelDao.delete(Number.parseInt(req.params.id)).then(deleted => {
+        if (!deleted) {
+            res.statusCode = 404;
+        } else {
+            res.statusCode = 200;
+        }
+        res.end()
+    })
 });
 
 /**
@@ -44,10 +64,35 @@ router.delete('/:id', (req, res) => {
  * TODO: add typescript support for body
  * TODO: throw error if parcel already tracked by current user
  */
-router.post('/add', (_, res) => {
-    console.log('Add parcel');
-    res.statusCode = 200;
-    res.end();
+router.post('/', (req, res) => {
+    console.log('Adding new parcel');
+    // check if parcel with same tracking Id already exists 
+    const dto = req.body as Dto<parcel>;
+    // always id to undefined to avoid overwriting existing parcel
+    dto.id = undefined;
+    // set owner to 0 until auth is added
+    dto.owner = -1;
+    // set last sync to -1 
+    dto.lastSync = -1;
+    // yuck ! 
+    parcelDao.findByTrackingId(dto.trackingId).then(existingParcel => {
+        console.log('existing parcel found')
+        if (existingParcel) {
+            res.statusCode = 500;
+            res.end();
+        } else {
+            parcelDao.save(new parcel(dto)).then(savedParcel => {
+                console.log('could not save parcel')
+                if (!savedParcel) {
+                    res.statusCode = 500;
+                    res.end();
+                } else {
+                    res.statusCode = 200;
+                    res.json(savedParcel.toData());
+                }
+            })
+        }
+    })
 });
 
 /**

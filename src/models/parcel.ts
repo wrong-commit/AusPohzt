@@ -1,3 +1,4 @@
+import { bind, entity } from "../decorator/entityDecorators";
 import { Dto } from "../types/Dto";
 
 export { parcel };
@@ -5,15 +6,18 @@ export { parcel };
  * class object for parcel being tracked.
  * TODO: add inactive/delivered parcels
  */
+@entity('parcel')
 class parcel {
     /**
      * Unique ID of parcel. 
      */
-    id: string;
+    @bind
+    id?: number;
 
     /**
      * digitalapi tracking ID.
      */
+    @bind
     trackingId: string;
 
     /**
@@ -21,15 +25,18 @@ class parcel {
      * 
      * TODO: spec this out. 
      */
+    @bind
     owner: number;
     /**
      * Use defined nickname. Can come from digitalapi or user defined.
      */
+    @bind
     nickName?: string;
 
     /**
      * Last time parcel synced, unix Epoch.
      */
+    @bind
     lastSync: number;
 
     /**

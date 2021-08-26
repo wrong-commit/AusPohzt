@@ -1,9 +1,9 @@
-import { Pool } from 'node-postgres';
+import { Pool, Client } from 'pg';
 
 const host = (process.env.PG_HOST ?? '').length === 0 ? 'localhost' : process.env.PG_HOST;
 const port = (process.env.PG_PORT ?? '') === '' ? 0 : process.env.PG_PORT;
 
-const pool = new Pool({
+const config = {
     // TODO: use connectionstring ? 
     // server details
     host,
@@ -13,6 +13,10 @@ const pool = new Pool({
     password: process.env.PG_PASSWORD,
     // database
     database: process.env.PG_DATABASE,
-});
+}
 
-export { pool }
+const pool = new Pool(config);
+
+const client = new Client(config)
+
+export { pool, client }
