@@ -16,5 +16,5 @@ CREATE TABLE parcel (
     -- optional nickname assigned to parcel
     nickname VARCHAR(255) NULL, 
     -- TODO: use proper datatype here ? 
-    lastSync BIGINT
+    lastSync INTEGER
 );
