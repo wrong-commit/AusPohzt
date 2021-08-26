@@ -1,6 +1,7 @@
 import express from 'express';
 import { parcelDao } from '../../dao/parcelDao';
-import { pool } from '../../database/database';
+import { parcel } from '../../models/parcel';
+import { Dto } from '../../types/Dto';
 
 const router = express.Router();
 export default router;
@@ -63,10 +64,35 @@ router.delete('/:id', (req, res) => {
  * TODO: add typescript support for body
  * TODO: throw error if parcel already tracked by current user
  */
-router.post('/add', (_, res) => {
-    console.log('Add parcel');
-    res.statusCode = 200;
-    res.end();
+router.post('/', (req, res) => {
+    console.log('Adding new parcel');
+    // check if parcel with same tracking Id already exists 
+    const dto = req.body as Dto<parcel>;
+    // always id to undefined to avoid overwriting existing parcel
+    dto.id = undefined;
+    // set owner to 0 until auth is added
+    dto.owner = -1;
+    // set last sync to -1 
+    dto.lastSync = -1;
+    // yuck ! 
+    parcelDao.findByTrackingId(dto.trackingId).then(existingParcel => {
+        console.log('existing parcel found')
+        if (existingParcel) {
+            res.statusCode = 500;
+            res.end();
+        } else {
+            parcelDao.save(new parcel(dto)).then(savedParcel => {
+                console.log('could not save parcel')
+                if (!savedParcel) {
+                    res.statusCode = 500;
+                    res.end();
+                } else {
+                    res.statusCode = 200;
+                    res.json(savedParcel.toData());
+                }
+            })
+        }
+    })
 });
 
 /**
