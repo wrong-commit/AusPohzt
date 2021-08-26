@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { buildExpress } from '../../../buildExpress';
-import { pool } from '../../../database/pool';
+import { pool } from '../../../database/database';
 describe("parcelController", () => {
     let app = buildExpress();
     beforeAll(async () => {
