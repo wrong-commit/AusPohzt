@@ -45,9 +45,17 @@ class parcelDao extends dao<parcel> {
             return undefined;
         }
     }
-    async save(value: parcel): Promise<parcel> {
-        console.log(value)
-        throw new Error("Method not implemented.");
+    // FIXME: support merging parcels 
+    async save(newParcel: parcel): Promise<parcel | undefined> {
+        try {
+            const result = await pool.query('INSERT INTO parcel (trackingId, owner, nickname, lastSync) VALUES ($1, $2, $3, $4) RETURNING id', [newParcel.trackingId, newParcel.owner, newParcel.nickName, newParcel.lastSync]);
+            this.expectedRows(result, 1);
+            newParcel.id = result.rows[0]['id'];
+            return newParcel;
+        } catch (e) {
+            console.error(`Could not save parcel`, e);
+            return undefined;
+        }
     }
 }
 /**

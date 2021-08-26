@@ -11,9 +11,10 @@ abstract class dao<T> {
     abstract find(id: any): PromiseLike<T | undefined>;
     /**
      * Create new or update existing of type {T}
+     * FIXME: support mergin
      * @param value 
      */
-    abstract save(value: T): PromiseLike<T>;
+    abstract save(value: T): PromiseLike<T | undefined>;
 
     /**
      * Delete object by Id

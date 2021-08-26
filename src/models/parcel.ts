@@ -12,7 +12,7 @@ class parcel {
      * Unique ID of parcel. 
      */
     @bind
-    id: number;
+    id?: number;
 
     /**
      * digitalapi tracking ID.
