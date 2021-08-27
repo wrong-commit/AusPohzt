@@ -7,6 +7,7 @@ API for tracking parcels
 - [ ] Tracking 
     - [x] Add Tracking ID
     - [x] Remove Tracking ID 
+    - [x] Set nickname for Tracking ID 
     - [ ] Update Database when status changes
 - [ ] User Management
     - [ ] Authentication
