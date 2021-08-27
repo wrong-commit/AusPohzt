@@ -98,21 +98,25 @@ class baseDao<T extends daoEntity> implements dao<T> {
     private async merge(existObj: T): Promise<T | undefined> {
         const fields = getFields(this.entity).filter(x => x !== 'id');
         try {
-            // create `field=$1, field2=$2` string
+            // create `field1=$2, field2=$3` string
             let setValues = fields.map((x, i) => {
-                return `${x} = $${i + 1}`
+                return `${x} = $${i + 2}`
             })
-            const result = await pool.query(`UPDATE ${this.entityName} SET ${setValues.join(',')}`,
-                fields.map(field =>
-                    //@ts-expect-error 
-                    newObj[field]
-                )
+            // where id=$1
+            const result = await pool.query(`UPDATE ${this.entityName} SET ${setValues.join(',')} WHERE id =$1`,
+                [
+                    existObj.id,
+                    ...fields.map(field =>
+                        //@ts-expect-error 
+                        existObj[field]
+                    )
+                ]
             );
             this.expectedRows(result, 1);
             // TODO: support versions ? 
             return existObj;
         } catch (e) {
-            console.error(`Could not save ${this.entityName}`, e);
+            console.error(`Could not merge ${this.entityName}`, e);
             return undefined;
         }
     }
