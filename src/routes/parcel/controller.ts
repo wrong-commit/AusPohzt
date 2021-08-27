@@ -40,7 +40,6 @@ router.get('/:id', (req, res) => {
             res.json(parcel);
         }
     })
-
 });
 
 /**
@@ -111,9 +110,20 @@ router.post('/', async (req, res) => {
  * 
  * @returns 404 if parcel doesn't exist
  */
-router.put('/:id/nickname', (req, res) => {
+router.put('/:id/nickname', async (req, res) => {
     const nickname = req.query['nickname'];
+    // TODO: check nickanme is string
     console.log(`Setting Parcel ${req.params.id} nickname to ${nickname}`);
-    res.statusCode = 200;
-    res.end();
+
+    let parcel = await parcelDao.find(Number.parseInt(req.params.id));
+    if (!parcel) {
+        res.statusCode = 404;
+        res.end()
+    } else {
+        parcel.nickName = nickname as string;
+        await parcelDao.save(parcel);
+        res.statusCode = 200;
+        res.json(parcel);
+        res.end();
+    }
 })
