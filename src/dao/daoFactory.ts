@@ -6,6 +6,8 @@ import { parcelDao } from "./parcelDao";
 
 export { daoFactory }
 
+new parcelDao(parcel);
+
 function daoFactory(x: Newable<parcel>): parcelDao;
 
 function daoFactory<T extends daoEntity>(x: Newable<T>): dao<T> {
