@@ -1,0 +1,21 @@
+name: Run Tests On Merge
+on: [push]
+jobs:
+  Test-Before-Merge:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Running npm tests from ${{ github.ref }}, trigger = ${{ github.event_name }}"
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: Run Typescript build
+        run: |
+          npm run-script build
+      - run: echo "Status after build ${{ job.status }}."
+      - name: Run Unit Tests
+        run: |
+          npm run-script test
+      - run: echo "Status after unit-tests ${{ job.status }}."
+      # - name: Run Integration Tests
+      #   run: |
+      #     npm run-script it-test
+      # - run: echo "Status after integration-tests ${{ job.status }}."
