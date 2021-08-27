@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { buildExpress } from '../../../buildExpress';
 import { pool } from '../../../database/database';
-import { parcel } from '../../../models/parcel';
+import { parcel } from '../../../entities/parcel';
 import { Dto } from '../../../types/Dto';
 
 let findParcel: number;

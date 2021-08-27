@@ -74,6 +74,11 @@ class baseDao<T extends daoEntity> implements dao<T> {
     async save(newObj: T): Promise<T | undefined> {
         const fields = getFields(this.entity).filter(x => x !== 'id');
         try {
+            // merge existing objects
+            if (newObj.id) {
+                return this.merge(newObj);
+            }
+            // otherwise save new
             const result = await pool.query(`INSERT INTO ${this.entityName} (${fields.join(', ')}) ` +
                 `VALUES (${fields.map((_, i) => '$' + (i + 1))}) RETURNING id`,
                 fields.map(field =>
@@ -84,6 +89,28 @@ class baseDao<T extends daoEntity> implements dao<T> {
             this.expectedRows(result, 1);
             newObj.id = result.rows[0]['id'];
             return newObj;
+        } catch (e) {
+            console.error(`Could not save ${this.entityName}`, e);
+            return undefined;
+        }
+    }
+
+    private async merge(existObj: T): Promise<T | undefined> {
+        const fields = getFields(this.entity).filter(x => x !== 'id');
+        try {
+            // create `field=$1, field2=$2` string
+            let setValues = fields.map((x, i) => {
+                return `${x} = $${i + 1}`
+            })
+            const result = await pool.query(`UPDATE ${this.entityName} SET ${setValues.join(',')}`,
+                fields.map(field =>
+                    //@ts-expect-error 
+                    newObj[field]
+                )
+            );
+            this.expectedRows(result, 1);
+            // TODO: support versions ? 
+            return existObj;
         } catch (e) {
             console.error(`Could not save ${this.entityName}`, e);
             return undefined;

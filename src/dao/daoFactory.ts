@@ -1,5 +1,5 @@
 import { getDao } from "../decorator/daoDecorators";
-import { parcel } from "../models/parcel";
+import { parcel } from "../entities/parcel";
 import { Newable } from "../types/Newable";
 import { baseDao, dao, daoEntity } from "./dao";
 import { parcelDao } from "./parcelDao";

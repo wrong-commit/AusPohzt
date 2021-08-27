@@ -1,5 +1,5 @@
 import { pool } from "../../database/database";
-import { parcel } from "../../models/parcel";
+import { parcel } from "../../entities/parcel";
 import { daoFactory } from "../daoFactory";
 import { parcelDao } from "../parcelDao";
 

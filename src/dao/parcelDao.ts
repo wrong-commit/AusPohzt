@@ -2,7 +2,7 @@ import { pool } from "../database/database";
 import { dao } from '../decorator/daoDecorators';
 
 import { pirate } from "../mapping/pirate";
-import { parcel } from "../models/parcel";
+import { parcel } from "../entities/parcel";
 import { baseDao } from "./dao";
 
 export { parcelDao }
@@ -16,7 +16,7 @@ class parcelDao extends baseDao<parcel> {
             this.expectedRows(result, 1);
             return new pirate<parcel>(result.rows[0], result.fields).map(parcel);
         } catch (e) {
-            console.error(`Could not find ${this.entityName} with trackingId ${trackingId}`, e);
+            console.warn(`Could not find ${this.entityName} with trackingId ${trackingId}`, e);
             return undefined;
         }
     }
