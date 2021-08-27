@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { buildExpress } from '../../../buildExpress';
 import { pool } from '../../../database/database';
-import { parcel } from '../../../models/parcel';
+import { parcel } from '../../../entities/parcel';
 import { Dto } from '../../../types/Dto';
 
 let findParcel: number;
@@ -48,32 +48,48 @@ describe("parcelController", () => {
             .expect(404);
     });
 
-    test("add parcel", async () => {
-        await request(app)
-            .post(`/v0/parcel/`)
-            .send(new parcel({
-                events: [],
-                lastSync: 100,
-                owner: -1,
-                trackingId: 'addedTrackingId',
-            }).toData())
-            .then(x => {
-                console.log(x.statusCode);
-                console.log(x.body);
-                return x
-            })
-        // .expect('Content-Type', /json/)
-        // .expect(200)
-        // .then(resp => {
-        //     const saved = resp.body as Dto<parcel>
-        //     expect(saved).toBeDefined();
-        //     expect(saved.trackingId).toBe('addedTrackingId');
-        //     expect(saved.id).toBeDefined();
-        //     // TODO: assert actual owner Id when auth added
-        //     expect(saved.owner).toBe(-1);
-        //     // set by default
-        //     expect(saved.lastSync).toBe(-1);
-        //     expect(saved.nickName).toBeUndefined();
-        // })
+    describe("add parcel", () => {
+        test("undefined body returns 500", async () => {
+            await request(app)
+                .post(`/v0/parcel/`)
+                .expect(500)
+        })
+        test("new parcel added", async () => {
+            await request(app)
+                .post(`/v0/parcel/`)
+                .send({
+                    events: [],
+                    lastSync: 100,
+                    owner: -1,
+                    trackingId: 'addedTrackingId',
+                } as Dto<parcel>)
+                .expect('Content-Type', /json/)
+                .expect(200)
+                .then(resp => {
+                    const saved = resp.body as Dto<parcel>
+                    expect(saved).toBeDefined();
+                    expect(saved.trackingId).toBe('addedTrackingId');
+                    expect(saved.id).toBeDefined();
+                    // TODO: assert actual owner Id when auth added
+                    expect(saved.owner).toBe(-1);
+                    // set by default
+                    expect(saved.lastSync).toBe(-1);
+                    expect(saved.nickName).toBeUndefined();
+                })
+        })
+        test("cannot add same parcel twice", async () => {
+            await request(app)
+                .post(`/v0/parcel/`)
+                .send({
+                    events: [],
+                    lastSync: 100,
+                    owner: -1,
+                    // findParcelTrkId setup when test first runs
+                    trackingId: 'findParcelTrkId',
+                } as Dto<parcel>)
+                .expect(500)
+            // FIXME: assert returned message
+            // .expect({ message: 'Parcel already exists' })
+        })
     })
 });

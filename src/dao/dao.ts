@@ -1,28 +1,133 @@
 import { QueryResult } from "pg";
+import { pool } from "../database/database";
+import { dao } from "../decorator/daoDecorators";
+import { getEntityName, getFields } from "../decorator/entityDecorators";
+import { pirate } from "../mapping/pirate";
+import { Newable } from "../types/Newable";
 
-export { dao }
-abstract class dao<T> {
+export { dao, baseDao, daoEntity }
 
-    abstract findAll(): PromiseLike<T[] | undefined>;
+type dao<T> = {
     /**
-     * Lookup object
+     * Find all instances of T
      * @param id 
      */
-    abstract find(id: any): PromiseLike<T | undefined>;
+    findAll: () => PromiseLike<T[] | undefined>;
+    /**
+     * Lookup T by id
+     * @param id 
+     */
+    find(id: any): PromiseLike<T | undefined>;
     /**
      * Create new or update existing of type {T}
-     * FIXME: support mergin
      * @param value 
      */
-    abstract save(value: T): PromiseLike<T | undefined>;
-
+    save(value: T): PromiseLike<T | undefined>;
     /**
-     * Delete object by Id
+     * Delete T by Id
      * @param id 
+     * @returns true if deleted successfully
      */
-    abstract delete(id: any): PromiseLike<boolean>;
+    delete(id: any): PromiseLike<boolean>;
+}
 
-    // TODO: move somewhere else
+type daoEntity = {
+    id?: number;
+}
+
+/**
+ * BaseDao implementation. 
+ * 
+ * assumes id property exists, and is identity of object
+ */
+class baseDao<T extends daoEntity> implements dao<T> {
+    entity: Newable<T>;
+    entityName: string;
+
+    constructor(entity: Newable<T>) {
+        this.entity = entity;
+        this.entityName = getEntityName(this.entity);
+    }
+
+    async findAll(): Promise<T[] | undefined> {
+        try {
+            const result = await pool.query(`SELECT * FROM ${this.entityName}`);
+            return new pirate<T>(result.rows, result.fields).mapMany(this.entity);
+        } catch (e) {
+            console.error(`Could not find all ${this.entityName}`, e);
+            return undefined;
+        }
+    }
+
+    async find(id: number): Promise<T | undefined> {
+        try {
+            const result = await pool.query(`SELECT * FROM ${this.entityName} WHERE ID = $1`, [id]);
+            // const result = await pool.query(this.findAllQ,);
+            this.expectedRows(result, 1);
+            return new pirate<T>(result.rows[0], result.fields).map(this.entity);
+        } catch (e) {
+            console.error(`Could not find ${this.entityName} with id ${id}`, e);
+            return undefined;
+        }
+    }
+    // FIXME: support merging
+    async save(newObj: T): Promise<T | undefined> {
+        const fields = getFields(this.entity).filter(x => x !== 'id');
+        try {
+            // merge existing objects
+            if (newObj.id) {
+                return this.merge(newObj);
+            }
+            // otherwise save new
+            const result = await pool.query(`INSERT INTO ${this.entityName} (${fields.join(', ')}) ` +
+                `VALUES (${fields.map((_, i) => '$' + (i + 1))}) RETURNING id`,
+                fields.map(field =>
+                    //@ts-expect-error 
+                    newObj[field]
+                )
+            );
+            this.expectedRows(result, 1);
+            newObj.id = result.rows[0]['id'];
+            return newObj;
+        } catch (e) {
+            console.error(`Could not save ${this.entityName}`, e);
+            return undefined;
+        }
+    }
+
+    private async merge(existObj: T): Promise<T | undefined> {
+        const fields = getFields(this.entity).filter(x => x !== 'id');
+        try {
+            // create `field=$1, field2=$2` string
+            let setValues = fields.map((x, i) => {
+                return `${x} = $${i + 1}`
+            })
+            const result = await pool.query(`UPDATE ${this.entityName} SET ${setValues.join(',')}`,
+                fields.map(field =>
+                    //@ts-expect-error 
+                    newObj[field]
+                )
+            );
+            this.expectedRows(result, 1);
+            // TODO: support versions ? 
+            return existObj;
+        } catch (e) {
+            console.error(`Could not save ${this.entityName}`, e);
+            return undefined;
+        }
+    }
+
+    async delete(id: any): Promise<boolean> {
+        try {
+            const result = await pool.query(`DELETE FROM ${this.entityName} WHERE id = $1`, [id]);
+            return result.rowCount === 1;
+        } catch (e) {
+            console.error(`Could not delete ${this.entityName} with id ${id}`, e);
+            return false;
+        }
+    }
+
+    // TODO: move somewhere else ?
     /**
      * 
      * @param result
@@ -31,8 +136,7 @@ abstract class dao<T> {
      */
     expectedRows(result: QueryResult, count: number) {
         if (result.rowCount !== count) {
-            const msg = result.rowCount === 0 ? 'No rows returned' : `More than ${count} row${count === 1 ? '' : 's'} returned`;
-            throw new Error(msg);
+            throw new Error(`${result.rowCount} rows returned, expected ${count}`);
         }
         return result;
     }

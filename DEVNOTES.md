@@ -15,3 +15,32 @@ Routes should probably be versioned under the applications major version number.
 3. ./jest.it.config.js calls src/setupIts.ts to TRUNCATE all tables between tests
 4. That means each test is responsible for configuring its own test data, and means no cross-test data issues occur
 5. ./jest.it.config.js calls src/globalItTeardown
+
+
+## Explicit Daos
+
+To add override methods to a dao class
+
+1. Setup a unique class that extends baseDao<T>, where T is an entity type.
+2. Decorate the class with dao('entityName'). The entity name should map to an actual entity, beware runtime errors 
+3. Override daoFactory with the entity type, returning the explicit dao type
+4. EXPLICITLY initialize parcel in daoFactory. why ? because ts/js sucks, and decorators aren't processed if a class 
+    isn't "used".
+    - This could likely be worked around by declaring daos within dao.ts, but that would make code maintenance harder
+
+### Explicit Dao and Integration Tests
+
+Because jest runs things in its own context, the explicit dao needs to be explicitly initialized within the jest test.
+This can be done once at the top of the file, like this 
+
+```javascript
+
+import { unique } from '../../models/unique'; 
+import { uniqueDao } from '../uniqueDao';
+
+new uniqueDao(unique);
+
+describe("daoTest", () => {
+    // ...
+})
+```

@@ -11,5 +11,6 @@ module.exports = {
     // run before each test suite. wipe all tables then reinsert new data
     setupFiles: [
         "<rootDir>/setupIts.ts",
+        '<rootDir>/setupTests.ts',
     ],
 }
