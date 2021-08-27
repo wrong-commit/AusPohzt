@@ -97,5 +97,25 @@ describe("parcelDao", () => {
             expect(newParcel).toBeDefined();
             expect(newParcel!.id).toBeDefined();
         })
+        test("merge", async () => {
+            let newParcel: parcel | undefined = new parcel({
+                trackingId: 'newParcelTrkId',
+                owner: 0,
+                events: [],
+                lastSync: 0,
+            });
+            newParcel = await pDao.save(newParcel);
+
+            expect(newParcel).toBeDefined();
+            expect(newParcel!.id).toBeDefined();
+
+            newParcel!.nickName = 'newNickname';
+
+            await pDao.save(newParcel!);
+
+            const savedNick = (await pDao.find(newParcel!.id!))!.nickName;
+
+            expect(savedNick).toBe('newNickname')
+        })
     })
 })
