@@ -1,3 +1,4 @@
+import { entity } from "../decorator/entityDecorators";
 import { Dto } from "../types/Dto";
 
 export { trackingEvent, trackingEventStatus }
@@ -16,6 +17,7 @@ type trackingEventStatus =
 /**
  * event updates for tracked item
  */
+@entity('trackingEvent')
 class trackingEvent {
     // is id necessary ? only if updating or deleting single entries at a time. otherwises delete where parcelId = $1
     id?: number;
