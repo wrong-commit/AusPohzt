@@ -11,7 +11,7 @@ interface Constructor {
 /**
  * Stores a Class type, and the value of the Store Name. 
  */
-const entityNameMap = new Map<{ constructor: Constructor }, string>();
+const entityNameMap = new Map<object, string>();
 const fieldsMap = new Map<object, string[]>();
 
 // 
@@ -60,12 +60,13 @@ const bind = (target: object, field: string) => {
  * @throws Error if target is not an entity
  */
 const getEntityName = (target: object): string => {
+    // check if user has passed prototype
+    let entityNameVal: string | undefined = entityNameMap.get(target);
+    if (entityNameVal) return entityNameVal;
     //@ts-expect-error
     let proto = target.prototype ?? target.__proto__;
     console.debug(`Getting Entity Name of target.prototype = ${proto}`);
-    let entityNameVal: string | undefined = entityNameMap.get(
-        proto
-    );
+    entityNameVal = entityNameMap.get(proto);
     if (!entityNameVal) throw new Error(`${proto} does not have an Entity Name value`);
     return entityNameVal;
 }
@@ -77,10 +78,10 @@ const getEntityName = (target: object): string => {
  * @returns 
  * @throws Error if entityName does not exist for any entity
  */
-const getEntityPrototype = (entityName: string): { constructor: Constructor } => {
+const getEntityPrototype = <K extends { constructor: Constructor }>(entityName: string): K => {
     const entityPrototype = Array.from(entityNameMap.entries()).find((pair => pair['1'] === entityName));
     if (!entityPrototype) throw new Error(`No entity prototype found for ${entityName}`);
-    return entityPrototype[0];
+    return entityPrototype[0] as K;
 }
 
 /**
@@ -93,12 +94,13 @@ const getEntityPrototype = (entityName: string): { constructor: Constructor } =>
  * @returns fields
  */
 const getFields = (target: object): string[] => {
+    // check if user has passed prototype
+    let fields: string[] | undefined = fieldsMap.get(target);
+    if (fields) return fields;
     //@ts-expect-error
     let proto = target.prototype ?? target.__proto__;
     console.debug(`Getting Fields of target = ${proto}`);
-    let fields: string[] | undefined = fieldsMap.get(
-        proto
-    );
+    fields = fieldsMap.get(proto);
     if (fields == undefined) throw new Error(`${proto} is not an entity`);
     return fields;
 }

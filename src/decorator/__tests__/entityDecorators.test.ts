@@ -44,7 +44,7 @@ describe("@entity", () => {
         test("Invalid entity name throws error", () => {
             expect(() => entityDecorators.getEntity('invalid')).toThrowError();
         })
-        test("Invalid entity name returns entity prototype", () => {
+        test("Can constuct class instance from getEntity()", () => {
             const proto = entityDecorators.getEntity('lookupByName');
             expect(proto).toBe(_testLookupByName.prototype);
 
