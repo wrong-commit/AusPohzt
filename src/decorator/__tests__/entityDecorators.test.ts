@@ -13,7 +13,7 @@ class _testClassWithNoFields {
 class _testClassWithNoDecerator {
 }
 
-describe("Test entityDecorator", () => {
+describe("@entity", () => {
     describe("Get entity name", () => {
         test("No Decorator on class throws an error", () => {
             const _testClassInst: _testClassWithNoDecerator = new _testClassWithNoDecerator();

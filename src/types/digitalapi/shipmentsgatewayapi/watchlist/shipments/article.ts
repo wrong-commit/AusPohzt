@@ -1,3 +1,6 @@
+// article endpoint returns shipmentResponse 
+export { shipmentsResponse }
+
 type shipmentsResponse = {
     status: 'Success' | /*?*/'Failure';
     consignmentId: string; // number ? 

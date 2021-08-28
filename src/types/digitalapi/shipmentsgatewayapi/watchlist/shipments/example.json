@@ -125,7 +125,7 @@
                             "colour": "#00ac3e",
                             "status": "Current",
                             "progressPercentage": 100,
-                            "dateTime": "YYYY-MM-DDTHH:mm:SS+10:00",
+                            "dateTime": "YYYY-MM-DDTHH:mm:SS+10:00"
                         }
                     ],
                     "hasNotification": null,

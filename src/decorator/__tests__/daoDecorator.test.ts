@@ -18,7 +18,7 @@ class _testEntityWithoutDecorator {
 
 let mockDaoMethod = jest.fn();
 
-describe("Test daoDecorator", () => {
+describe("@dao", () => {
     beforeEach(() => {
         // reset between tests
         mockDaoMethod = jest.fn();
