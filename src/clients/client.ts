@@ -1,7 +1,8 @@
 import { parcel } from "../entities/parcel";
+import { trackingEvent } from "../entities/trackingEvent";
 import { Dto } from "../types/Dto";
 
-export { client }
+export { client };
 interface client<T> {
     /**
      * Create type T for a trackingId. implementation is responssible for determining a fail state, indicated by 
@@ -15,4 +16,10 @@ interface client<T> {
      * @param args 
      */
     createPacel(external: T): Dto<parcel> | undefined;
+
+    /**
+     * Create trackingEvent info
+     * @param shipmentEvent 
+     */
+    parseTrackingEvent(shipmentEvent: any): Dto<trackingEvent>;
 }
