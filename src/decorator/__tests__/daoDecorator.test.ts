@@ -44,28 +44,11 @@ describe("@dao", () => {
             expect(mockDaoMethod).toBeCalledTimes(1);
         })
     })
-
-    // describe("Get fields", () => {
-    //     test("No Entity decorator throws an error", () => {
-    //         expect(() => {
-    //             entityDecorators.getFields(_testClassWithNoDecerator);
-    //         }).toThrowError();
-    //     })
-
-    //     test("fields returned for instance", () => {
-    //         const _testClassInst: _testClass = new _testClass();
-    //         expect(entityDecorators.getFields(_testClassInst)).toStrictEqual(['stringProp']);
-    //     })
-
-    //     test("fields returned for type", () => {
-    //         expect(entityDecorators.getFields(_testClass)).toStrictEqual(['stringProp']);
-    //     })
-
-    //     // FIXME: does this need to be fixed ? can an entity exist without an bound fields ? 
-    //     test("no fields for entity throws error", () => {
-    //         expect(() => {
-    //             entityDecorators.getFields(_testClassWithNoFields);
-    //         }).toThrowError();
-    //     })
-    // })
+    test("Cannot assign entity to mutliple daos", () => {
+        expect(() => {
+            class _secondDao { }
+            // entity test already assigned to dao _testDao
+            daoDecorators.dao("test")(_secondDao);
+        }).toThrowError();
+    })
 })
