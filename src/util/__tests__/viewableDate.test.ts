@@ -24,4 +24,9 @@ describe("viewableDate()", () => {
         date.setHours(1, 2, 3);
         expect(viewableDate(date)).toBe('1994-12-9 01:02');
     })
+
+    test("Bad input returns empty string", () => {
+        const output = viewableDate(undefined);
+        expect(output).toBe('');
+    })
 })

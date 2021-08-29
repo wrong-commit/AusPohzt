@@ -92,7 +92,7 @@ router.post('/', async (req, res) => {
             console.log('could not save parcel')
             if (!savedParcel) {
                 res.statusCode = 500;
-                res.write(JSON.stringify({ msg: 'Parcel already exists' }))
+                res.write(JSON.stringify({ msg: 'Could not create Parcel' }))
                 res.end();
             } else {
                 res.statusCode = 200;
