@@ -1,7 +1,12 @@
 import { bind, entity } from "../decorator/entityDecorators";
+import { join } from "../decorator/joinDecorator";
 import { Dto } from "../types/Dto";
+import { Without } from "../types/Without";
+import { trackingEvent } from "./trackingEvent";
 
-export { parcel };
+export { parcel, parcelDto };
+
+type parcelDto = Without<Dto<parcel>, 'events'> & { events: Dto<trackingEvent>[] }
 /**
  * class object for parcel being tracked.
  * TODO: add inactive/delivered parcels
@@ -40,9 +45,9 @@ class parcel {
     lastSync: number;
 
     /**
-     * TODO: use real type.
      */
-    events: string[];
+    @join('trackingEvent', { joinColumnName: 'parcelId', association: 'multiple' })
+    events: trackingEvent[];
 
     constructor(data: Dto<parcel>) {
         this.id = data.id;
@@ -50,7 +55,7 @@ class parcel {
         this.owner = data.owner;
 
         this.nickName = data.nickName;
-        this.events = data.events;
+        this.events = data.events.map(e => new trackingEvent(e));
         this.lastSync = data.lastSync;
     }
 
@@ -61,7 +66,7 @@ class parcel {
             trackingId: this.trackingId,
             nickName: this.nickName,
             lastSync: this.lastSync,
-            events: this.events,
+            events: this.events.map(x => x.toData()),
         }
     }
 }

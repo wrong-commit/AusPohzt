@@ -97,9 +97,9 @@
                             "dateTime": 1623809604000,
                             "localeDateTime": "YYYY-MM-DDTHH:mm:SS+10:00",
                             "description": "Delivered",
-                            "location": "BROKEN HILL NSW",
+                            "location": "PINE GAP",
                             "eventCode": "DD-ER13",
-                            "wcid": "000125"
+                            "wcid": "000999"
                         },
                         {
                             "dateTime": 1623722435000,
@@ -125,7 +125,7 @@
                             "colour": "#00ac3e",
                             "status": "Current",
                             "progressPercentage": 100,
-                            "dateTime": "YYYY-MM-DDTHH:mm:SS+10:00",
+                            "dateTime": "YYYY-MM-DDTHH:mm:SS+10:00"
                         }
                     ],
                     "hasNotification": null,

@@ -13,4 +13,12 @@ module.exports = {
         "<rootDir>/setupIts.ts",
         '<rootDir>/setupTests.ts',
     ],
+
+    /* Test Configuration Information */
+    collectCoverage: true,
+    coverageDirectory: "../dist/it-coverage",
+    coverageReporters: [
+        "text",
+        "html",
+    ],
 }

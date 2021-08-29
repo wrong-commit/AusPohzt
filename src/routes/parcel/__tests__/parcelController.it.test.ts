@@ -60,19 +60,57 @@ describe("parcelController", () => {
         })
     })
 
-    test("delete parcel", async () => {
-        const deleteParcel = (await pool.query(
-            `INSERT INTO parcel (trackingId, owner, nickname, lastSync) VALUES ('deleteParcelTrkId', 1, 'nickname', 0) RETURNING id;`
-        )).rows[0]['id'];
+    describe("delete parcel", () => {
+        test("delete parcel without events", async () => {
+            const deleteParcelId = await request(app)
+                .post(`/v0/parcel/`)
+                .send({
+                    events: [],
+                    lastSync: 100,
+                    owner: -1,
+                    trackingId: 'deleteParcelTrkId',
+                } as Dto<parcel>)
+                .expect('Content-Type', /json/)
+                .expect(200)
+                .then(resp => resp.body.id);
 
-        await request(app)
-            .delete(`/v0/parcel/${deleteParcel}`)
-            .expect(200);
+            await request(app)
+                .delete(`/v0/parcel/${deleteParcelId}`)
+                .expect(200);
 
-        await request(app)
-            .get(`/v0/parcel/${deleteParcel}`)
-            .expect(404);
-    });
+            await request(app)
+                .get(`/v0/parcel/${deleteParcelId}`)
+                .expect(404);
+        });
+        test("delete parcel with events", async () => {
+            const deleteParcelId = await request(app)
+                .post(`/v0/parcel/`)
+                .send({
+                    events: [{
+                        dateTime: 0,
+                        location: '',
+                        message: '',
+                        raw: '',
+                        type: 'pending',
+                    }],
+                    lastSync: 100,
+                    owner: -1,
+                    trackingId: 'deleteParcelTrkId2',
+                } as Dto<parcel>)
+                .expect('Content-Type', /json/)
+                .expect(200)
+                .then(resp => resp.body.id);
+
+            await request(app)
+                .delete(`/v0/parcel/${deleteParcelId}`)
+                .expect(200);
+
+            await request(app)
+                .get(`/v0/parcel/${deleteParcelId}`)
+                .expect(404);
+
+        });
+    })
 
     describe("add parcel", () => {
         test("undefined body returns 500", async () => {

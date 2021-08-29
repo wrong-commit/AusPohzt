@@ -1,3 +1,25 @@
+// article endpoint returns shipmentResponse 
+export {
+    shipmentsResponse,
+    DELIVERED_CODE,
+    DELIVERY_FAILED,
+    AWAITING_COLLECTION,
+    PENDING,
+    TRANSIT,
+}
+
+const DELIVERED_CODE = 'DD-ER13';
+const DELIVERY_FAILED = 'DD-ER8';
+const AWAITING_COLLECTION = 'DD-ER4';
+const PENDING = 'ADMIN-ER39';
+const TRANSIT = [
+    'AFC-ER31',
+    'NSS-ER42',
+    'NSS-ER01',
+    'AFP-ER13',
+    'TTP-ER37,'
+]
+
 type shipmentsResponse = {
     status: 'Success' | /*?*/'Failure';
     consignmentId: string; // number ? 
@@ -32,9 +54,9 @@ type event = {
     dateTime: number; // local time
     localeDateTime: string; // cast to Datee
     description: string;
-    location: string;
+    location: null | string;
     eventCode: string;
-    wcid: string;
+    wcid: null | string;
 }
 type signatureOnDelivery = {
     required: boolean;
