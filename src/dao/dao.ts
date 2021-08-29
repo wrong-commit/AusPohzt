@@ -1,10 +1,10 @@
-import { QueryResult, QueryResultRow } from "pg";
-import { pool } from "../database/database";
+import { Pool, QueryResult, QueryResultRow } from "pg";
 import { dao } from "../decorator/daoDecorators";
 import { getEntity, getEntityName, getFields } from "../decorator/entityDecorators";
 import { getJoinData, joinData } from "../decorator/joinDecorator";
 import { JoinQueryResult, pirate } from "../mapping/pirate";
 import { Newable } from "../types/Newable";
+import { daoFactory } from "./daoFactory";
 
 export { dao, baseDao, daoEntity };
 
@@ -42,20 +42,26 @@ type daoEntity = {
  * assumes id property exists, and is identity of object
  */
 class baseDao<T extends daoEntity> implements dao<T> {
+    pool: Pool;
+
     entity: Newable<T>;
     entityName: string;
     joinDatas?: joinData[]
+    fields: string[];
 
-    constructor(entity: Newable<T>) {
+    constructor(entity: Newable<T>, pool: Pool) {
         this.entity = entity;
         this.entityName = getEntityName(this.entity);
+        this.fields = getFields(this.entity);
         this.joinDatas = getJoinData(this.entity);
+        // postgres pool object.
+        this.pool = pool;
     }
 
     async findAll(): Promise<T[] | undefined> {
         try {
             // TODO: support JOIN queries ? 
-            const result = await pool.query(`SELECT * FROM ${this.entityName}`);
+            const result = await this.pool.query(`SELECT * FROM ${this.entityName}`);
             const pirates = [];
             for (const row of result.rows) {
                 const rowJoinData: JoinQueryResult[] = await this.join(row)
@@ -70,7 +76,7 @@ class baseDao<T extends daoEntity> implements dao<T> {
 
     async find(id: number): Promise<T | undefined> {
         try {
-            const result = await pool.query(`SELECT * FROM ${this.entityName} WHERE ID = $1`, [id]);
+            const result = await this.pool.query(`SELECT * FROM ${this.entityName} WHERE ID = $1`, [id]);
             // const result = await pool.query(this.findAllQ,);
             this.expectedRows(result, 1);
             const rowJoinData: JoinQueryResult[] = await this.join(result.rows[0])
@@ -82,19 +88,51 @@ class baseDao<T extends daoEntity> implements dao<T> {
     }
     // FIXME: support merging
     async save(newObj: T): Promise<T | undefined> {
-        const fields = getFields(this.entity).filter(x => x !== 'id');
         try {
             // merge existing objects
-            if (newObj.id) {
+            // TODO: dedupe saveJoins call ? 
+            if (!newObj.id) {
+                return this.saveNew(newObj);
+            } else {
                 return this.merge(newObj);
             }
-            // otherwise save new
-            const result = await pool.query(`INSERT INTO ${this.entityName} (${fields.join(', ')}) ` +
+        } catch (e) {
+            console.error(`Could not save ${this.entityName}`, e);
+            return undefined;
+        }
+    }
+
+    async delete(id: any): Promise<boolean> {
+        try {
+            if (this.joinDatas) {
+                console.trace(`Deleting joined entities for ${this.entityName}`);
+                let deleted = 0;
+                for (const [_, jEntityName, __, joinColumn] of this.joinDatas) {
+                    console.debug(`Deleting joined entity ${jEntityName} where ${joinColumn} = ${id}`);
+                    const deleteResult = await this.pool.query(`DELETE FROM ${jEntityName} WHERE ${joinColumn} = $1`,
+                        [id]);
+                    deleted += deleteResult.rowCount;
+                    console.debug(`Deleted x${deleteResult.rowCount} joined entity ${jEntityName}`);
+                }
+                console.debug(`Deleted ${deleted} joined entities for ${this.entity} ${id}`)
+            }
+            const result = await this.pool.query(`DELETE FROM ${this.entityName} WHERE id = $1`, [id]);
+            this.expectedRows(result, 1);
+            return true;
+        } catch (e) {
+            console.error(`Could not delete ${this.entityName} with id ${id}`, e);
+            return false;
+        }
+    }
+
+    protected async saveNew(newObj: T): Promise<T | undefined> {
+        const fields = this.fields.filter(x => x !== 'id');
+        try {
+            const result = await this.pool.query(`INSERT INTO ${this.entityName} (${fields.join(', ')}) ` +
                 `VALUES (${fields.map((_, i) => '$' + (i + 1))}) RETURNING id`,
                 fields.map(field =>
                     //@ts-expect-error 
-                    newObj[field]
-                )
+                    newObj[field])
             );
             this.expectedRows(result, 1);
             newObj.id = result.rows[0]['id'];
@@ -106,101 +144,18 @@ class baseDao<T extends daoEntity> implements dao<T> {
         }
     }
 
-    async delete(id: any): Promise<boolean> {
-        try {
-            if (this.joinDatas) {
-                console.trace(`Deletinig joined entities for ${this.entityName}`);
-                let deleted = 0;
-                for (const [_, jEntityName, __, joinColumn] of this.joinDatas) {
-                    const deleteResult = await pool.query(`DELETE FROM ${jEntityName} WHERE ${joinColumn} = $1`,
-                        [id]);
-                    // this.expectedRows(deleteResult, 1);
-                    deleted++;
-                }
-            }
-            const result = await pool.query(`DELETE FROM ${this.entityName} WHERE id = $1`, [id]);
-            this.expectedRows(result, 1);
-            return true;
-        } catch (e) {
-            console.error(`Could not delete ${this.entityName} with id ${id}`, e);
-            return false;
-        }
-    }
-
-    // TODO: use new baseDao(existJent).save ? 
-    protected async saveJoins(existObj: T): Promise<number | undefined> {
-        if (this.joinDatas) {
-            console.trace(`Saving joined entities for ${this.entityName}`);
-            let updated = 0;
-            for (const [field, jEntityName, assoc, joinColumn] of this.joinDatas) {
-                const joinEntity = getEntity(jEntityName);
-
-                let existJents: Array<any> = [];
-
-                if (assoc === 'single') {
-                    //@ts-expect-error
-                    const existJent = existObj[field];
-                    existJent.push(existJent)
-                } else {
-                    //@ts-expect-error
-                    existJents = existObj[field];
-                }
-
-                existJents.forEach(j => j[joinColumn] = existObj.id)
-
-                const fields = getFields(joinEntity).filter(x => x !== 'id');
-
-                // create `field1=$2, field2=$3` string
-                let setValues = fields.map((x, i) => {
-                    return `${x} = $${i + 2}`
-                })
-
-                for (const existJent of existJents) {
-                    let result;
-                    if (!existJent.id) {
-                        // TODO: definitely leverage baseDao
-                        result = await pool.query(`INSERT INTO ${jEntityName} (${fields.join(', ')}) ` +
-                            `VALUES (${fields.map((_, i) => '$' + (i + 1))}) RETURNING id`,
-                            fields.map(field =>
-                                existJent[field]
-                            )
-                        );
-                        this.expectedRows(result, 1);
-                        existJent.id = result.rows[0]['id'];
-                    } else {
-                        result = await pool.query(`UPDATE ${jEntityName} SET ${setValues.join(',')} WHERE id =$1`,
-                            [
-                                existJent.id,
-                                ...fields.map(field =>
-                                    existJent[field]
-                                )
-                            ]
-                        );
-                    }
-                    this.expectedRows(result, 1);
-                    updated++;
-                }
-            }
-            return updated;
-        }
-        return undefined;
-    }
-
     protected async merge(existObj: T): Promise<T | undefined> {
-        const fields = getFields(this.entity).filter(x => x !== 'id');
+        const fields = this.fields.filter(x => x !== 'id');
         try {
             // create `field1=$2, field2=$3` string
-            let setValues = fields.map((x, i) => {
-                return `${x} = $${i + 2}`
-            })
+            let setValues = fields.map((x, i) => `${x} = $${i + 2}`);
             // where id=$1
-            const result = await pool.query(`UPDATE ${this.entityName} SET ${setValues.join(',')} WHERE id =$1`,
+            const result = await this.pool.query(`UPDATE ${this.entityName} SET ${setValues.join(',')} WHERE id =$1`,
                 [
                     existObj.id,
                     ...fields.map(field =>
                         //@ts-expect-error 
-                        existObj[field]
-                    )
+                        existObj[field])
                 ]
             );
             this.expectedRows(result, 1);
@@ -218,7 +173,7 @@ class baseDao<T extends daoEntity> implements dao<T> {
         if (this.joinDatas) {
             console.trace(`Fetching joined entities for ${this.entityName}`);
             for (const [_, jEntityName, __, joinColumn] of this.joinDatas) {
-                const joinResult = await pool.query(`SELECT * FROM ${jEntityName} WHERE ${joinColumn} = $1`,
+                const joinResult = await this.pool.query(`SELECT * FROM ${jEntityName} WHERE ${joinColumn} = $1`,
                     [row['id']]);
                 rowJoinData.push(...joinResult.rows.map(jRow => ({
                     joinedEntity: jEntityName,
@@ -229,6 +184,47 @@ class baseDao<T extends daoEntity> implements dao<T> {
         }
         return rowJoinData;
     }
+
+    // TODO: add logging
+    protected async saveJoins(existObj: T): Promise<number | undefined> {
+        if (this.joinDatas) {
+            console.trace(`Saving joined entities for ${this.entityName}`);
+            let updated = 0;
+            for (const [field, jEntityName, assoc, joinColumn] of this.joinDatas) {
+                const joinEntity = getEntity(jEntityName);
+
+                let existJents: Array<any> = [];
+
+                if (assoc === 'single') {
+                    //@ts-expect-error
+                    const existJent = existObj[field];
+                    existJents.push(existJent)
+                } else {
+                    //@ts-expect-error
+                    existJents = existObj[field];
+                }
+
+                // set join column value to entity id
+                existJents.forEach(j => j[joinColumn] = existObj.id)
+
+                // TODO: setup correct typing
+                const joinEntityDao = daoFactory(joinEntity as unknown as Newable<daoEntity>);
+                // save with joinEntityDao
+                for (const existJent of existJents) {
+                    const savedJEnt = await joinEntityDao.save(existJent)
+                    // TODO: add test
+                    if (!savedJEnt) {
+                        throw new Error(`Joined entiity ${jEntityName} could not be saved`)
+                    }
+                    updated++;
+                }
+            }
+            return updated;
+        }
+        return undefined;
+    }
+
+
     // TODO: move somewhere else ?
     /**
      * 
