@@ -198,7 +198,11 @@ class baseDao<T extends daoEntity> implements dao<T> {
                 if (assoc === 'single') {
                     //@ts-expect-error
                     const existJent = existObj[field];
-                    existJents.push(existJent)
+                    if (existJent) {
+                        existJents.push(existJent)
+                    } else {
+                        console.debug(`Join entity ${jEntityName} on ${this.entityName}.${joinColumn} was undefined`);
+                    }
                 } else {
                     //@ts-expect-error
                     existJents = existObj[field];
@@ -212,9 +216,8 @@ class baseDao<T extends daoEntity> implements dao<T> {
                 // save with joinEntityDao
                 for (const existJent of existJents) {
                     const savedJEnt = await joinEntityDao.save(existJent)
-                    // TODO: add test
                     if (!savedJEnt) {
-                        throw new Error(`Joined entiity ${jEntityName} could not be saved`)
+                        throw new Error(`Joined entity ${jEntityName} could not be saved`)
                     }
                     updated++;
                 }
