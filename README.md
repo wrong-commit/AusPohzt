@@ -21,7 +21,7 @@ API for tracking parcels
     - [ ] Convert semi-JavaDocs to JSDocs 
     - [ ] Setup Github Actions
 - [ ] Refactor
-    - [ ] pirate to support passing results through map() and mapMany()
+    - [x] pirate to support passing results through map() and mapMany()
     - [ ] typing of entityDecorator.getEntityPrototype
     - [x] DRY dao code
     - [ ] pirate.map() accepts row arg as array instead of single instance, see dao.find() comment
