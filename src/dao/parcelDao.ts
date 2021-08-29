@@ -14,7 +14,7 @@ class parcelDao extends baseDao<parcel> {
             const result = await this.pool.query(`SELECT * FROM ${this.entityName} WHERE trackingId = $1`, [trackingId]);
             this.expectedRows(result, 1);
             const rowJoinData: JoinQueryResult[] = await this.join(result.rows[0])
-            return new pirate<parcel>(result.rows[0], result.fields, rowJoinData).map(this.entity);
+            return new pirate<parcel>(this.entity).map(result.rows[0], result.fields, rowJoinData);
         } catch (e) {
             console.warn(`Could not find ${this.entityName} with trackingId ${trackingId}`, e);
             return undefined;
