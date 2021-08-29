@@ -58,7 +58,6 @@ const getJoinData = (target: object | string): joinData[] | undefined => {
         //@ts-expect-error
         let proto = target.prototype;
         const entityName = getEntityName(target)
-        if (!entityName) throw new Error(`${proto} is not an entity`);
         console.debug(`Getting join data for ${entityName}`);
         return entityJoinDatasMap.get(proto);
     }

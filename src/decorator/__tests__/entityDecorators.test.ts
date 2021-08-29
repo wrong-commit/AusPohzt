@@ -5,6 +5,8 @@ import * as entityDecorators from '../entityDecorators';
 class _testClass {
     @entityDecorators.bind
     stringProp: string = 'default';
+    @entityDecorators.bind
+    numberProp: number = -1;
 }
 @entityDecorators.entity("noFields")
 class _testClassWithNoFields {
@@ -38,6 +40,10 @@ describe("@entity", () => {
         test("entity name returned for type", () => {
             expect(entityDecorators.getEntityName(_testClass)).toBe('test');
         })
+
+        test("entity name returned for prototype", () => {
+            expect(entityDecorators.getEntityName(_testClass.prototype)).toBe('test');
+        })
     })
 
     describe("Get entity by name", () => {
@@ -62,11 +68,20 @@ describe("@entity", () => {
 
         test("fields returned for instance", () => {
             const _testClassInst: _testClass = new _testClass();
-            expect(entityDecorators.getFields(_testClassInst)).toStrictEqual(['stringProp']);
+            expect(entityDecorators.getFields(_testClassInst)).toStrictEqual(
+                ['stringProp', 'numberProp']
+            );
         })
 
         test("fields returned for type", () => {
-            expect(entityDecorators.getFields(_testClass)).toStrictEqual(['stringProp']);
+            expect(entityDecorators.getFields(_testClass)).toStrictEqual(
+                ['stringProp', 'numberProp']
+            );
+        })
+        test("fields returned for prototype", () => {
+            expect(entityDecorators.getFields(_testClass.prototype)).toStrictEqual(
+                ['stringProp', 'numberProp']
+            );
         })
 
         // FIXME: does this need to be fixed ? can an entity exist without an bound fields ? 
