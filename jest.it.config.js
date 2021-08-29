@@ -16,7 +16,7 @@ module.exports = {
 
     /* Test Configuration Information */
     collectCoverage: true,
-    coverageDirectory: "dist/coverage",
+    coverageDirectory: "../dist/it-coverage",
     coverageReporters: [
         "text",
         "html",
