@@ -19,12 +19,12 @@ router.get('/', (_, res) => {
 
     parcelDao.findAll().then(parcels => {
         if (!parcels) {
-            res.statusCode = 500;
-            res.end()
+            throw new Error('dao.findAll failed');
         } else {
-            res.statusCode = 200;
-            res.json(parcels?.map(x => x.toData()));
+            res.status(200).json(parcels?.map(x => x.toData()))
         }
+    }).catch(err => {
+        res.status(500).write(JSON.stringify(err));
     })
 });
 
@@ -33,11 +33,9 @@ router.get('/:id', (req, res) => {
 
     parcelDao.find(Number.parseInt(req.params.id)).then(parcel => {
         if (!parcel) {
-            res.statusCode = 404;
-            res.end()
+            res.status(404).end()
         } else {
-            res.statusCode = 200;
-            res.json(parcel);
+            res.status(200).json(parcel);
         }
     })
 });
@@ -51,10 +49,10 @@ router.delete('/:id', (req, res) => {
 
     parcelDao.delete(Number.parseInt(req.params.id)).then(deleted => {
         if (!deleted) {
-            res.statusCode = 404;
+            res.status(404).end()
         } else {
             console.log(`Deleted parcel ${req.params.id}`);
-            res.statusCode = 200;
+            res.status(200).end();
         }
         res.end()
     })
@@ -77,8 +75,7 @@ router.post('/', async (req, res) => {
         const existingParcel = await parcelDao.findByTrackingId(dto.trackingId);
         if (existingParcel) {
             console.warn(`parcel ${existingParcel.id} already created for trackingId ${dto.trackingId}`);
-            res.statusCode = 500;
-            res.send(JSON.stringify({ message: 'Parcel already exists' }))
+            res.status(500).send(JSON.stringify({ message: 'Parcel already exists' }));
             // res.end();
         } else {
             // always id to undefined to avoid overwriting existing parcel
@@ -91,18 +88,14 @@ router.post('/', async (req, res) => {
             const savedParcel = await parcelDao.save(new parcel(dto));
             console.log('could not save parcel')
             if (!savedParcel) {
-                res.statusCode = 500;
-                res.write(JSON.stringify({ msg: 'Could not create Parcel' }))
-                res.end();
+                res.status(500).send(JSON.stringify({ msg: 'Could not create Parcel' }));
             } else {
-                res.statusCode = 200;
-                res.json(savedParcel.toData());
+                res.status(200).json(savedParcel.toData());
             }
         }
     } catch (e) {
         console.error(e);
-        res.statusCode = 500;
-        res.end();
+        res.status(500).end();
     }
 });
 
@@ -117,13 +110,10 @@ router.put('/:id/nickname', async (req, res) => {
 
     let parcel = await parcelDao.find(Number.parseInt(req.params.id));
     if (!parcel) {
-        res.statusCode = 404;
-        res.end()
+        res.status(404).end()
     } else {
         parcel.nickName = nickname as string;
         await parcelDao.save(parcel);
-        res.statusCode = 200;
-        res.json(parcel);
-        res.end();
+        res.status(200).json(parcel);
     }
 })
