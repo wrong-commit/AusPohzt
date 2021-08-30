@@ -1,12 +1,10 @@
 import { bind, entity } from "../decorator/entityDecorators";
 import { join } from "../decorator/joinDecorator";
 import { Dto } from "../types/Dto";
-import { Without } from "../types/Without";
 import { trackingEvent } from "./trackingEvent";
 
-export { parcel, parcelDto };
+export { parcel };
 
-type parcelDto = Without<Dto<parcel>, 'events'> & { events: Dto<trackingEvent>[] }
 /**
  * class object for parcel being tracked.
  * TODO: add inactive/delivered parcels
@@ -20,31 +18,32 @@ class parcel {
     id?: number;
 
     /**
-     * digitalapi tracking ID.
+     * Tracking ID.
      */
     @bind
     trackingId: string;
 
     /**
      * Id of user that owns this package. 
-     * 
      * TODO: spec this out. 
      */
     @bind
     owner: number;
+
     /**
-     * Use defined nickname. Can come from digitalapi or user defined.
+     * Use defined nickname.
      */
     @bind
     nickName?: string;
 
     /**
-     * Last time parcel synced, unix Epoch.
+     * Seconds since unix epoch when last successfully synced event data. 
      */
     @bind
     lastSync: number;
 
     /**
+     * Unordered trackingEvents associated with parcel.
      */
     @join('trackingEvent', { joinColumnName: 'parcelId', association: 'multiple' })
     events: trackingEvent[];
