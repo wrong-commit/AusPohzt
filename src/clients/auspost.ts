@@ -22,7 +22,7 @@ class auspost implements client<shipmentsResponse> {
         const response = await this.api.get(`shipmentsgatewayapi/watchlist/shipments/${trackingId}`,
             {
                 headers: {
-                    'Origin': 'https://auspost.com.au',
+                    Origin: 'https://auspost.com.au',
                     'accept-encoding': 'gzip, deflate, br',
                     Referer: 'https://auspost.com.au/',
                     Host: 'digitalapi.auspost.com.au',
@@ -34,7 +34,8 @@ class auspost implements client<shipmentsResponse> {
                 statusCode: 200,
             })
             .then(resp => {
-                console.debug(`Response returned`);
+                console.info(`Response returned`);
+                console.log(`${resp.statusCode} - ${resp.statusMessage}`)
                 return resp.json() as Promise<shipmentsResponse>;
             })
             .then(resp => {
@@ -42,6 +43,7 @@ class auspost implements client<shipmentsResponse> {
                     console.debug(JSON.stringify(resp))
                     throw new Error(`Response did not return {status: 'Success'}`);
                 }
+                return resp;
             })
             .catch(err => {
                 console.error(`Error syncing auspost data for ${trackingId}`, err);
@@ -85,6 +87,7 @@ class auspost implements client<shipmentsResponse> {
         return {
             id: undefined,
             parcelId: undefined,
+            externalId: shipmentEvent.wcid,
             dateTime: shipmentEvent.dateTime,
             location: shipmentEvent.location ?? '',
             message: shipmentEvent.description,

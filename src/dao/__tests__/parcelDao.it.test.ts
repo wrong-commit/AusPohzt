@@ -155,6 +155,7 @@ describe("parcelDao", () => {
                 trackingId: 'newParcelTrkId',
                 owner: 0,
                 events: [{
+                    externalId: '0',
                     dateTime: 0,
                     location: '',
                     message: '',
@@ -182,6 +183,7 @@ describe("parcelDao", () => {
 
             newParcel!.nickName = 'newNickname';
             newParcel!.events.push(new trackingEvent({
+                externalId: '0',
                 dateTime: 4,
                 location: '',
                 message: 'merged',

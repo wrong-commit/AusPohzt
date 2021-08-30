@@ -16,7 +16,7 @@ CREATE TABLE parcel (
     -- optional nickname assigned to parcel
     nickname VARCHAR(255) NULL, 
     -- TODO: use proper datatype here ? 
-    lastSync INTEGER
+    lastSync INT
 );
 
 CREATE TABLE trackingEvent ( 
@@ -24,8 +24,8 @@ CREATE TABLE trackingEvent (
     ID SERIAL PRIMARY KEY,
     -- TODO: will this work ? 
     parcelId SERIAL,
-    -- unix epoch
-    dateTime INTEGER,
+    -- TODO: use proper datatype here ? 
+    dateTime INT,
     -- location info attached to event. empty equivalent of NULL
     location VARCHAR(255),
     -- event message info
@@ -34,4 +34,4 @@ CREATE TABLE trackingEvent (
     type VARCHAR(100), 
     -- TODO: change to JSON, figure out null support. https://stackoverflow.com/a/45973415
     raw TEXT NULL
-)
+);
