@@ -1,6 +1,11 @@
 # black hole
-node_modules
-# Build folder
-dist/*
-.env
-tsconfig.tsbuildiinfo
+node_modules/
+*/node_modules/
+# Build folder for backend
+*/dist/
+# Builld folder for frontend
+*/build/
+*/.env
+tsconfig.tsbuildinfo
+**/.DS_STORE
+.DS_STORE

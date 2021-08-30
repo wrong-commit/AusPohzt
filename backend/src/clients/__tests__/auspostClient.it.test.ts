@@ -2,6 +2,7 @@ import { daoFactory } from '../../dao/daoFactory';
 import { parcel } from '../../entities/parcel';
 import { shipmentsResponse } from '../../types/digitalapi/shipmentsgatewayapi/watchlist/shipments/article';
 import exampleJson from '../../types/digitalapi/shipmentsgatewayapi/watchlist/shipments/example.json';
+
 import { Dto } from '../../types/Dto';
 import { auspost } from '../auspost';
 
