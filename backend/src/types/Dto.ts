@@ -1,4 +1,3 @@
-import { parcel } from "../entities/parcel";
 import { NonMethodKeys } from "./NonMethodKeys";
 
 export { Dto };
