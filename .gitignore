@@ -1,6 +1,9 @@
 # black hole
-node_modules
+node_modules/
+*/node_modules/
 # Build folder
-dist/*
-.env
-tsconfig.tsbuildiinfo
+*/dist/
+*/.env
+tsconfig.tsbuildinfo
+**/.DS_STORE
+.DS_STORE
