@@ -6,6 +6,11 @@ function buildExpress() {
     // TODO: setup json support()
     const app = express();
     app.use(express.json());
+    if (process.env.NODE_ENV === 'development') {
+        // set express.response.json settings to control response formatting
+        app.set('json spaces', 2);
+        app.set('json replacer', null);
+    }
     setupRoutes(app);
 
     app.use(handler => {
@@ -13,6 +18,7 @@ function buildExpress() {
         console.log(`${Date.now().toLocaleString()} - ${handler.method} ${handler.url}`)
         if (handler.next) handler.next();
     });
+
     return app;
 }
 

@@ -1,7 +1,4 @@
-import dotenv from 'dotenv'
-import { Pool, Client } from 'pg';
-
-
+import { Client, Pool } from 'pg';
 
 const host = (process.env.PG_HOST ?? '').length === 0 ? 'localhost' : process.env.PG_HOST;
 const port = (process.env.PG_PORT ?? '') === '' ? 0 : process.env.PG_PORT;
@@ -18,10 +15,13 @@ const config = {
     database: process.env.PG_DATABASE,
 }
 
-console.log(`Using Database Config\n${JSON.stringify(config, null, 2)}`)
+// TODO: specific debug property ? 
+if (process.env.NODE_ENV === 'development') {
+    console.log(`Using Database Config\n${JSON.stringify(config, null, 2)}`)
+}
 
 const pool = new Pool(config);
 
 const client = new Client(config)
 
-export { pool, client }
+export { pool, client };
