@@ -1,4 +1,4 @@
-{
+export default {
     "status": "Success",
     "consignmentId": "00111AB",
     "articles": [
