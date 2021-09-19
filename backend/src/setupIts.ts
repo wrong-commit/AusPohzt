@@ -10,7 +10,7 @@ async function cleanUpTables() {
     await pool.query(`TRUNCATE ${tables.rows.join(', ')};`);
 }
 
-module.exports = async () => {
+export default async () => {
     // console.debug('Truncating all tables');
     await cleanUpTables();
     // console.debug('Truncated all tables');

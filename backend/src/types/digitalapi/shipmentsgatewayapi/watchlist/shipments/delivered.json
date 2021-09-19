@@ -1,0 +1,225 @@
+{
+    "status": "Success",
+    "consignmentId": "PLG5315245",
+    "articles": [
+        {
+            "articleId": "PLG531524501000935101",
+            "status": {
+                "statusAttributeName": "Delivery Status of Article",
+                "statusAttributeValue": "Delivered",
+                "statusModificationDateTime": 1630059299000
+            },
+            "atlStatus": {
+                "statusAttributeName": "Customer ATL Request Status",
+                "statusAttributeValue": "Expired",
+                "statusModificationDateTime": 1630059299000
+            },
+            "trackStatusOfArticle": "Delivered",
+            "statusColour": "#00ac3e",
+            "nickname": null,
+            "articleRedirect": false,
+            "userOwnership": true,
+            "atlEligible": false,
+            "redirectIneligibility": {
+                "code": "4",
+                "reason": "Too late (article has had a disabling event code)"
+            },
+            "safeDropIneligibility": {
+                "code": "6",
+                "reason": "Too late (eligibility has expired)"
+            },
+            "awaitingCollectionWorkCentreId": null,
+            "awaitingCollectionDeliveryPointId": null,
+            "atlLocation": null,
+            "atlLocationCode": null,
+            "merchantId": "N/A",
+            "barcode": "019931265099999891PLG531524501000935101|4202127|9246025498|8008210824085146",
+            "details": [
+                {
+                    "articleId": "PLG531524501000935101",
+                    "consignmentId": "PLG5315245",
+                    "articleType": "Parcel Post",
+                    "productSubType": "Parcel Post",
+                    "sender": "Ghanda",
+                    "address": {
+                        "addressee": "QUINN PERRY",
+                        "addressLine1": "1709/2 WATERWAYS STREET, WENTWORTH POINT",
+                        "addressLine2": null,
+                        "addressLine3": null,
+                        "suburb": "WENTWORTH POINT",
+                        "state": "NSW",
+                        "postCode": "2127",
+                        "country": "AU",
+                        "countryName": null,
+                        "deliveryPointId": "46025498",
+                        "addressType": "S",
+                        "articleAddressType": "POSTAL",
+                        "internationalAddress": false,
+                        "customerPickupAddress": false,
+                        "postalAddress": true,
+                        "email": null,
+                        "mobile": null,
+                        "phone": null
+                    },
+                    "fromAddress": {
+                        "addressee": "Ghanda",
+                        "addressLine1": "80 Barwon Tce",
+                        "addressLine2": null,
+                        "addressLine3": null,
+                        "suburb": "SOUTH GEELONG",
+                        "state": "VIC",
+                        "postCode": "3220",
+                        "country": "AU",
+                        "countryName": null,
+                        "deliveryPointId": null,
+                        "addressType": null,
+                        "articleAddressType": "POSTAL",
+                        "internationalAddress": false,
+                        "customerPickupAddress": false,
+                        "postalAddress": true,
+                        "email": null,
+                        "mobile": null,
+                        "phone": null
+                    },
+                    "previousDelivery": {
+                        "addressee": null,
+                        "addressLine1": null,
+                        "addressLine2": null,
+                        "addressLine3": null,
+                        "suburb": null,
+                        "state": null,
+                        "postCode": null,
+                        "country": null,
+                        "countryName": null,
+                        "deliveryPointId": null,
+                        "addressType": null,
+                        "articleAddressType": "POSTAL",
+                        "internationalAddress": false,
+                        "customerPickupAddress": false,
+                        "postalAddress": true,
+                        "email": null,
+                        "mobile": null,
+                        "phone": null
+                    },
+                    "accessCode": null,
+                    "deliverySummary": {
+                        "imageExists": false
+                    },
+                    "deliveredByDate": null,
+                    "deliveredByDateISO": null,
+                    "estimatedDeliveryDateRange": null,
+                    "collectByDateISO": null,
+                    "dateRevised": true,
+                    "displaySubscriptionPrompt": false,
+                    "redirectStatus": "Unavailable",
+                    "displayEstimatorLink": false,
+                    "extendedDescription": null,
+                    "toolTipText": null,
+                    "events": [
+                        {
+                            "dateTime": 1630059299000,
+                            "localeDateTime": "2021-08-27T20:14:59+10:00",
+                            "description": "Delivered",
+                            "location": "WENTWORTH POINT NSW",
+                            "eventCode": "DD-ER13",
+                            "wcid": "266095"
+                        },
+                        {
+                            "dateTime": 1630027778000,
+                            "localeDateTime": "2021-08-27T11:29:38+10:00",
+                            "description": "Onboard for delivery",
+                            "location": "CHULLORA NSW",
+                            "eventCode": "AFP-ER13",
+                            "wcid": "266095"
+                        },
+                        {
+                            "dateTime": 1629985436000,
+                            "localeDateTime": "2021-08-26T23:43:56+10:00",
+                            "description": "Item processed at facility",
+                            "location": "SYDNEY SOUTH WEST NSW",
+                            "eventCode": "NSS-ER42",
+                            "wcid": "279822"
+                        },
+                        {
+                            "dateTime": 1629805596000,
+                            "localeDateTime": "2021-08-24T21:46:36+10:00",
+                            "description": "In transit to next facility in SYDNEY SOUTH WEST NSW",
+                            "location": null,
+                            "eventCode": "NSS-ER01",
+                            "wcid": null
+                        },
+                        {
+                            "dateTime": 1629802771000,
+                            "localeDateTime": "2021-08-24T20:59:31+10:00",
+                            "description": "Item processed at facility",
+                            "location": "MELBOURNE VIC",
+                            "eventCode": "NSS-ER42",
+                            "wcid": "319230"
+                        },
+                        {
+                            "dateTime": 1629789910000,
+                            "localeDateTime": "2021-08-24T17:25:10+10:00",
+                            "description": "Received and ready for processing",
+                            "location": null,
+                            "eventCode": "AFC-ER64",
+                            "wcid": ""
+                        },
+                        {
+                            "dateTime": 1629788532000,
+                            "localeDateTime": "2021-08-24T17:02:12+10:00",
+                            "description": "Shipping information received by Australia Post",
+                            "location": null,
+                            "eventCode": "ADMIN-ER39",
+                            "wcid": "351281"
+                        }
+                    ],
+                    "milestones": [
+                        {
+                            "name": "Delivered",
+                            "description": null,
+                            "colour": "#00ac3e",
+                            "status": "Current",
+                            "progressPercentage": 100,
+                            "dateTime": "2021-08-27T20:14:59+10:00"
+                        }
+                    ],
+                    "hasNotification": true,
+                    "measurements": {
+                        "height": {
+                            "unit": "CM",
+                            "value": 6.000
+                        },
+                        "length": {
+                            "unit": "CM",
+                            "value": 32.000
+                        },
+                        "width": {
+                            "unit": "CM",
+                            "value": 26.500
+                        },
+                        "weight": {
+                            "unit": "KG",
+                            "value": 0.450
+                        }
+                    },
+                    "internationalTracking": null,
+                    "estimatedDeliveryDateEligible": false,
+                    "signatureOnDelivery": {
+                        "required": true,
+                        "instruction": {
+                            "code": "SIG_REQUEST_ATL",
+                            "description": null
+                        }
+                    },
+                    "collectionInstruction": {
+                        "delegate": {
+                            "allowed": false,
+                            "reason": "article must be awaiting collection at either PARCEL_COLLECT or WORK_CENTRE"
+                        },
+                        "facility": null
+                    }
+                }
+            ]
+        }
+    ]
+}

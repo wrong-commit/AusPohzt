@@ -1,0 +1,255 @@
+{
+    "status": "Success",
+    "consignmentId": "997049763262",
+    "articles": [
+        {
+            "articleId": "99704976326201008320909",
+            "status": {
+                "statusAttributeName": "Delivery Status of Article",
+                "statusAttributeValue": "Awaiting Collection",
+                "statusModificationDateTime": 1630109837000
+            },
+            "atlStatus": {
+                "statusAttributeName": "Customer ATL Request Status",
+                "statusAttributeValue": "Ineligible",
+                "statusModificationDateTime": 1629439873000
+            },
+            "trackStatusOfArticle": "Awaiting collection",
+            "statusColour": "#00ac3e",
+            "nickname": null,
+            "articleRedirect": false,
+            "userOwnership": true,
+            "atlEligible": false,
+            "redirectIneligibility": {
+                "code": "4",
+                "reason": "Too late (article has had a disabling event code)"
+            },
+            "safeDropIneligibility": {
+                "code": "1",
+                "reason": "Article will be left in a safe place"
+            },
+            "awaitingCollectionWorkCentreId": "244195",
+            "awaitingCollectionDeliveryPointId": null,
+            "atlLocation": null,
+            "atlLocationCode": null,
+            "merchantId": "N/A",
+            "barcode": "01993126509999989199704976326201008320909|4202127|9246025498|8008210820181119",
+            "details": [
+                {
+                    "articleId": "99704976326201008320909",
+                    "consignmentId": "997049763262",
+                    "articleType": "Parcel Post",
+                    "productSubType": "Parcel Post Small Satchel",
+                    "sender": null,
+                    "address": {
+                        "addressee": "Quinn Perry",
+                        "addressLine1": "U 1709",
+                        "addressLine2": "2 WATERWAYS ST",
+                        "addressLine3": null,
+                        "suburb": "WENTWORTH POINT",
+                        "state": "NSW",
+                        "postCode": "2127",
+                        "country": "AU",
+                        "countryName": null,
+                        "deliveryPointId": null,
+                        "addressType": "S",
+                        "articleAddressType": "POSTAL",
+                        "internationalAddress": false,
+                        "customerPickupAddress": false,
+                        "postalAddress": true,
+                        "email": null,
+                        "mobile": null,
+                        "phone": null
+                    },
+                    "fromAddress": {
+                        "addressee": null,
+                        "addressLine1": "PO BOX 2266",
+                        "addressLine2": null,
+                        "addressLine3": null,
+                        "suburb": "ESPERANCE",
+                        "state": "WA",
+                        "postCode": "6450",
+                        "country": "AU",
+                        "countryName": null,
+                        "deliveryPointId": null,
+                        "addressType": null,
+                        "articleAddressType": "POSTAL",
+                        "internationalAddress": false,
+                        "customerPickupAddress": false,
+                        "postalAddress": true,
+                        "email": null,
+                        "mobile": null,
+                        "phone": null
+                    },
+                    "previousDelivery": {
+                        "addressee": null,
+                        "addressLine1": null,
+                        "addressLine2": null,
+                        "addressLine3": null,
+                        "suburb": null,
+                        "state": null,
+                        "postCode": null,
+                        "country": null,
+                        "countryName": null,
+                        "deliveryPointId": null,
+                        "addressType": null,
+                        "articleAddressType": "POSTAL",
+                        "internationalAddress": false,
+                        "customerPickupAddress": false,
+                        "postalAddress": true,
+                        "email": null,
+                        "mobile": null,
+                        "phone": null
+                    },
+                    "accessCode": null,
+                    "deliverySummary": null,
+                    "deliveredByDate": null,
+                    "deliveredByDateISO": null,
+                    "estimatedDeliveryDateRange": null,
+                    "collectByDateISO": "2021-09-13",
+                    "dateRevised": false,
+                    "displaySubscriptionPrompt": false,
+                    "redirectStatus": "Unavailable",
+                    "displayEstimatorLink": false,
+                    "extendedDescription": null,
+                    "toolTipText": null,
+                    "events": [
+                        {
+                            "dateTime": 1630109837000,
+                            "localeDateTime": "2021-08-28T10:17:17+10:00",
+                            "description": "Awaiting collection at SILVERWATER BUSINESS CENTRE",
+                            "location": "SILVERWATER NSW",
+                            "eventCode": "DD-ER4",
+                            "wcid": "244195"
+                        },
+                        {
+                            "dateTime": 1630109836000,
+                            "localeDateTime": "2021-08-28T10:17:16+10:00",
+                            "description": "In transit",
+                            "location": "SILVERWATER NSW",
+                            "eventCode": "TTP-ER37",
+                            "wcid": "229905"
+                        },
+                        {
+                            "dateTime": 1630104542000,
+                            "localeDateTime": "2021-08-28T08:49:02+10:00",
+                            "description": "Unable to be left in a safe place - Location not suitable",
+                            "location": "WENTWORTH POINT NSW",
+                            "eventCode": "DD-ER8",
+                            "wcid": "229905"
+                        },
+                        {
+                            "dateTime": 1630097041000,
+                            "localeDateTime": "2021-08-28T06:44:01+10:00",
+                            "description": "Onboard for delivery",
+                            "location": "STRATHFIELD NSW",
+                            "eventCode": "AFP-ER13",
+                            "wcid": "229905"
+                        },
+                        {
+                            "dateTime": 1630071205000,
+                            "localeDateTime": "2021-08-27T23:33:25+10:00",
+                            "description": "In transit to next facility in STRATHFIELD NSW",
+                            "location": null,
+                            "eventCode": "NSS-ER01",
+                            "wcid": null
+                        },
+                        {
+                            "dateTime": 1630070698000,
+                            "localeDateTime": "2021-08-27T23:24:58+10:00",
+                            "description": "Item processed at facility",
+                            "location": "SYDNEY WEST NSW",
+                            "eventCode": "NSS-ER42",
+                            "wcid": "269288"
+                        },
+                        {
+                            "dateTime": 1630051506000,
+                            "localeDateTime": "2021-08-27T18:05:06+10:00",
+                            "description": "In transit to next facility in STRATHFIELD NSW",
+                            "location": null,
+                            "eventCode": "NSS-ER01",
+                            "wcid": null
+                        },
+                        {
+                            "dateTime": 1630049447000,
+                            "localeDateTime": "2021-08-27T17:30:47+10:00",
+                            "description": "Item processed at facility",
+                            "location": "SYDNEY WEST NSW",
+                            "eventCode": "NSS-ER42",
+                            "wcid": "269288"
+                        },
+                        {
+                            "dateTime": 1629761884000,
+                            "localeDateTime": "2021-08-24T07:38:04+08:00",
+                            "description": "In transit to next facility in SYDNEY WEST NSW",
+                            "location": null,
+                            "eventCode": "NSS-ER01",
+                            "wcid": null
+                        },
+                        {
+                            "dateTime": 1629761065000,
+                            "localeDateTime": "2021-08-24T07:24:25+08:00",
+                            "description": "Item processed at facility",
+                            "location": "PERTH AIRPORT WA",
+                            "eventCode": "NSS-ER42",
+                            "wcid": "617932"
+                        },
+                        {
+                            "dateTime": 1629448361000,
+                            "localeDateTime": "2021-08-20T16:32:41+08:00",
+                            "description": "Received by Australia Post",
+                            "location": "ESPERANCE WA",
+                            "eventCode": "AFC-ER31",
+                            "wcid": "634505"
+                        },
+                        {
+                            "dateTime": 1629447073000,
+                            "localeDateTime": "2021-08-20T16:11:13+08:00",
+                            "description": "Shipping information received by Australia Post",
+                            "location": null,
+                            "eventCode": "ADMIN-ER39",
+                            "wcid": "622379"
+                        }
+                    ],
+                    "milestones": null,
+                    "hasNotification": true,
+                    "measurements": {
+                        "height": {
+                            "unit": "CM",
+                            "value": 6.500
+                        },
+                        "length": {
+                            "unit": "CM",
+                            "value": 24.500
+                        },
+                        "width": {
+                            "unit": "CM",
+                            "value": 18.000
+                        },
+                        "weight": null
+                    },
+                    "internationalTracking": null,
+                    "estimatedDeliveryDateEligible": false,
+                    "signatureOnDelivery": {
+                        "required": false,
+                        "instruction": {
+                            "code": "NO_SIG",
+                            "description": null
+                        }
+                    },
+                    "collectionInstruction": {
+                        "delegate": {
+                            "allowed": true,
+                            "reason": null
+                        },
+                        "facility": {
+                            "type": "WORK_CENTRE",
+                            "workCentreId": "244195",
+                            "deliveryPointId": null
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}
