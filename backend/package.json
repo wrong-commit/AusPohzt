@@ -7,7 +7,7 @@
     "type": "module",
     "scripts": {
         "clean": "tsc --build --clean",
-        "build": "tsc ",
+        "build": "tsc --build",
         "start": "node dist/index.js",
         "server": "node dist/server.js",
         "test": "jest --notify",

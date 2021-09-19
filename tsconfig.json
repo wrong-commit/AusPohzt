@@ -1,11 +1,42 @@
 {
-    "files": [],
-    "references": [
-        {
-            "path": "./backend/tsconfig.ref.json",
-        },
-        {
-            "path": "./frontend/tsconfig.ref.json",
-        }
-    ]
+    "compilerOptions": {
+        "incremental": true,
+        "target": "es2019",
+        "module": "esnext",
+        "declaration": true,
+        "sourceMap": true,
+        "composite": true,
+        "strict": true,
+        "moduleResolution": "node",
+        "esModuleInterop": true, /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */
+        /* Advanced Options */
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        // "outDir": "dist",
+        // "baseUrl": ".",
+        // "allowJs": false,
+        // "checkJs": false,
+        // "allowSyntheticDefaultImports": true,
+        // "tsBuildInfoFile": "./dist/.tsbuildinfo",
+        // "jsx": "preserve",
+        "downlevelIteration": true,
+        "noImplicitAny": true, /* Raise error on expressions and declarations with an implied 'any' type. */
+        "strictNullChecks": true,
+        "strictFunctionTypes": true,
+        "strictBindCallApply": true,
+        "strictPropertyInitialization": true,
+        "noImplicitThis": true,
+        "alwaysStrict": true,
+        // /* Additional Checks */
+        "noUnusedLocals": false,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "noUncheckedIndexedAccess": true,
+        "noImplicitOverride": true,
+        "noPropertyAccessFromIndexSignature": true,
+        /* Decorators for backend madness */
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+    }
 }
