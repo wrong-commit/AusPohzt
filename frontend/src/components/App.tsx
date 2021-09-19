@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { parcel } from '@boganpost/backend/src/entities/parcel';
-// import { parcel } from '../../../backend/src/entities/parcel';
 import { Dto } from '@boganpost/backend/src/types/Dto';
 import { useAsync } from '../hooks/useAsync';
 import { viewableDate } from '@boganpost/backend/src/util/viewableDate'
@@ -17,8 +16,8 @@ const App = (props: Props) => {
         return fetch(request, {
             method: 'GET',
         }).then(res => {
-            if (res.ok) {
-                throw new Error('Could not get parcels valid');
+            if (!res.ok) {
+                throw new Error('API failed getting parcels');
             }
             return res.json();
         }).then(res => {
@@ -51,6 +50,17 @@ const App = (props: Props) => {
             {!loading && result && result.map(parcel => (
                 <React.Fragment key={parcel.id + parcel.trackingId}>
                     <h3>{parcel.trackingId} {parcel.nickName ? ': ' + parcel.nickName : ''}</h3>
+                    <button onClick={() => {
+                        fetch(new Request(`http://localhost:3000/v0/parcel/${parcel.id}`),
+                            {
+                                method: 'DELETE'
+                            }).then(res => {
+                                if (!res.ok) {
+                                    throw new Error('API failed deleting parcel')
+                                }
+                            })
+                            .catch(err => console.error(`Could not delete parcel ${parcel.id!}`, err))
+                    }}>Delete</button>
                     <span>Events</span>
                     <table>
                         <thead>
@@ -59,6 +69,7 @@ const App = (props: Props) => {
                                 <th>Location</th>
                                 <th>Date Time</th>
                                 <th>Message</th>
+                                <th>Type</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -68,6 +79,12 @@ const App = (props: Props) => {
                                     <td>{event.location}</td>
                                     <td>{viewableDate(event.dateTime)}</td>
                                     <td>{event.message}</td>
+                                    <td style={{
+                                        color: event.type === 'delivered' ? 'green' :
+                                            event.type === 'failed' ? 'red' :
+                                                event.type === 'awaiting collection' ? 'blue' : 'gray'
+
+                                    }}>{event.type}</td>
                                 </tr>
                             ))}
                         </tbody>

@@ -7,7 +7,7 @@
     "scripts": {
         "clean": "tsc --build --clean",
         "build": "tsc --build",
-        "start": "node --experimental-modules lib/index.js",
+        "start": "node lib/index.js",
         "server": "node lib/server.js",
         "test": "jest --notify",
         "it-test": "bash ./database/dbSetup.sh && jest --forceExit --notify --runInBand --config jest.it.config.js"
@@ -16,6 +16,7 @@
     "license": "ISC",
     "dependencies": {
         "bent": "^7.3.12",
+        "cors": "^2.8.5",
         "dotenv": "^10.0.0",
         "express": "^4.17.1",
         "jest": "^27.0.6",
@@ -27,6 +28,7 @@
     },
     "devDependencies": {
         "@types/bent": "^7.3.2",
+        "@types/cors": "^2.8.12",
         "@types/express": "^4.17.13",
         "@types/jest": "^27.0.1",
         "@types/pg": "^8.6.1",

@@ -9,6 +9,7 @@ API for tracking parcels
     - [x] Remove Tracking ID 
     - [x] Set nickname for Tracking ID 
     - [ ] Update Database when status changes
+        - [ ] Fix duplicate events not clearing properly
 - [ ] User Management
     - [ ] Authentication
     - [ ] Add User
