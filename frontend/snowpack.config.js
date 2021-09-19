@@ -1,5 +1,5 @@
 /** @type {import("snowpack").SnowpackUserConfig } */
-export default {
+module.exports = {
     // allows snowpack to resolve backend imports
     workspaceRoot: "../",
     mount: {

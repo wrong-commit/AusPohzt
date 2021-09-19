@@ -2,14 +2,13 @@
     "name": "@boganpost/backend",
     "version": "1.0.0",
     "description": "AusPost Package Tracker",
-    "main": "dist/index.js",
+    "main": "lib/index.js",
     "private": true,
-    "type": "module",
     "scripts": {
         "clean": "tsc --build --clean",
         "build": "tsc --build",
-        "start": "node dist/index.js",
-        "server": "node dist/server.js",
+        "start": "node --experimental-modules lib/index.js",
+        "server": "node lib/server.js",
         "test": "jest --notify",
         "it-test": "bash ./database/dbSetup.sh && jest --forceExit --notify --runInBand --config jest.it.config.js"
     },
