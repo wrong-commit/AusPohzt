@@ -32,6 +32,7 @@ class trackingEvent {
     /**
      * Unique external ID for tracking event.
      */
+    @bind
     externalId: string | null;
 
     /**
@@ -79,6 +80,7 @@ class trackingEvent {
      * @param other 
      * @returns 
      */
+
     equals(other?: Dto<trackingEvent> | trackingEvent): boolean {
         if (!other) return false;
         return this.dateTime === other.dateTime &&
