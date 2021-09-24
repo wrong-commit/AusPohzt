@@ -107,7 +107,7 @@ class baseDao<T extends daoEntity> implements dao<T> {
     async delete(id: any): Promise<boolean> {
         try {
             if (this.joinDatas) {
-                console.trace(`Deleting joined entities for ${this.entityName}`);
+                console.debug(`Deleting joined entities for ${this.entityName}`);
                 let deleted = 0;
                 for (const [_, jEntityName, __, joinColumn] of this.joinDatas) {
                     console.debug(`Deleting joined entity ${jEntityName} where ${joinColumn} = ${id}`);

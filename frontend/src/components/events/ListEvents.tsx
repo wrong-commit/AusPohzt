@@ -15,6 +15,7 @@ const ListEvents = (props: Props) => {
             <thead>
                 <tr>
                     <th>Id</th>
+                    <th>External Id</th>
                     <th>Location</th>
                     <th>Date Time</th>
                     <th>Message</th>
@@ -22,9 +23,10 @@ const ListEvents = (props: Props) => {
                 </tr>
             </thead>
             <tbody>
-                {props.events.map(event => (
+                {props.events.sort((a, b) => a.id! - b!.id!).map(event => (
                     <tr key={event.id}>
                         <td>{event.id}</td>
+                        <td>{event.externalId}</td>
                         <td>{event.location}</td>
                         <td>{event.dateTime}</td>
                         <td>{event.message}</td>
