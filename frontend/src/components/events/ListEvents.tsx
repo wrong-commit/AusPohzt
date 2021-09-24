@@ -1,4 +1,5 @@
 import React from 'react';
+import { viewableDate } from '../../service/viewableDate'
 import { trackingEvent } from "@boganpost/backend/src/entities/trackingEvent";
 import { Dto } from "@boganpost/backend/src/types/Dto";
 import '../../styles/table.css';
@@ -10,6 +11,7 @@ type Props = {
 }
 
 const ListEvents = (props: Props) => {
+
     return (
         <table>
             <thead>
@@ -28,7 +30,7 @@ const ListEvents = (props: Props) => {
                         <td>{event.id}</td>
                         <td>{event.externalId}</td>
                         <td>{event.location}</td>
-                        <td>{event.dateTime}</td>
+                        <td>{viewableDate(event.dateTime * 1000)}</td>
                         <td>{event.message}</td>
                         <td style={{
                             color: event.type === 'delivered' ? 'green' :

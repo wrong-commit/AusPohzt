@@ -35,6 +35,7 @@ class runner<T> {
                 console.warn(`Could not create parcel dto from response for ${trackingId}`);
                 return false;
             }
+            parcelDto.events.forEach(x => x.dateTime = Math.floor(x.dateTime / 1000))
             if (trackedParcel) {
                 // merge parcelDto with existing parcel 
                 const newEvents = parcelDto.events.filter(newEvent =>
@@ -46,9 +47,9 @@ class runner<T> {
             } else {
                 console.info(`Synced new parcel ${trackingId}`);
                 trackedParcel = new parcel(parcelDto);
+                trackedParcel.events.forEach(x => new trackingEvent(x));
             }
             // FIXME: support millisecond accurate date times properly
-            trackedParcel.events.forEach(x => x.dateTime = Math.floor(x.dateTime / 1000))
             trackedParcel.lastSync = Math.floor(Date.now() / 1000);
             // save parcel 
             return (await parcelDao.save(trackedParcel)) != undefined;
