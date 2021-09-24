@@ -63,6 +63,7 @@ router.delete('/:id', (req, res) => {
  * Q: can a parcel be tracked by multiple users ? 
  * TODO: add typescript support for body
  * TODO: throw error if parcel already tracked by current user
+ * TODO: add permission check, only runner should post to this endpoint. add 404 on failure
  */
 router.post('/', async (req, res) => {
     console.trace(`Adding new parcel ${JSON.stringify(req.body)}`);

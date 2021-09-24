@@ -1,0 +1,13 @@
+.App {
+    /* Set <App> to 100% of */
+    min-height: 100vh;
+    max-height: 100vh;
+    min-width: 100%;
+    max-width: 100%;
+
+    /* padding: 2rem; */
+    /* padding: 1rem; */
+
+    color: var(--TEXT);
+
+}

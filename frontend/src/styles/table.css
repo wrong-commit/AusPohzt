@@ -1,0 +1,13 @@
+table>thead th:first-child {
+    border-left: 1px solid white;
+}
+
+table>thead th {
+    border-right: 1px solid white;
+}
+
+table>thead th,
+table>tbody td {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
