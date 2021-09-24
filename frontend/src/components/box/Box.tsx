@@ -1,6 +1,8 @@
-import React from "react"
+import React, { useRef } from "react"
+import { useDraggable } from "../../hooks/useDraggable";
 
 import '../../styles/components/Box.css';
+import '../../styles/components/draggable.css';
 
 export { Box }
 type Props = {
@@ -13,11 +15,17 @@ type Props = {
 }
 
 const Box = (props: Props) => {
-    // TODO: make draggable
+    const ref = useRef<HTMLDivElement | null>(null);
+    const [draggableProps, position, setPosition] = useDraggable(ref);
     // TODO: make resizable with minimum dimensions
     // TODO: make 
     return (
-        <div className={'Box'}>
+        <div {...draggableProps} //ref={r => ref.current = r} draggable
+            className={'Box draggable'}
+            style={{
+                left: position.x ?? 0,
+                top: position.y ?? 0,
+            }}>
             <div data-box-header>
                 <h3>{props.title}</h3>
                 {props.onClose && (
