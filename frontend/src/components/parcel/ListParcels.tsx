@@ -2,6 +2,7 @@ import React from 'react';
 import { parcel } from "@boganpost/backend/src/entities/parcel";
 import { Dto } from "@boganpost/backend/src/types/Dto";
 import '../../styles/table.css';
+import { viewableDate } from '../../service/viewableDate';
 
 export { ListParcels };
 
@@ -28,7 +29,7 @@ const ListParcels = (props: Props) => {
                         <td>{p.id}</td>
                         <td>{p.trackingId}</td>
                         <td>{p.nickName}</td>
-                        <td>{p.lastSync}</td>
+                        <td>{viewableDate(p.lastSync * 1000)}</td>
                     </tr>
                 ))}
             </tbody>
