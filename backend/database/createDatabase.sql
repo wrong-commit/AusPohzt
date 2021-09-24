@@ -24,6 +24,8 @@ CREATE TABLE trackingEvent (
     ID SERIAL PRIMARY KEY,
     -- TODO: will this work ? 
     parcelId SERIAL,
+    -- TODO: will this work ? 
+    externalId VARCHAR(255) NULL,
     -- TODO: use proper datatype here ? 
     dateTime INT,
     -- location info attached to event. empty equivalent of NULL
