@@ -54,7 +54,7 @@ class parcel {
         this.owner = data.owner;
 
         this.nickName = data.nickName;
-        this.events = data.events.map(e => new trackingEvent(e));
+        this.events = data.events.map(e => new trackingEvent(e)).sort((a, b) => (a.id ?? a.dateTime) - (b.id ?? b.dateTime));
         this.lastSync = data.lastSync;
     }
 
