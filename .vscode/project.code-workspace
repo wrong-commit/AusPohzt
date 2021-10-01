@@ -8,14 +8,22 @@
         },
         {
             "path": "../frontend"
+        },
+        {
+            "path": "../client"
         }
     ],
     "settings": {
         "files.exclude": {
-            // "lib/": true,
+            "../backend/lib/": true,
+            "lib/": true,
             "node_modules/": true,
             // "backend/": true,
             // "frontend/": true,
+        },
+        "go.toolsEnvVars": {
+            /* Enable Go Module resolution*/
+            "GONOPROXY": "none;",
         },
     }
 }

@@ -1,6 +1,6 @@
 # AusPohzt 
 
-API for tracking parcels 
+API, Front End, and Notification Clients for tracking parcels 
 
 ## TODO 
 
@@ -9,15 +9,25 @@ API for tracking parcels
     - [x] Remove Tracking ID 
     - [x] Set nickname for Tracking ID 
     - [ ] Update Database when status changes
-        - [ ] Fix duplicate events not clearing properly
+        - [x] Fix duplicate events not clearing properly
+    - [ ] Handle dates correctly
+        - [ ] Support 64 bit integers for dates, or
+        - [ ] Migrate to postgres datetime date types
 - [ ] User Management
     - [ ] Authentication
     - [ ] Add User
     - [ ] Remove User
 - [ ] System
     - [ ] Setup daemon scripts
+        - [ ] node systemctl script
+        - [ ] node macos service script
+        - [ ] cronjob example for notifications
     - [ ] Setup multiple workers
     - [ ] Default nginx config for workers
+- [ ] Notifications
+    - [x] Barebones notification script
+    - [ ] custom icon for notification (in MacOS only ?)
+    - [ ] last events written to configurable folder
 - [ ] Misc
     - [ ] Convert semi-JavaDocs to JSDocs 
     - [ ] Setup Github Actions
@@ -25,8 +35,8 @@ API for tracking parcels
     - [x] pirate to support passing results through map() and mapMany()
     - [ ] typing of entityDecorator.getEntityPrototype
     - [x] DRY dao code
-    - [ ] pirate.map() accepts row arg as array instead of single instance, see dao.find() comment
+    - [x] pirate.map() accepts row arg as array instead of single instance, see dao.find() comment
 - [ ] Documentation
-    - [ ] Explain typescript setup: https://2ality.com/2021/07/simple-monorepos.html
+    - [ ] Explain typescript setup: https://2ality.com/2021/07/simple-monorepos.html (no longer correct, using amalgamatioin of various configs)
     - [ ] Explain package.json setup
     - [ ] Explain snowpack setup ( easy )
