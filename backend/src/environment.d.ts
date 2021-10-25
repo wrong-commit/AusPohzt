@@ -1,6 +1,7 @@
 
 declare global {
     namespace NodeJS {
+        // TODO: add method to ensure environment variables are set, or set default if required.
         interface ProcessEnv {
             /**
              * TODO: param should control logging profile
@@ -41,6 +42,16 @@ declare global {
              * Postgres Port. Defaults to `5432`
              */
             PG_PORT?: number;
+            /**
+             * Runner execution interval. Defaults to `60000`, or 1 minute
+             */
+            RUNNER_INTERVAL_MS?: number;
+            /**
+             * Parcel sync interval. Defaults to `600000`, or 10 minutes.
+             * 
+             * This may be dependant on the number of parcels in the system, don't want to get banned from API
+             */
+            SYNC_INTERVAL_MS?: number;
         }
     }
 }

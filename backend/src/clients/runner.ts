@@ -22,7 +22,7 @@ class runner<T> {
     /**
      * This method will sync new information about a parcel by trackingId. 
      * 
-     * Assumes that parcel trackingEvents.raw 
+     * TODO: this should really be posting directly to the API instead of using dao.
      * 
      * @param trackingId 
      */
