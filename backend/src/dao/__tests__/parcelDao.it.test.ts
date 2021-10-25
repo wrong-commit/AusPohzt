@@ -171,7 +171,7 @@ describe("parcelDao", () => {
         })
         test("merge", async () => {
             let newParcel: parcel | undefined = new parcel({
-                trackingId: 'newParcelTrkId',
+                trackingId: 'mergeParcelTrkId',
                 owner: 0,
                 events: [],
                 lastSync: 0,
