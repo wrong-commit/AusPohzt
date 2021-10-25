@@ -1,3 +1,5 @@
+# JWT HMAC secret
+HMAC_SECRET=
 # digital api url  
 DIGITAL_API=
 # api key 

@@ -4,6 +4,10 @@ declare global {
         // TODO: add method to ensure environment variables are set, or set default if required.
         interface ProcessEnv {
             /**
+             * JWT Secret
+             */
+            HMAC_SECRET: string;
+            /**
              * TODO: param should control logging profile
              * TODO: param should control other stuff ?
              * TODO: add testing env
