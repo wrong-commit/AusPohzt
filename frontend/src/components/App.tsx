@@ -1,6 +1,6 @@
 import { parcel } from '@boganpost/backend/src/entities/parcel';
 import { Dto } from '@boganpost/backend/src/types/Dto';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useAsync } from '../hooks/useAsync';
 import { getParcels } from '../service/getParcels';
 import { Box } from './box/Box';
@@ -12,14 +12,14 @@ import '../styles/components/App.css';
 import { getQueued } from '../service/getQueued';
 import { ListQueued } from './queued/ListQueued';
 import { queued } from '@boganpost/backend/src/entities/queued';
-import { TaskBar } from './taskbar/TaskBar';
-
+import { useTimer } from '../hooks/useTimer';
+import { TaskBar, TaskBarItem } from './taskbar/TaskBar';
 
 export { App };
+
 type Props = {
     userId: number
 }
-
 const App = (props: Props) => {
     console.log(props);
 
@@ -27,6 +27,16 @@ const App = (props: Props) => {
     const [queued, fetchQueued, fetchingQueued, setQueued] = useAsync<Dto<queued>[]>(() => getQueued(), undefined);
     const [parcels, fetchParcels, fetchingParcels, setFetchedParcels] = useAsync<Dto<parcel>[]>(() => getParcels(), undefined);
     const [parcel, setParcel] = useState<Dto<parcel> | undefined>(undefined);
+
+    const sync = async () => {
+        await fetchParcels();
+        await fetchQueued();
+    }
+    // ignore callback, this is just triggering useAsync calls
+    const lastUpdated = useTimer(async () => {
+        await sync()
+        return 1;
+    }, 5000, () => null, [])
 
     useEffect(() => {
         // fetch parcels on first render, unless already fetching (unnecessary ?)
@@ -97,7 +107,12 @@ const App = (props: Props) => {
                     </Box>
                 )}
 
-                <TaskBar />
+                <TaskBar>
+                    <TaskBarItem hidden={false}
+                        onClick={sync}>
+                        ...
+                    </TaskBarItem>
+                </TaskBar>
             </div >
         </>
     )
