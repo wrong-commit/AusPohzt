@@ -1,0 +1,59 @@
+/* FIXME: don't let border shift .Taskbar into overflow */
+.TaskBar {
+    /* dimensions */
+    height: 2rem;
+    min-width: 100vw;
+    width: 100%;
+
+    background-color: var(--BACKGROUND);
+
+    padding: 0.1rem 0.1rem 0.4rem 0.2rem;
+
+    /* avoid y-overflow because of border */
+    margin-bottom: 0.2rem;
+
+    /* add border */
+    border-top: 0.1rem solid var(--TEXT);
+    box-sizing: border-box;
+
+    /* always on bottom, always vsibile */
+    position: fixed;
+    bottom: 0;
+
+    /*  */
+    display: flex;
+    flex-direction: row;
+}
+
+
+.TaskBarItem {
+    /* space between previous item */
+    margin-left: 0.4rem;
+    /* pad horizontal */
+    padding: 0 1rem 0 1rem;
+    /* center text */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* full height of taskbar */
+    height: 100%;
+    /* nice styling */
+    border: 0.1rem solid var(--TEXT);
+    /* UI to look like actual buttons. TODO: use buttons ? */
+    cursor: pointer;
+    /* iOS Safari */
+    -webkit-touch-callout: none;
+    /* Safari */
+    -webkit-user-select: none;
+    /* Konqueror HTML */
+    -khtml-user-select: none;
+    /* Old versions of Firefox */
+    -moz-user-select: none;
+    /* Internet Explorer/Edge */
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.TaskBarItem[data-hidden=true] {
+    color: gray;
+}

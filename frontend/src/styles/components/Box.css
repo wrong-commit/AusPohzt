@@ -20,3 +20,7 @@
 .Box [data-box-body] {
     margin: 1rem;
 }
+
+.Box [data-box-body]>* {
+    margin-bottom: 1rem;
+}

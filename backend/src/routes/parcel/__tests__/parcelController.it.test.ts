@@ -8,7 +8,7 @@ import { Dto } from '../../../types/Dto';
 const parcelDao = daoFactory(parcel);
 let findParcel: number;
 // parcel to delete
-describe("parcelController", () => {
+describe("parcel controller", () => {
     let app = buildExpress();
     beforeAll(async () => {
         findParcel = (await pool.query(

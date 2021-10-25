@@ -17,6 +17,7 @@ API, Front End, and Notification Clients for tracking parcels
     - [ ] Authentication
     - [ ] Add User
     - [ ] Remove User
+    - [ ] Authorization for runner, probably with signed tokens
 - [ ] System
     - [ ] Setup daemon scripts
         - [ ] node systemctl script
@@ -36,6 +37,8 @@ API, Front End, and Notification Clients for tracking parcels
     - [ ] typing of entityDecorator.getEntityPrototype
     - [x] DRY dao code
     - [x] pirate.map() accepts row arg as array instead of single instance, see dao.find() comment
+    - [ ] controller code should use async/await instead of promise callbacks
+    - [ ] use proper go fmt methods for logging ( unnecessary \n everywhere )
 - [ ] Documentation
     - [ ] Explain typescript setup: https://2ality.com/2021/07/simple-monorepos.html (no longer correct, using amalgamatioin of various configs)
     - [ ] Explain package.json setup

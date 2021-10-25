@@ -22,17 +22,26 @@ class pirate<T extends object> {
     }
 
     /**
-     * Map from ResultQuery to constructor argument for instance.
+     * Map ResultQuery to constructor argument for instance.
+     * @param row SQL Table Row
+     * @param fieldDefs column definitions for row arg
+     * @param joinResult optional entity join results
      */
     map(row: QueryResultRow, fields: FieldDef[], joinResult?: JoinQueryResult[]): T {
         return this._map(row, fields, joinResult);
     }
 
+    /**
+     * Map multiple ResultQuery to constructor argument for instances.
+     * @param rows SQL Table Rows
+     * @param fieldDefs column definitions for SQL Table rows arg
+     * @param joinResult optional entity join results. if defined, must have same number of entries as rows arg
+     */
     mapMany(rows: QueryResultRow[], fields: FieldDef[], joinResults?: JoinQueryResult[][]): T[] {
-        if (rows.length !== joinResults?.length) {
+        if (joinResults && rows.length !== joinResults?.length) {
             throw new Error('Cannot map many entities with different number of join results. Ensure joinResults populated with undefined for rows without join results');
         }
-        return rows.map((row, i) => this._map(row, fields, joinResults[i]));
+        return rows.map((row, i) => this._map(row, fields, (joinResults ?? [])[i]));
     }
 
     /**
