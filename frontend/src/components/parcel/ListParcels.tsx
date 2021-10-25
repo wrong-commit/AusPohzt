@@ -24,7 +24,7 @@ const ListParcels = (props: Props) => {
                 </tr>
             </thead>
             <tbody>
-                {props.parcels.map(p => (
+                {props.parcels.sort((a, b) => a.id! - b.id!).map(p => (
                     <tr key={p.id} onClick={() => props.onClick(p.id!)}>
                         <td>{p.id}</td>
                         <td>{p.trackingId}</td>
