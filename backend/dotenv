@@ -7,3 +7,7 @@ PORT=3000
 PG_USER=
 PG_PASS=
 PG_DATABASE=
+# how often should the runner check for queued parcels, and check if SYNC_INTERVAL_MS has ellapsed for each parcel
+RUNNER_INTERVAL_MS=60000
+# how long between runner parcel syncs
+SYNC_INTERVAL_MS=600000
