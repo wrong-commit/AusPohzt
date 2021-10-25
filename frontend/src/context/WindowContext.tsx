@@ -25,6 +25,26 @@ type Action = {
 
 type Children = { children?: React.ReactNode; }
 
+function getPositionFromStorage(id: string): [number, number] | undefined {
+    let positions = undefined;
+    try {
+        const stored = window.sessionStorage.getItem(id);
+        if (stored) {
+            const obj = JSON.parse(stored);
+            if (Array.isArray(obj) && obj.length === 2 && !Number.isNaN(obj[0]) && !Number.isNaN(obj[1])) {
+                positions = [obj[0], obj[1]] as [number, number];
+                console.info(`loaded stored pos ${positions} for ${id}`)
+            }
+        }
+    } catch (err) {
+    }
+    return positions;
+}
+function setPositionInStorage(id: string, pos: [number, number]) {
+    console.debug(`Stored pos ${pos} for ${id}`)
+    window.sessionStorage.setItem(id, JSON.stringify(pos))
+}
+
 function LockReducer(state: State, action: Action): State {
     let newState: State;
     switch (action.type) {
@@ -39,6 +59,10 @@ function LockReducer(state: State, action: Action): State {
                     dim: action.dim!,
                     pos: action.pos!,
                 };
+                const positions = getPositionFromStorage(action.id)
+                if (positions) {
+                    newState[action.id]!.pos = positions;
+                }
             }
             break;
         }
@@ -53,6 +77,7 @@ function LockReducer(state: State, action: Action): State {
             newState = { ...state };
             if (action.pos && newState[action.id]) {
                 newState[action.id]!.pos = action.pos;
+                setPositionInStorage(action.id, newState[action.id]!.pos)
             };
             break;
         }

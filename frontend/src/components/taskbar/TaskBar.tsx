@@ -3,9 +3,7 @@ import { useWindowDispatch, useWindowState, WindowState } from '../../context/Wi
 
 import '../../styles/components/taskbar/TaskBar.css';
 
-export {
-    TaskBar
-}
+export { TaskBar }
 
 type Props = {}
 
@@ -34,6 +32,7 @@ type ItemProps = {
     children: string;
     hidden: boolean;
     onClick: (hidden: boolean) => void;
+    // TODO: add onHover 
 }
 const TaskBarItem = (props: ItemProps) => {
     return (

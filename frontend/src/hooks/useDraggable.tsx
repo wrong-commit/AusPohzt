@@ -33,7 +33,7 @@ const useDraggable = <T extends HTMLElement>(
             console.log('Didnt click header')
         }
         // setup event listeners for move and mouse up
-        console.debug('Started Dragging')
+        // console.debug('Started Dragging')
         originalDisplayStyle.current = (e.target as HTMLElement).style.display
 
         // setup event listeners now dragging has started
@@ -51,7 +51,7 @@ const useDraggable = <T extends HTMLElement>(
     }, [container]);
 
     const onDragEnd: MouseHandler = useCallback(e => {
-        console.debug('Ended Dragging');
+        // console.debug('Ended Dragging');
         const target = (e.target as HTMLElement);
         target.style.display = originalDisplayStyle.current;
 
@@ -70,11 +70,11 @@ const useDraggable = <T extends HTMLElement>(
     }, [container]);
 
     const onDrop: MouseHandler = useCallback(e => {
-        console.debug('Dropped');
+        // console.debug('Dropped');
     }, [container]);
 
     const onDragOver: MouseHandler = useCallback(e => {
-        console.debug('Drag Over');
+        // console.debug('Drag Over');
         e.preventDefault();
     }, [container]);
 
