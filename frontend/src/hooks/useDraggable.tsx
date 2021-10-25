@@ -1,32 +1,31 @@
-import { LegacyRef, useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export { useDraggable };
 
-// type Props<T extends HTMLElement>  = ;
 type MouseHandler = (e: MouseEvent) => void;
 
 type Position = {
     x: number | undefined,
     y: number | undefined,
 }
-type DraggableProps<T> = {
+type DraggableProps = {
     draggable: boolean;
-    ref: LegacyRef<T>;
 }
 
-const useDraggable = <T extends HTMLElement>(container: React.MutableRefObject<T | null>):
-    [DraggableProps<T>, Position, Function] => {
-    console.log(container.current);
+const useDraggable = <T extends HTMLElement>(
+    container: React.MutableRefObject<T | null>,
+    defaultPosition?: Position):
+    [DraggableProps, Position, React.Dispatch<React.SetStateAction<Position>>] => {
     if (container.current && !container.current?.draggable) {
         console.warn(`Element ${container} is not draggable=true`, container)
         throw new Error(`Element ${container} is not draggable=true`);
     }
     /* Store position of draggable originally clicked. */
-    const originalDisplay = useRef('');
+    const originalDisplayStyle = useRef('');
     const start = useRef({ x: 0, y: 0 });
     const [position, setPosition] = useState({
-        x: container.current?.clientLeft,
-        y: container.current?.clientTop,
+        x: defaultPosition?.x ?? container.current?.clientLeft,
+        y: defaultPosition?.y ?? container.current?.clientTop,
     })
 
     const onDragStart: MouseHandler = useCallback(e => {
@@ -35,7 +34,7 @@ const useDraggable = <T extends HTMLElement>(container: React.MutableRefObject<T
         }
         // setup event listeners for move and mouse up
         console.debug('Started Dragging')
-        originalDisplay.current = (e.target as HTMLElement).style.display
+        originalDisplayStyle.current = (e.target as HTMLElement).style.display
 
         // setup event listeners now dragging has started
         container.current?.removeEventListener('dragstart', onDragStart);
@@ -54,12 +53,11 @@ const useDraggable = <T extends HTMLElement>(container: React.MutableRefObject<T
     const onDragEnd: MouseHandler = useCallback(e => {
         console.debug('Ended Dragging');
         const target = (e.target as HTMLElement);
-        target.style.display = originalDisplay.current;
+        target.style.display = originalDisplayStyle.current;
 
         const adjustedX = start.current.x - e.clientX
         const adjustedY = start.current.y - e.clientY;
 
-        console.log({ adjustedX, adjustedY })
         if (container.current) {
             container.current!.style.top = `${target.offsetTop - adjustedY}px`;
             container.current!.style.left = `${target.offsetLeft - adjustedX}px`;
@@ -93,11 +91,8 @@ const useDraggable = <T extends HTMLElement>(container: React.MutableRefObject<T
         }
     }, [container, container.current])
 
-    // const dragging = useRef(false);
-    // const start = useRef({ x: 0, y: 0 });
     return [
         {
-            ref: (r) => { container.current = r },
             draggable: true
         },
         position,
