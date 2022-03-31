@@ -39,6 +39,7 @@ API, Front End, and Notification Clients for tracking parcels
     - [x] pirate.map() accepts row arg as array instead of single instance, see dao.find() comment
     - [ ] controller code should use async/await instead of promise callbacks
     - [ ] use proper go fmt methods for logging ( unnecessary \n everywhere )
+    - [ ] parcel dao should be rewritten, needs to support most parcel methods returning a list
 - [ ] Documentation
     - [ ] Explain typescript setup: https://2ality.com/2021/07/simple-monorepos.html (no longer correct, using amalgamatioin of various configs)
     - [ ] Explain package.json setup

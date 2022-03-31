@@ -27,8 +27,12 @@ class runner<T> {
      * @param trackingId 
      */
     async sync(trackingId: string, owner: number): Promise<boolean> {
+        let disabledParcel = await parcelDao.findByTrackingIdAndDisabled(trackingId, true);
         let trackedParcel = await parcelDao.findByTrackingId(trackingId);
         const queued = await queuedDao.findByTrackingId(trackingId);
+        if (disabledParcel) {
+            return false;
+        }
         if (trackedParcel && trackedParcel.owner !== owner) {
             throw new Error(`Incorrect user tried to sync ${trackingId}`);
         }
@@ -65,6 +69,15 @@ class runner<T> {
             }
             // FIXME: support millisecond accurate date times properly
             trackedParcel.lastSync = Math.floor(Date.now() / 1000);
+
+            if (trackedParcel.events.length > 0) {
+                const lastEvent = trackedParcel.events[trackedParcel.events.length - 1]
+                if (lastEvent?.type === 'delivered') {
+                    console.debug(`Disabling parcel because last event is delivered, ${lastEvent.externalId}`)
+                    // trackedParcel.disabled = true;
+                }
+            }
+
             // save parcel 
             return (await parcelDao.save(trackedParcel)) != undefined;
         } else {
