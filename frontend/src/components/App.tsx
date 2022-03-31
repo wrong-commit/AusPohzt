@@ -15,6 +15,7 @@ import { queued } from '@boganpost/backend/src/entities/queued';
 import { useTimer } from '../hooks/useTimer';
 import { TaskBar, TaskBarItem } from './taskbar/TaskBar';
 import { RenameParcel } from './parcel/RenameParcel';
+import { api } from '@boganpost/backend/src/services/api';
 
 export { App };
 
@@ -130,6 +131,13 @@ const App = (props: Props) => {
                     <TaskBarItem hidden={false}
                         onClick={sync}>
                         ...
+                    </TaskBarItem>
+                    <TaskBarItem hidden={false}
+                        onClick={() => {
+                            api.init('http://localhost:3000').post('/v0/auth/logout')
+                                .then(() => window.location.href = window.location.href)
+                        }}>
+                        Logout
                     </TaskBarItem>
                 </TaskBar>
             </div >

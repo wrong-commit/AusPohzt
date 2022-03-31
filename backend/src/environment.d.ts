@@ -4,6 +4,10 @@ declare global {
         // TODO: add method to ensure environment variables are set, or set default if required.
         interface ProcessEnv {
             /**
+             * penlicence
+             */
+            AUTH_COOKIE_NAME: string;
+            /**
              * JWT Secret
              */
             HMAC_SECRET: string;

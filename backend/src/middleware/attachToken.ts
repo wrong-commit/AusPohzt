@@ -11,10 +11,19 @@ export { attachToken }
  */
 const attachToken = (req: express.Request, _: express.Response, next: express.NextFunction) => {
     const authHeader = req.headers.authorization;
-    const token = authHeader?.split('Bearer: ')[1];
-    if (authHeader && token && token.length > 0) {
-        const claims = jwt.verify(token, process.env.HMAC_SECRET)
-        req.claims = claims;
+    let token = undefined;
+    token = authHeader?.split('Bearer: ')[1];
+    if (!token && req.cookies) {
+        token = req.cookies[process.env.AUTH_COOKIE_NAME]
+    }
+    if (token && token.length > 0) {
+        try {
+            const claims = jwt.verify(token, process.env.HMAC_SECRET)
+            req.claims = claims;
+        } catch (e) {
+            console.debug('Could not attach claims from token ', token)
+            // console.log(e);
+        }
     }
     next();
 };

@@ -22,6 +22,16 @@ class api {
 
         return response;
     }
+    async post(path: string, options?: postOptions): Promise<bent.NodeResponse> {
+        const url = this.buildUrl(path, options?.params);
+        const request = bent<NodeResponse>('POST');
+
+        const response = await request(url.toString(), options?.body, this.buildHeaders(options?.headers));
+
+        this.throwErrorOnWrongStatusCode(response, options?.statusCode)
+
+        return response;
+    }
 
     private throwErrorOnWrongStatusCode(response: NodeResponse, _statusCodes?: number | number[]) {
         if (_statusCodes) {

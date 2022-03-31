@@ -1,3 +1,5 @@
+# name of cookie to read JWT from
+AUTH_COOKIE_NAME=penlicence
 # JWT HMAC secret
 HMAC_SECRET=
 # digital api url  
