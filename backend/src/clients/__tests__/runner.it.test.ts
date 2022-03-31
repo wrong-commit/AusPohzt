@@ -37,6 +37,7 @@ describe("runner", () => {
                 }
             ],
             lastSync: 0,
+            disabled: false,
             owner: 0,
         })))!;
         expect(savedParcel).toBeDefined()

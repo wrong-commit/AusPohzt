@@ -188,9 +188,10 @@ class baseDao<T extends daoEntity> implements dao<T> {
     // TODO: add logging
     protected async saveJoins(existObj: T): Promise<number | undefined> {
         if (this.joinDatas) {
-            console.trace(`Saving joined entities for ${this.entityName}`);
+            console.debug(`Saving joined entities for ${this.entityName}`);
             let updated = 0;
             for (const [field, jEntityName, assoc, joinColumn] of this.joinDatas) {
+                console.debug(`entity  ${this.entityName}. field=${field},jEntityName=${jEntityName},assoc=${assoc},joinColumn=${joinColumn}`);
                 const joinEntity = getEntity(jEntityName);
 
                 let existJents: Array<any> = [];

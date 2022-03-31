@@ -7,7 +7,6 @@ export { parcel };
 
 /**
  * class object for parcel being tracked.
- * TODO: add inactive/delivered parcels
  */
 @entity('parcel')
 class parcel {
@@ -29,6 +28,9 @@ class parcel {
      */
     @bind
     owner: number;
+
+    @bind
+    disabled: boolean;
 
     /**
      * Use defined nickname.
@@ -52,6 +54,7 @@ class parcel {
         this.id = data.id;
         this.trackingId = data.trackingId;
         this.owner = data.owner;
+        this.disabled = data.disabled;
 
         this.nickName = data.nickName;
         this.events = data.events.map(e => new trackingEvent(e)).sort((a, b) => (a.id ?? a.dateTime) - (b.id ?? b.dateTime));
@@ -62,6 +65,7 @@ class parcel {
         return {
             id: this.id,
             owner: this.owner,
+            disabled: this.disabled,
             trackingId: this.trackingId,
             nickName: this.nickName,
             lastSync: this.lastSync,

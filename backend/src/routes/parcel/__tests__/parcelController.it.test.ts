@@ -6,25 +6,49 @@ import { parcel } from '../../../entities/parcel';
 import { Dto } from '../../../types/Dto';
 
 const parcelDao = daoFactory(parcel);
+// findParcelTrkId
 let findParcel: number;
-// parcel to delete
+// deleteMeTrkId
+let parcelToDelete: number;
+// deletedParcelTrkId
+let deletedParcel: number;
 describe("parcel controller", () => {
     let app = buildExpress();
     beforeAll(async () => {
         findParcel = (await pool.query(
             `INSERT INTO parcel (trackingId, owner, nickname, lastSync) VALUES ('findParcelTrkId', 1, 'nickname', 0) RETURNING id;`
         )).rows[0]['id'];
+        parcelToDelete = (await pool.query(
+            `INSERT INTO parcel (trackingId, owner, nickname, lastSync) VALUES ('deleteMeTrkId', 1, 'nickname', 0) RETURNING id;`
+        )).rows[0]['id'];
+        deletedParcel = (await pool.query(
+            `INSERT INTO parcel (trackingId, owner, nickname, lastSync, "disabled") VALUES ('deletedParcelTrkId', 1, 'nickname', 0, 'y') RETURNING id;`
+        )).rows[0]['id'];
     })
-    // FIXME: wtf, why is async jest broken in this version ? need to reread documentation so --forceExit isn't required
-    test("get all parcels", async () => {
-        await request(app)
-            .get('/v0/parcel/')
-            .expect('Content-Type', /json/)
-            .expect(200)
-            .then(resp => {
-                expect(resp.body.map((x: Dto<parcel>) => x.trackingId)).toContain('findParcelTrkId');
-            })
-    });
+
+    describe("get active parcels", () => {
+        // FIXME: wtf, why is async jest broken in this version ? need to reread documentation so --forceExit isn't required
+        test("get all non-deleted parcels", async () => {
+            await request(app)
+                .get('/v0/parcel/')
+                .expect('Content-Type', /json/)
+                .expect(200)
+                .then(resp => {
+                    expect(resp.body.map((x: Dto<parcel>) => x.trackingId)).toContain('findParcelTrkId');
+                    expect(resp.body.map((x: Dto<parcel>) => x.trackingId)).not.toContain('deletedParcelTrkId');
+                })
+        });
+        test("get deleted parcels", async () => {
+            await request(app)
+                .get('/v0/parcel?disabled=true')
+                .expect('Content-Type', /json/)
+                .expect(200)
+                .then(resp => {
+                    console.info(resp.body);
+                    expect(resp.body.map((x: Dto<parcel>) => x.trackingId)).toContain('deletedParcelTrkId');
+                })
+        })
+    })
 
     test("get parcel by id", async () => {
         await request(app)
@@ -66,6 +90,7 @@ describe("parcel controller", () => {
                 .post(`/v0/parcel/`)
                 .send({
                     events: [],
+                    disabled: false,
                     lastSync: 100,
                     owner: -1,
                     trackingId: 'deleteParcelTrkId',
@@ -124,6 +149,7 @@ describe("parcel controller", () => {
                 .send({
                     events: [],
                     lastSync: 100,
+                    disabled: false,
                     owner: -1,
                     trackingId: 'addedTrackingId',
                 } as Dto<parcel>)
@@ -147,6 +173,7 @@ describe("parcel controller", () => {
                 .send({
                     events: [],
                     lastSync: 100,
+                    disabled: false,
                     owner: -1,
                     // findParcelTrkId setup when test first runs
                     trackingId: 'findParcelTrkId',

@@ -11,6 +11,7 @@ CREATE TABLE parcel (
     ID SERIAL PRIMARY KEY,
     -- random trackingId size
     trackingId VARCHAR(255),
+    "disabled" boolean DEFAULT false,
     -- id of user that owns this parcel
     owner INTEGER,
     -- optional nickname assigned to parcel
@@ -46,3 +47,17 @@ CREATE TABLE trackingEvent (
     -- TODO: change to JSON, figure out null support. https://stackoverflow.com/a/45973415
     raw TEXT NULL
 );
+
+
+
+-- IF (SELECT 1 
+--     FROM information_schema.columns 
+--     WHERE 
+--         -- table_schema='my_schema' AND 
+--         table_name='parcel' AND 
+--         column_name='disabled') = 0 THEN 
+--     RAISE NOTICE 'Adding parcel.disabled boolean';
+--     ALTER TABLE parcel ADD COLUMN "disabled" boolean;
+-- END IF;
+
+
