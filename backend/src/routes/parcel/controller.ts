@@ -9,23 +9,40 @@ export default router;
 const parcelDao = daoFactory(parcel);
 
 /**
- * Return all of users parcels.
+ * Return all active parcels
  * TODO: show active parcels by default, control with query param
  * TODO: add typescript support for return type
  * @returns all users parcels
  */
-router.get('/', (_, res) => {
-    console.trace(`Getting all parcels`);
-
-    parcelDao.findAll().then(parcels => {
-        if (!parcels) {
-            throw new Error('dao.findAll failed');
+router.get('/', async (req, res) => {
+    console.debug(`Getting all parcels`);
+    let parcels: parcel[] | undefined = undefined;
+    try {
+        /**
+         * if this is true, we included deleted parcels in our search
+         */
+        const { disabled, } = req.query;
+        console.debug(`disabled=${disabled}`);
+        let parcelsPromise: null | Promise<parcel[] | undefined>;
+        if (disabled == undefined) {
+            console.debug('Finding all non deleted parcels')
+            parcelsPromise = parcelDao.findAll();
         } else {
-            res.status(200).json(parcels?.map(x => x.toData()))
+            console.debug('Finding all disabled parcels')
+            parcelsPromise = parcelDao.findByDisabled(true)
+            // console.debug('Disabled is invalid ' + typeof disabled)
+            // return res.status(400).send('what you playin at ? -_0');
         }
-    }).catch(err => {
-        res.status(500).write(JSON.stringify(err));
-    })
+        parcels = await parcelsPromise;
+    } catch (e) {
+        console.error(e);
+        return res.status(500).end();
+    }
+    if (parcels) {
+        res.status(200).json(parcels.map(x => x.toData()))
+    } else {
+        res.status(500).send('could not load parcels');
+    }
 });
 
 router.get('/:id', (req, res) => {
@@ -73,15 +90,16 @@ router.post('/', async (req, res) => {
         }
         // check if parcel with same tracking Id already exists 
         const dto = req.body as Dto<parcel>;
+        // FIXME: find by TrackingIdAndOwner 
         const existingParcel = await parcelDao.findByTrackingId(dto.trackingId);
         if (existingParcel) {
             console.warn(`parcel ${existingParcel.id} already created for trackingId ${dto.trackingId}`);
             res.status(500).send(JSON.stringify({ message: 'Parcel already exists' }));
-            // res.end();
         } else {
             // always id to undefined to avoid overwriting existing parcel
             dto.id = undefined;
-            // set owner to 0 until auth is added
+            dto.disabled = false;
+            // set owner to -1 until auth is added
             dto.owner = -1;
             // set last sync to -1 to indicate sync required
             dto.lastSync = -1;

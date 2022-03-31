@@ -6,8 +6,8 @@ USER="bogan"
 PASSWORD="123"
 DATABASE="auspohzt_test"
 
-if [ $# -gt 0 ]
-     then
+if [ $# -gt 0 ] 
+then
     USER=$1
 fi
 if [ $# -gt 1 ] 

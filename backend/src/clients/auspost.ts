@@ -74,6 +74,7 @@ class auspost implements client<shipmentsResponse> {
         let parcel: Dto<parcel> = {
             id: undefined,
             trackingId,
+            disabled: false,
             nickName: undefined,
             owner: - 1,
             lastSync: -1,
