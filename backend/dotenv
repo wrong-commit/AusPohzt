@@ -1,3 +1,9 @@
+# Enable or Disable authentication. true | false
+ENABLE_AUTH=true
+# name of cookie to read JWT from
+AUTH_COOKIE_NAME=penlicence
+# JWT HMAC secret
+HMAC_SECRET=
 # digital api url  
 DIGITAL_API=
 # api key 

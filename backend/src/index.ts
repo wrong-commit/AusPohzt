@@ -5,15 +5,17 @@ import { runner } from './clients/runner';
 import { parcel } from './entities/parcel';
 import { queued } from './entities/queued';
 import { api } from './services/api';
+import { auspostApi } from './services/auspostApi';
 import { Dto } from './types/Dto';
 
+export { main }
 
 const runnerInterval = process.env.RUNNER_INTERVAL_MS ?? 60000;
 const syncInterval = process.env.SYNC_INTERVAL_MS ?? 600000;
 
 
 function syncTrackingId(id: string, owner: number): Promise<boolean> {
-    const runn = new runner(new auspost(api.init(process.env.DIGITAL_API)))
+    const runn = new runner(new auspost(auspostApi.init()))
     return runn.sync(id, owner);
 }
 
@@ -28,6 +30,7 @@ async function startQueuedIds(client: api): Promise<string[]> {
     for (const x of queuedParcels) {
         const synced = await syncTrackingId(x.trackingId, x.owner);
         console.log(`Tracking Id ${x.trackingId} synced ${synced}`);
+        // TODO: increment hashmap of trackingIds that counts sync failures. disable parcel at 3rd retry
     }
 
     return queuedParcels.map(x => x.trackingId);
@@ -57,6 +60,5 @@ async function main() {
         }
     }
 }
-
 
 main();

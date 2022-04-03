@@ -71,6 +71,7 @@ const useDraggable = <T extends HTMLElement>(
 
     const onDrop: MouseHandler = useCallback(e => {
         // console.debug('Dropped');
+        e.preventDefault();
     }, [container]);
 
     const onDragOver: MouseHandler = useCallback(e => {

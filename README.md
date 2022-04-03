@@ -10,6 +10,9 @@ API, Front End, and Notification Clients for tracking parcels
     - [x] Set nickname for Tracking ID 
     - [ ] Update Database when status changes
         - [x] Fix duplicate events not clearing properly
+        - [ ] Mark parcels as disabled after 3 runner errors
+        - [ ] Mark parcels as disabled when status is COMPLETE
+        - [ ] Runner does not check disabled parcels
     - [ ] Handle dates correctly
         - [ ] Support 64 bit integers for dates, or
         - [ ] Migrate to postgres datetime date types
@@ -28,7 +31,8 @@ API, Front End, and Notification Clients for tracking parcels
 - [ ] Notifications
     - [x] Barebones notification script
     - [ ] custom icon for notification (in MacOS only ?)
-    - [ ] last events written to configurable folder
+    - [ ] last events written to DB linked by mac address. 
+    - [ ] don't send notifications for disabled parcels
 - [ ] Misc
     - [ ] Convert semi-JavaDocs to JSDocs 
     - [ ] Setup Github Actions

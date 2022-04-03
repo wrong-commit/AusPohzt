@@ -15,18 +15,20 @@ import { queued } from '@boganpost/backend/src/entities/queued';
 import { useTimer } from '../hooks/useTimer';
 import { TaskBar, TaskBarItem } from './taskbar/TaskBar';
 import { RenameParcel } from './parcel/RenameParcel';
+import { api } from '@boganpost/backend/src/services/api';
 
 export { App };
 
 type Props = {
-    userId: number
+    userId: number,
+    api: api,
 }
 const App = (props: Props) => {
-    console.log(props);
+    console.log('App props:', props);
 
     // sync parcels
-    const [queued, fetchQueued, fetchingQueued, setQueued] = useAsync<Dto<queued>[]>(() => getQueued(), undefined);
-    const [parcels, fetchParcels, fetchingParcels, setFetchedParcels] = useAsync<Dto<parcel>[]>(() => getParcels(), undefined);
+    const [queued, fetchQueued, fetchingQueued, setQueued] = useAsync<Dto<queued>[]>(() => getQueued(props.api), undefined);
+    const [parcels, fetchParcels, fetchingParcels, setFetchedParcels] = useAsync<Dto<parcel>[]>(() => getParcels(props.api), undefined);
     const [parcel, setParcel] = useState<Dto<parcel> | undefined>(undefined);
 
     const sync = async () => {
@@ -77,7 +79,7 @@ const App = (props: Props) => {
                         )}
                     </div>
                     <div>
-                        <span>Selected: {parcel ? parcel.trackingId : 'None'}</span>
+                        <span style={{ userSelect: 'text' }}>Selected: <span className="/*PUT SOMETHING HERE*/">{parcel ? parcel.trackingId : 'None'}</span></span>
                         {parcel && (
                             <DeleteParcel id={parcel.id!} deletedParcel={() => {
                                 setFetchedParcels(undefined);
@@ -120,7 +122,9 @@ const App = (props: Props) => {
                     <Box id={'events'}
                         title={`${parcel.trackingId}: Events`}
                         onClose={() => setParcel(undefined)}>
-                        <ListEvents events={parcel.events} />
+                        {/* todo: is this a crap way to refresh components ?  */}
+                        <ListEvents key={parcel.id! + parcel.events.length}
+                            events={parcel.events} />
                     </Box>
                 )}
 
@@ -128,6 +132,13 @@ const App = (props: Props) => {
                     <TaskBarItem hidden={false}
                         onClick={sync}>
                         ...
+                    </TaskBarItem>
+                    <TaskBarItem hidden={false}
+                        onClick={() => {
+                            props.api.post('/v0/auth/logout')
+                                .then(() => window.location.href = window.location.href)
+                        }}>
+                        Logout
                     </TaskBarItem>
                 </TaskBar>
             </div >

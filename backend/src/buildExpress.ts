@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import setupRoutes from './routes/initRoutes';
+import { attachToken } from './middleware/attachToken';
 function buildExpress() {
     // TODO: setup actual CORs config
     // TODO: modify the app.listen() call to work for production environments
@@ -12,13 +13,14 @@ function buildExpress() {
         app.set('json spaces', 2);
         app.set('json replacer', null);
     }
-    setupRoutes(app);
-
+    app.use(attachToken);
     app.use(handler => {
         // log request middleware
         console.log(`${Date.now().toLocaleString()} - ${handler.method} ${handler.url}`)
         if (handler.next) handler.next();
     });
+
+    setupRoutes(app);
 
     return app;
 }

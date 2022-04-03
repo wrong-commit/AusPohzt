@@ -6,7 +6,7 @@ import '../../styles/components/taskbar/TaskBar.css';
 export { TaskBar, TaskBarItem }
 
 type Props = {
-    children?: React.ReactChild | React.ReactChildren;
+    children?: React.ReactNode | React.ReactNodeArray;
 }
 
 const TaskBar = ({ children }: Props) => {
