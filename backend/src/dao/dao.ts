@@ -18,7 +18,7 @@ type dao<T> = {
      * Lookup T by id
      * @param id 
      */
-    find(id: any): PromiseLike<T | undefined>;
+    find(id: number): PromiseLike<T | undefined>;
     /**
      * Create new or update existing of type {T}
      * @param value 
@@ -29,7 +29,7 @@ type dao<T> = {
      * @param id 
      * @returns true if deleted successfully
      */
-    delete(id: any): PromiseLike<boolean>;
+    delete(id: number): PromiseLike<boolean>;
 }
 
 type daoEntity = {
@@ -102,7 +102,12 @@ class baseDao<T extends daoEntity> implements dao<T> {
         }
     }
 
-    async delete(id: any): Promise<boolean> {
+    /**
+     * This should always be passed in an ID
+     * @param id 
+     * @returns 
+     */
+    async delete(id: number): Promise<boolean> {
         try {
             if (this.joinDatas) {
                 console.debug(`Deleting joined entities for ${this.entityName}`);
@@ -115,6 +120,7 @@ class baseDao<T extends daoEntity> implements dao<T> {
                     console.debug(`Deleted x${deleteResult.rowCount} joined entity ${jEntityName}`);
                 }
                 console.debug(`Deleted ${deleted} joined entities for ${this.entity} ${id}`)
+                // TODO: assert deleted entities
             }
             const result = await this.pool.query(`DELETE FROM ${this.entityName} WHERE id = $1`, [id]);
             this.expectedRows(result, 1);

@@ -14,6 +14,7 @@ const ListQueued = (props: Props) => {
                 <tr>
                     <th>ID</th>
                     <th>Tracking Number</th>
+                    <th>Fail Count</th>
                 </tr>
             </thead>
             <tbody>
@@ -21,6 +22,7 @@ const ListQueued = (props: Props) => {
                     <tr key={p.id}>
                         <td>{p.id}</td>
                         <td>{p.trackingId}</td>
+                        <td>{p.checked}</td>
                     </tr>
                 ))}
             </tbody>

@@ -97,6 +97,7 @@ describe("queuedDao", () => {
     describe("save", () => {
         test("save new", async () => {
             let newQueued: queued | undefined = new queued({
+                checked: 0,
                 trackingId: 'newQueuedTrkId',
                 owner: 0,
             });
@@ -106,6 +107,7 @@ describe("queuedDao", () => {
         })
         test("merge", async () => {
             let newQueued: queued | undefined = new queued({
+                checked: 0,
                 trackingId: 'mergeQueuedTrkId',
                 owner: 0,
             });
