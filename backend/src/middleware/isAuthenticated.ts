@@ -1,21 +1,25 @@
 import * as express from "express";
 
-export { isAuthenticated };
+export { isAuthenticatedMiddle, isAuthenticated };
 
 /**
- * Request handler responsible for validating if a user has provided a valid JWT.
+ * Request handler responsible for validating if a user has provided a valid JWT. Set response status to 401 if not 
+ * authenticated.
  * @param req Reques
  * @param res 
  * @param next 
  * @returns 
  * @see `./attachToken.ts`
  */
-const isAuthenticated = (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    // TODO: is return necessary ? 
-    if (!req.claims) {
+function isAuthenticatedMiddle(req: express.Request, res: express.Response, next: express.NextFunction) {
+    if (isAuthenticated(req, process.env.ENABLE_AUTH)) {
         console.log('Request is not authenticated ')
-        // TODO: do something if not authenticated
         return res.status(401).end();
     }
     return next();
 };
+
+
+function isAuthenticated(req: express.Request, enableAuth: 'true' | 'false') {
+    return !(enableAuth === 'true' && !req.claims)
+}
