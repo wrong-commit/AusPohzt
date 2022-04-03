@@ -98,7 +98,7 @@ router.delete('/:trackingId', async (req, res) => {
         if (!toDelete) {
             throw new Error('dao.findByTrackingId failed')
         }
-        const success = await queuedDao.delete(toDelete.id);
+        const success = await queuedDao.delete(toDelete.id!);
         if (!success) {
             return res.status(500).send({ message: `Could not delete queued parcel ${toDelete.id}` });
         }
