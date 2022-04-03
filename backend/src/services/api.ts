@@ -74,7 +74,7 @@ class api {
 }
 
 type urlParams = {
-    [key in string]: string | number;
+    [key in string]: string | number | boolean;
 }
 
 type getOptions = {

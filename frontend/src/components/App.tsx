@@ -28,7 +28,7 @@ const App = (props: Props) => {
 
     // sync parcels
     const [queued, fetchQueued, fetchingQueued, setQueued] = useAsync<Dto<queued>[]>(() => getQueued(props.api), undefined);
-    const [parcels, fetchParcels, fetchingParcels, setFetchedParcels] = useAsync<Dto<parcel>[]>(() => getParcels(props.api), undefined);
+    const [parcels, fetchParcels, fetchingParcels, setFetchedParcels] = useAsync<Dto<parcel>[]>(() => getParcels(props.api, true), undefined);
     const [parcel, setParcel] = useState<Dto<parcel> | undefined>(undefined);
 
     const sync = async () => {
