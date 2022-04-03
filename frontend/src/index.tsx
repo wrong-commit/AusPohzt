@@ -13,8 +13,8 @@ ReactDOM.render(
         <WindowProvider>
 
             <Login>
-                {userId => (
-                    <App userId={userId} />
+                {(userId, api) => (
+                    <App userId={userId} api={api} />
                 )}
             </Login>
 

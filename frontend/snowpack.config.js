@@ -18,9 +18,21 @@ module.exports = {
         [
             '@snowpack/plugin-typescript',
             {
-
             },
         ],
+        // [
+        [
+            'snowpack-plugin-esbuild',
+            {
+                input: ['.js', '.mjs', '.jsx', '.ts', '.tsx'],
+                // https://esbuild.github.io/api/#simple-options
+                options: {
+                    loader: 'tsx'
+                    // target: ['es6']
+                }
+            }
+        ]
+        // ]
     ],
     alias: {},
     routes: [
