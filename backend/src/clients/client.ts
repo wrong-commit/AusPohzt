@@ -12,13 +12,15 @@ interface client<T> {
     sync(trackingId: string): PromiseLike<T | undefined>;
 
     /**
-     * Constructs a parcel DTO for per client inputs
+     * Constructs a parcel DTO for per client inputs. 
+     * This parcel can re
      * @param args 
      */
-    createPacel(external: T): Dto<parcel> | undefined;
+    createParcel(external: T): Dto<parcel> | undefined;
 
     /**
-     * Create trackingEvent info
+     * Create trackingEvent info.
+     * Events may have data that needs to be populated afterwards.
      * @param shipmentEvent 
      */
     parseTrackingEvent(shipmentEvent: any): Dto<trackingEvent>;

@@ -11,7 +11,7 @@ const mockClientFactory = (
     }): client<any> => {
 
     const cl = {
-        createPacel: mockMethods._createParcel ?? jest.fn(),
+        createParcel: mockMethods._createParcel ?? jest.fn(),
         sync: mockMethods._sync ?? jest.fn(),
         parseTrackingEvent: mockMethods._parsesTrackingEvent ?? jest.fn(),
     };
