@@ -3,3 +3,4 @@ node_modules
 # Build folder
 dist/*
 .env
+tsconfig.tsbuildiinfo
