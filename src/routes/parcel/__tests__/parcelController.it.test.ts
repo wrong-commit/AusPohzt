@@ -77,5 +77,19 @@ describe("parcelController", () => {
                     expect(saved.nickName).toBeUndefined();
                 })
         })
+        test("cannot add same parcel twice", async () => {
+            await request(app)
+                .post(`/v0/parcel/`)
+                .send({
+                    events: [],
+                    lastSync: 100,
+                    owner: -1,
+                    // findParcelTrkId setup when test first runs
+                    trackingId: 'findParcelTrkId',
+                } as Dto<parcel>)
+                .expect(500)
+            // FIXME: assert returned message
+            // .expect({ message: 'Parcel already exists' })
+        })
     })
 });

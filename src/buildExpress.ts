@@ -5,7 +5,7 @@ function buildExpress() {
     // TODO: modify the app.listen() call to work for production environments
     // TODO: setup json support()
     const app = express();
-
+    app.use(express.json());
     setupRoutes(app);
 
     app.use(handler => {
