@@ -1,5 +1,5 @@
 import express from 'express';
-import { pool } from '../../database/pool';
+import { pool } from '../../database/database';
 
 const router = express.Router();
 export default router;

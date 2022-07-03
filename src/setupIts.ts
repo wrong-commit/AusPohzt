@@ -1,4 +1,4 @@
-import { pool } from './database/pool'
+import { pool } from './database/database'
 
 // clean all databases
 async function cleanUpTables() {

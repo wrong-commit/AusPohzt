@@ -1,4 +1,4 @@
-import { pool } from './database/pool';
+import { pool } from './database/database';
 
 module.exports = function () {
     // console.log('Global It Teardown');
