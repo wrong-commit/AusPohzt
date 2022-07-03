@@ -1,4 +1,4 @@
-// const mergeComparisonMap = new Map<object, Set<string>>();
+export { entity, getEntityName, bind, getFields }
 /**
  * Stores a Class type, and the value of the Store Name. 
  */
@@ -88,5 +88,3 @@ const getFields = (target: object): string[] => {
     return fields;
 }
 
-
-export { entity, getEntityName, bind, getFields }

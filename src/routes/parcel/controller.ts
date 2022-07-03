@@ -1,5 +1,5 @@
 import express from 'express';
-import { parcelDao } from '../../dao/parcelDao';
+import { daoFactory } from '../../dao/daoFactory';
 import { parcel } from '../../models/parcel';
 import { Dto } from '../../types/Dto';
 
@@ -12,6 +12,8 @@ export default router;
  * TODO: add typescript support for return type
  * @returns all users parcels
  */
+const parcelDao = daoFactory(parcel);
+
 router.get('/', (_, res) => {
     console.log('Get current parcels');
 
