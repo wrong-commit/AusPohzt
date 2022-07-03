@@ -1,5 +1,5 @@
 import { entity, getEntity } from "../entityDecorators"
-import { getJoinData, join } from "../joinDecorator";
+import { getJoinData, join, joinData } from "../joinDecorator";
 
 class _notEntity { }
 
@@ -14,6 +14,10 @@ class _testClassWithJoin {
     id?: number;
     @join('_joinedEntity')
     joinEntity?: _joinedEntity;
+
+
+    @join('_joinedEntity', 'multiple')
+    joinMany?: _joinedEntity[];
 
     /**
      * This is valid because join decorator does not check type of object to be joined. Errors are instead
@@ -32,9 +36,10 @@ describe("@join", () => {
     })
     test("get joinData from entity returns joinData", () => {
         const joinFields = getJoinData(_testClassWithJoin);
-        expect(joinFields).toStrictEqual([
-            ['joinEntity', '_joinedEntity'],
-            ['joinNotEntity', '_notEntity'],
+        expect(joinFields).toStrictEqual<joinData[]>([
+            ['joinEntity', '_joinedEntity', 'single'],
+            ['joinMany', '_joinedEntity', 'multiple'],
+            ['joinNotEntity', '_notEntity', 'single'],
         ]);
 
         // catch any issues with entityDecorator.getEntity by name early
