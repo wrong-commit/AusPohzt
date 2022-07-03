@@ -26,7 +26,8 @@ CREATE TABLE queued (
     -- random trackingId size
     trackingId VARCHAR(255) UNIQUE,
     -- id of user that owns this parcel
-    owner INTEGER
+    owner INTEGER,
+    checked INTEGER
 );
 
 CREATE TABLE trackingEvent ( 
@@ -61,3 +62,12 @@ CREATE TABLE trackingEvent (
 -- END IF;
 
 
+-- IF (SELECT 1 
+--     FROM information_schema.columns 
+--     WHERE 
+--         -- table_schema='my_schema' AND 
+--         table_name='queued' AND 
+--         column_name='checked') = 0 THEN 
+--     RAISE NOTICE 'Adding queued.checked integer';
+--     ALTER TABLE queued ADD COLUMN checked INTEGER;
+-- END IF;
