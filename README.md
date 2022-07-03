@@ -5,8 +5,8 @@ API for tracking parcels
 ## TODO 
 
 - [ ] Tracking 
-    - [ ] Add Tracking ID
-    - [ ] Remove Tracking ID 
+    - [x] Add Tracking ID
+    - [x] Remove Tracking ID 
     - [ ] Update Database when status changes
 - [ ] User Management
     - [ ] Authentication
