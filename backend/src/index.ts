@@ -1,8 +1,8 @@
 import dotenv from 'dotenv';
+dotenv.config({ path: '.env' })
 import { auspost } from './clients/auspost';
 import { runner } from './clients/runner';
 import { api } from './services/api';
-dotenv.config({ path: '.env' })
 
 
 
