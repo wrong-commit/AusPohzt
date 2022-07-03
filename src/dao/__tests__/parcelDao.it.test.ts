@@ -46,6 +46,22 @@ describe("parcelDao", () => {
         })
     })
 
+    describe("findByTrackingId()", () => {
+        test("TrackingId does not map to existing parcel", async () => {
+            expect(await parcelDao.findByTrackingId('')).toBeUndefined()
+        });
+
+        test("Id maps to existing parcel", async () => {
+            const parcel = await parcelDao.findByTrackingId('findMe');
+            expect(parcel).toBeDefined();
+            expect(parcel!.id).toBe(findParcel);
+            expect(parcel!.trackingId).toBe('findMe');
+            expect(parcel!.owner).toBe(1);
+            expect(parcel!.nickName).toBe(null);
+            expect(parcel!.lastSync).toBe(0);
+        })
+    })
+
     describe("delete()", () => {
         test("Delete invalid Id", async () => {
             expect(await parcelDao.delete(-1)).toBeFalsy();
