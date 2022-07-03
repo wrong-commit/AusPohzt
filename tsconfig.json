@@ -1,8 +1,13 @@
 {
+    "exclude": [
+        "node_modules",
+    ],
     "compilerOptions": {
         // explicit types to include
         "types": [
             "node",
+            // add Jest types
+            "jest",
         ],
         /* Visit https://aka.ms/tsconfig.json to read more about this file */
         /* Basic Options */
