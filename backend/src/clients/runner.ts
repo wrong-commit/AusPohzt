@@ -1,11 +1,13 @@
 import { daoFactory } from "../dao/daoFactory";
 import { parcel } from "../entities/parcel";
+import { queued } from "../entities/queued";
 import { trackingEvent } from "../entities/trackingEvent";
 import { client as clientType } from "./client";
 
 export { runner }
 
 const parcelDao = daoFactory(parcel);
+const queuedDao = daoFactory(queued);
 /**
  * Runner created to fetch data from generic client object
  */
@@ -24,8 +26,12 @@ class runner<T> {
      * 
      * @param trackingId 
      */
-    async sync(trackingId: string): Promise<boolean> {
+    async sync(trackingId: string, owner: number): Promise<boolean> {
         let trackedParcel = await parcelDao.findByTrackingId(trackingId);
+        const queued = await queuedDao.findByTrackingId(trackingId);
+        if (trackedParcel && trackedParcel.owner !== owner) {
+            throw new Error(`Incorrect user tried to sync ${trackingId}`);
+        }
 
         const response = await this.client.sync(trackingId);
         if (response) {
@@ -45,9 +51,17 @@ class runner<T> {
                 console.info(`Added ${newEvents.length} new events to ${trackingId}`);
                 trackedParcel.events.push(...newEvents.map(x => new trackingEvent(x)));
             } else {
-                console.info(`Synced new parcel ${trackingId}`);
+                console.info(`Synced new parcel ${trackingId} to ${owner}`);
                 trackedParcel = new parcel(parcelDto);
+                trackedParcel.owner = owner;
                 trackedParcel.events.forEach(x => new trackingEvent(x));
+
+                // delete queued if required
+                if (queued) {
+                    await queuedDao.delete(queued.id);
+                } else {
+                    console.warn(`No queued parcel ${trackingId} existed`);
+                }
             }
             // FIXME: support millisecond accurate date times properly
             trackedParcel.lastSync = Math.floor(Date.now() / 1000);

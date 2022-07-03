@@ -15,11 +15,12 @@ describe("runner", () => {
         });
 
         const r = new runner(mockClient);
-        await r.sync('test');
+        await r.sync('test', 0);
 
         expect(mockCreateParcel).not.toBeCalled();
     });
 
+    test.todo("runner throws error if trying to sync to wrong owner")
     test("runner merges new events with existing events", async () => {
         const TRACKING_ID = 'test';
         // save parcel with 1 event
@@ -57,7 +58,7 @@ describe("runner", () => {
             }),
         });
         const r = new runner(mockClient);
-        await r.sync(TRACKING_ID);
+        await r.sync(TRACKING_ID, 0);
 
         // expect both events to be saved
         const afterSyncParcel = (await parcelDao.findByTrackingId(TRACKING_ID))!;
