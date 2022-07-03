@@ -25,3 +25,7 @@ API for tracking parcels
     - [ ] typing of entityDecorator.getEntityPrototype
     - [x] DRY dao code
     - [ ] pirate.map() accepts row arg as array instead of single instance, see dao.find() comment
+- [ ] Documentation
+    - [ ] Explain typescript setup: https://2ality.com/2021/07/simple-monorepos.html
+    - [ ] Explain package.json setup
+    - [ ] Explain snowpack setup ( easy )
