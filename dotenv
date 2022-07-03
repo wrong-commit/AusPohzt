@@ -1,9 +1,0 @@
-# digital api url  
-DIGITAL_API=
-# api key 
-API_KEY=
-# application port number
-PORT=3000
-PG_USER=
-PG_PASS=
-PG_DATABASE=
