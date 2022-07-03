@@ -17,3 +17,7 @@ API for tracking parcels
     - [ ] Setup daemon scripts
     - [ ] Setup multiple workers
     - [ ] Default nginx config for workers
+- [ ] Misc
+    - [ ] Convert semi-JavaDocs to JSDocs 
+    - [ ] Setup Github Actions
+
