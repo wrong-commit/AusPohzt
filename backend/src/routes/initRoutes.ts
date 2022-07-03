@@ -1,4 +1,5 @@
 import express from 'express';
+import { isAuthenticated } from '../middleware/isAuthenticated';
 
 import auth from './auth/controller';
 import parcel from './parcel/controller';
@@ -13,5 +14,5 @@ import queue from './queue/controller';
 export default function setupRoutes(app: express.Express) {
     app.use('/v0/auth', auth);
     app.use('/v0/parcel', parcel);
-    app.use('/v0/queue', queue);
+    app.use('/v0/queue', isAuthenticated, queue);
 }

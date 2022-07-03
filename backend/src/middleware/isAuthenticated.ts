@@ -10,10 +10,12 @@ export { isAuthenticated };
  * @returns 
  * @see `./attachToken.ts`
  */
-const isAuthenticated = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+const isAuthenticated = (req: express.Request, _: express.Response, next: express.NextFunction) => {
     // TODO: is return necessary ? 
     if (!req.claims) {
-        return res.status(401).end();
+        // TODO: do something if not authenticated
+        return next();
     }
+    // TODO: do something 
     return next();
 };

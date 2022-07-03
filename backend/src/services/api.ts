@@ -4,15 +4,9 @@ export { api }
 
 class api {
     host: string;
-    userAgent: string;
 
-    static HEADER_API_KEY = 'api-key';
-    static HEADER_AP_CHANNEL_NAME = 'AP_CHANNEL_NAME';
-    static DEF_USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36';
-
-    constructor(host: string, userAgent?: string) {
+    constructor(host: string) {
         this.host = host;
-        this.userAgent = userAgent ?? '';
     }
 
     public static init(host: string): api {
@@ -40,7 +34,7 @@ class api {
 
     /**
      * Create a HTTP headers required for request to complete.
-     * TODO: extend class to define default headers ? 
+     * 
      * @param headerKeyVal 
      * @returns 
      */
@@ -52,19 +46,9 @@ class api {
         return headers;
     }
 
-    private addDefaultHeaders(headers: Record<string, string | number>): void {
-        console.debug(`Adding API_KEY ${process.env.API_KEY}`);
-        headers[api.HEADER_API_KEY] = process.env.API_KEY;
-        // needed ? 
-        headers[api.HEADER_AP_CHANNEL_NAME] = 'WEB_DETAIL';
-        if (!headers['Accept']) {
-            console.debug('default Accept header is application/json');
-            headers['Accept'] = 'application/json';
-        }
-        if (!headers['User-Agent']) {
-            console.debug('Adding default User-Agent');
-            headers['User-Agent'] = api.DEF_USER_AGENT;
-        }
+    // provided for override by implementing classes
+    addDefaultHeaders(headers: Record<string, string | number>): void {
+        headers; // TS config complains that headers is unused otherwise
     }
 
     private buildUrl(path: string, urlParams?: urlParams): URL {
