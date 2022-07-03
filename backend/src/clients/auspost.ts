@@ -18,11 +18,7 @@ class auspost implements client<shipmentsResponse> {
     }
 
     async sync(trackingId: string): Promise<shipmentsResponse | undefined> {
-<<<<<<< HEAD
         console.debug(`Syncing auspost info for ${trackingId}`);
-=======
-        console.trace(`Syncing auspost info for ${trackingId}`);
->>>>>>> master
         const response = await this.api.get(`shipmentsgatewayapi/watchlist/shipments/${trackingId}`,
             {
                 headers: {
@@ -34,11 +30,7 @@ class auspost implements client<shipmentsResponse> {
                     Accept: 'application/json, text/plain, */*',
                     'Accept-Language': 'en-US,en;q=0.9',
                 },
-<<<<<<< HEAD
                 // error if 200 not received
-=======
-                // ensure 200 received
->>>>>>> master
                 statusCode: 200,
             })
             .then(resp => {
@@ -61,12 +53,7 @@ class auspost implements client<shipmentsResponse> {
         return response as shipmentsResponse | undefined;
     }
 
-<<<<<<< HEAD
     createParcel(external: shipmentsResponse): Dto<parcel> | undefined {
-=======
-    // Q: should this be moved to a method on parcel ? 
-    createPacel(external: shipmentsResponse): Dto<parcel> | undefined {
->>>>>>> master
         if (!external.articles[0]) {
             console.error(`No articles exist for ${external.consignmentId}`)
             return undefined;
@@ -81,12 +68,8 @@ class auspost implements client<shipmentsResponse> {
             return undefined;
         }
 
-<<<<<<< HEAD
         const events: Dto<trackingEvent>[] = shipmentEvents.map(e => this.parseTrackingEvent(e))
             .sort((a, b) => a.dateTime - b.dateTime)
-=======
-        const events: Dto<trackingEvent>[] = shipmentEvents.map(e => this.parseTrackingEvent(e)).sort((a, b) => a.dateTime - b.dateTime)
->>>>>>> master
 
         let parcel: Dto<parcel> = {
             id: undefined,
