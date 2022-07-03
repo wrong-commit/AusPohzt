@@ -1,6 +1,6 @@
 import { pool } from './database/database';
 
-module.exports = function () {
+export default function () {
     // console.log('Global It Teardown');
     pool.end();
 }

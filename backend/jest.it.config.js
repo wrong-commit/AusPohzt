@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     rootDir: 'src',
     transform: {
         '^.+\\.(j|t)s$': 'ts-jest',

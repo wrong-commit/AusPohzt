@@ -6,8 +6,8 @@
         "frontend"
     ],
     "scripts": {
-        "clean": "tsc --build --clean",
-        "build": "tsc --build",
+        "clean": "tsc --build --clean tsconfig.build.json",
+        "build": "tsc --build tsconfig.build.json",
         "watch": "tsc --build --watch"
     },
     "devDependencies": {
