@@ -62,7 +62,6 @@ class baseDao<T extends daoEntity> implements dao<T> {
         try {
             // TODO: support JOIN queries ? 
             const result = await this.pool.query(`SELECT * FROM ${this.entityName}`);
-            const sailor = new pirate<T>(this.entity);
             const joinRows = [];
             for (const row of result.rows) {
                 const rowJoinData: JoinQueryResult[] = await this.join(row);
@@ -81,7 +80,6 @@ class baseDao<T extends daoEntity> implements dao<T> {
             // const result = await pool.query(this.findAllQ,);
             this.expectedRows(result, 1);
             const joinRows: JoinQueryResult[] = await this.join(result.rows[0]!)
-            // FIXME: pirate.map() accepts row arg as array instead of single instance
             return new pirate<T>(this.entity).map(result.rows[0], result.fields, joinRows);
         } catch (e) {
             console.error(`Could not find ${this.entityName} with id ${id}`, e);

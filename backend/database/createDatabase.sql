@@ -19,6 +19,15 @@ CREATE TABLE parcel (
     lastSync INT
 );
 
+CREATE TABLE queued ( 
+    -- TODO: understand postgres column definitions
+    ID SERIAL PRIMARY KEY,
+    -- random trackingId size
+    trackingId VARCHAR(255) UNIQUE,
+    -- id of user that owns this parcel
+    owner INTEGER
+);
+
 CREATE TABLE trackingEvent ( 
     -- TODO: understand postgres column definitions
     ID SERIAL PRIMARY KEY,
