@@ -66,8 +66,9 @@ router.post('/:trackingId', async (req, res) => {
     }
 
     const newQueued = new queued({
-        owner: 0, // FIXME: lol
         trackingId: req.params.trackingId,
+        owner: 0, // FIXME: lol
+        checked: 0,
     });
 
     let savedQueued = undefined
