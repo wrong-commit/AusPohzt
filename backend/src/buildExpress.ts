@@ -4,7 +4,6 @@ import setupRoutes from './routes/initRoutes';
 function buildExpress() {
     // TODO: setup actual CORs config
     // TODO: modify the app.listen() call to work for production environments
-    // TODO: setup json support()
     const app = express();
     app.use(express.json());
     app.use(cors())

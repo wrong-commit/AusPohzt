@@ -1,96 +1,69 @@
-import React, { useEffect } from 'react';
 import { parcel } from '@boganpost/backend/src/entities/parcel';
 import { Dto } from '@boganpost/backend/src/types/Dto';
+import React, { useEffect, useState } from 'react';
 import { useAsync } from '../hooks/useAsync';
-import { viewableDate } from '@boganpost/backend/src/util/viewableDate'
+import { getParcels } from '../service/getParcels';
+import { Box } from './box/Box';
+import { ListEvents } from './events/ListEvents';
+import { AddParcel } from './parcel/AddParcel';
+import { ListParcels } from './parcel/ListParcels';
+import '../styles/components/App.css';
+import { DeleteParcel } from './parcel/DeleteParcel';
 
-export { App }
+
+export { App };
 type Props = {
 
 }
+
 const App = (props: Props) => {
     console.log(props);
-    const [result, trigger, loading, setResult] = useAsync<Dto<parcel>[]>(() => {
-        const request = new Request('http://localhost:3000/v0/parcel');
 
-        return fetch(request, {
-            method: 'GET',
-        }).then(res => {
-            if (!res.ok) {
-                throw new Error('API failed getting parcels');
-            }
-            return res.json();
-        }).then(res => {
-            if (Array.isArray(res)) {
-                return res.map(x => new parcel(x).toData())
-            }
-            console.warn(`Invalid response returned`);
-            return undefined;
-        }).catch(e => {
-            console.error(`Error fetching parcels`, e);
-            return undefined;
-        })
-    }, undefined);
+    // sync parcels
+    const [parcels, fetchParcels, loading, setFetchedParcels] = useAsync<Dto<parcel>[]>(() => getParcels(), undefined);
+    const [parcel, setParcel] = useState<Dto<parcel> | undefined>(undefined);
 
     useEffect(() => {
-        if (!result && !loading) {
-            trigger()
+        // fetch parcels on first render, unless already fetching (unnecessary ?)
+        if (!parcels && !loading) {
+            fetchParcels()
         }
     }, []);
 
-    return (
-        <div>
-            <h2>Yolo</h2>
-            {loading && (
-                <span>Loading...</span>
-            )}
-            {!loading && !result && (
-                <span style={{ color: 'red' }}>ERROR LOADING PARCELS</span>
-            )}
-            {!loading && result && result.map(parcel => (
-                <React.Fragment key={parcel.id + parcel.trackingId}>
-                    <h3>{parcel.trackingId} {parcel.nickName ? ': ' + parcel.nickName : ''}</h3>
-                    <button onClick={() => {
-                        fetch(new Request(`http://localhost:3000/v0/parcel/${parcel.id}`),
-                            {
-                                method: 'DELETE'
-                            }).then(res => {
-                                if (!res.ok) {
-                                    throw new Error('API failed deleting parcel')
-                                }
-                            })
-                            .catch(err => console.error(`Could not delete parcel ${parcel.id!}`, err))
-                    }}>Delete</button>
-                    <span>Events</span>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>Location</th>
-                                <th>Date Time</th>
-                                <th>Message</th>
-                                <th>Type</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {parcel.events.map(event => (
-                                <tr key={event.id}>
-                                    <td>{event.id}</td>
-                                    <td>{event.location}</td>
-                                    <td>{viewableDate(event.dateTime)}</td>
-                                    <td>{event.message}</td>
-                                    <td style={{
-                                        color: event.type === 'delivered' ? 'green' :
-                                            event.type === 'failed' ? 'red' :
-                                                event.type === 'awaiting collection' ? 'blue' : 'gray'
+    const loadedParcels = !loading && parcels;
 
-                                    }}>{event.type}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </React.Fragment>
-            ))}
+    return (
+        <div className={'App'}>
+            {/* <h2>Yolo</h2> */}
+            <Box title={'Parcels'}>
+                {loading && (
+                    <span>Loading Parcels...</span>
+                )}
+                {!loading && !parcels && (
+                    <span style={{ color: 'red' }}>ERROR LOADING PARCELS</span>
+                )}
+                <div>
+                    <span>Selected: {parcel ? parcel.trackingId : 'None'}</span>
+
+                    {parcel && (
+                        <DeleteParcel id={parcel.id!} deletedParcel={() => {
+                            setFetchedParcels(undefined);
+                            setParcel(undefined);
+                            fetchParcels()
+                        }} />
+                    )}
+                </div>
+                <AddParcel addedParcel={() => fetchParcels()} />
+                {loadedParcels && (
+                    <ListParcels parcels={parcels!}
+                        onClick={id => setParcel(parcels.find(p => p.id === id))} />
+                )}
+            </Box>
+            {parcel && (
+                <Box title={`${parcel.trackingId}: Events`} onClose={() => setParcel(undefined)}>
+                    <ListEvents events={parcel.events} />
+                </Box>
+            )}
         </div >
     )
 }
