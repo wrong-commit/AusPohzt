@@ -28,6 +28,9 @@ class _testClassWithJoin {
 };
 
 describe("@join", () => {
+    test("get joinData from string throws error", () => {
+        expect(() => getJoinData('_joiningEntity')).toThrow();
+    })
     test("get joinData from invalid entity throws error", () => {
         expect(() => getJoinData(_notEntity)).toThrow();
     })
@@ -42,8 +45,7 @@ describe("@join", () => {
             ['joinNotEntity', '_notEntity', 'single', `goesNowhereId`],
         ]);
     })
-
-    test("joinData entity name can lookup entity", () => {
+    test("getEntity from joinData entity returns entity prototype", () => {
         const joinFields = getJoinData(_testClassWithJoin);
         expect(getEntity(joinFields![0]![1])).toBe(_joinedEntity.prototype)
     })
