@@ -1,11 +1,13 @@
 import express from 'express';
+import cors from 'cors';
 import setupRoutes from './routes/initRoutes';
 function buildExpress() {
-    // TODO: setup CORs, or let nginx handle ?
+    // TODO: setup actual CORs config
     // TODO: modify the app.listen() call to work for production environments
     // TODO: setup json support()
     const app = express();
     app.use(express.json());
+    app.use(cors())
     if (process.env.NODE_ENV === 'development') {
         // set express.response.json settings to control response formatting
         app.set('json spaces', 2);
