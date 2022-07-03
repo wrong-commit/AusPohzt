@@ -1,9 +1,11 @@
 import request from 'supertest';
 import { buildExpress } from '../../../buildExpress';
+import { daoFactory } from '../../../dao/daoFactory';
 import { pool } from '../../../database/database';
 import { parcel } from '../../../entities/parcel';
 import { Dto } from '../../../types/Dto';
 
+const parcelDao = daoFactory(parcel);
 let findParcel: number;
 // parcel to delete
 describe("parcelController", () => {
@@ -34,8 +36,32 @@ describe("parcelController", () => {
             })
     });
 
+    describe("set nickname", () => {
+        test("invalid parcel returns 500", async () => {
+            await request(app)
+                .put(`/v0/parcel/${-1}/nickname`)
+                .query({ nickname: 'failme' })
+                .expect(404);
+        })
+        test("updating parcel returns new nick on subsequent request", async () => {
+            const nick = 'cage';
+            const renameParcel = (await pool.query(
+                `INSERT INTO parcel (trackingId, owner, nickname, lastSync) VALUES ('giveMeNickname', 1, null, 0) RETURNING id;`
+            )).rows[0]['id'];
+
+            await request(app)
+                .put(`/v0/parcel/${renameParcel}/nickname`)
+                .query({ nickname: nick })
+                .expect(200);
+
+            const parcel = await parcelDao.find(renameParcel);
+            expect(parcel).toBeDefined();
+            expect(parcel?.nickName).toBe(nick);
+        })
+    })
+
     test("delete parcel", async () => {
-        let deleteParcel = (await pool.query(
+        const deleteParcel = (await pool.query(
             `INSERT INTO parcel (trackingId, owner, nickname, lastSync) VALUES ('deleteParcelTrkId', 1, 'nickname', 0) RETURNING id;`
         )).rows[0]['id'];
 
