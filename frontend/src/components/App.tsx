@@ -6,9 +6,9 @@ import { getParcels } from '../service/getParcels';
 import { Box } from './box/Box';
 import { ListEvents } from './events/ListEvents';
 import { AddParcel } from './parcel/AddParcel';
+import { DeleteParcel } from './parcel/DeleteParcel';
 import { ListParcels } from './parcel/ListParcels';
 import '../styles/components/App.css';
-import { DeleteParcel } from './parcel/DeleteParcel';
 
 
 export { App };
@@ -34,7 +34,6 @@ const App = (props: Props) => {
 
     return (
         <div className={'App'}>
-            {/* <h2>Yolo</h2> */}
             <Box title={'Parcels'}>
                 {loading && (
                     <span>Loading Parcels...</span>

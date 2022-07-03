@@ -1,6 +1,7 @@
 import React from 'react';
 import { parcel } from "@boganpost/backend/src/entities/parcel";
 import { Dto } from "@boganpost/backend/src/types/Dto";
+import '../../styles/table.css';
 
 export { ListParcels };
 

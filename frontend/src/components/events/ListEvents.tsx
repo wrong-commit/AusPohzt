@@ -1,6 +1,7 @@
 import React from 'react';
 import { trackingEvent } from "@boganpost/backend/src/entities/trackingEvent";
 import { Dto } from "@boganpost/backend/src/types/Dto";
+import '../../styles/table.css';
 
 export { ListEvents }
 
