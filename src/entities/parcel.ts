@@ -45,9 +45,8 @@ class parcel {
     lastSync: number;
 
     /**
-     * TODO: use real type.
      */
-    @join('trackingEvent', 'multiple')
+    @join('trackingEvent', { joinColumnName: 'parcelId', association: 'multiple' })
     events: trackingEvent[];
 
     constructor(data: Dto<parcel>) {
