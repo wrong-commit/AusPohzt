@@ -29,7 +29,7 @@ describe("auspost", () => {
             // get trackingId from example.json
             const trackingId = example.consignmentId;
             // get createParcel response 
-            const parcel = client.createPacel(example);
+            const parcel = client.createParcel(example);
 
             const events = example.articles[0]!.details[0]!.events!.reverse();
 

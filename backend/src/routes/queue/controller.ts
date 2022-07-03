@@ -17,7 +17,7 @@ const parcelDao = daoFactory(parcel);
  * @returns all queued parcels
  */
 router.get('/', async (_, res) => {
-    console.trace(`Getting all queued parcels`);
+    console.debug(`Getting all queued parcels`);
     const queued = await queuedDao.findAll();
 
     if (!queued) {
@@ -33,7 +33,7 @@ router.get('/', async (_, res) => {
  * @returns all queued parcels
  */
 router.get('/:owner', async (req, res) => {
-    console.trace(`Getting all queued parcels for user ${req.params.owner}`);
+    console.debug(`Getting all queued parcels for user ${req.params.owner}`);
 
     const queued = await queuedDao.findByOwner(Number.parseInt(req.params.owner));
     if (!queued) {
@@ -51,7 +51,7 @@ router.get('/:owner', async (req, res) => {
  * @returns queued object if successful, otherwise 500
  */
 router.post('/:trackingId', async (req, res) => {
-    console.trace(`Queueing parcel with trackingId ${req.params.trackingId}`);
+    console.debug(`Queueing parcel with trackingId ${req.params.trackingId}`);
 
     if (req.params.trackingId.trim().length === 0) {
         console.warn(`Tried to queue invalid tracking id ${req.params.trackingId}`)
@@ -92,7 +92,7 @@ router.post('/:trackingId', async (req, res) => {
  * @returns 200 if queued parcel deleted
  */
 router.delete('/:trackingId', async (req, res) => {
-    console.trace(`Removing queued parcel id ${req.params.trackingId}`);
+    console.debug(`Removing queued parcel id ${req.params.trackingId}`);
     try {
         const toDelete = await queuedDao.findByTrackingId(req.params.trackingId);
         if (!toDelete) {

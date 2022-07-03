@@ -2,6 +2,7 @@ import { daoFactory } from "../dao/daoFactory";
 import { parcel } from "../entities/parcel";
 import { queued } from "../entities/queued";
 import { trackingEvent } from "../entities/trackingEvent";
+import { Dto } from "../types/Dto";
 import { client as clientType } from "./client";
 
 export { runner }
@@ -12,6 +13,9 @@ const queuedDao = daoFactory(queued);
  * Runner created to fetch data from generic client object
  */
 class runner<T> {
+    /**
+     * Client used to determine current event information. The client implementation can 
+     */
     client: clientType<T>;
 
     MAX_QUEUED_RETRIES: number = 3;
@@ -50,46 +54,67 @@ class runner<T> {
             }
             return false;
         }
-        // send HTTP request to our api 
-        const parcelDto = this.client.createPacel(response);
+
+        // convert client response to a parcel
+        const parcelDto = this.client.createParcel(response);
         if (!parcelDto) {
             console.warn(`Could not create parcel dto from response for ${trackingId}`);
             return false;
         }
-        parcelDto.events.forEach(x => x.dateTime = Math.floor(x.dateTime / 1000))
-        if (trackedParcel) {
-            // merge parcelDto with existing parcel 
-            const newEvents = parcelDto.events.filter(newEvent =>
-                // only return events that aren't in trackedParcel already
-                trackedParcel!.events.find(existingEvent => existingEvent.equals(newEvent)) == undefined
-            )
-            console.info(`Added ${newEvents.length} new events to ${trackingId}`);
-            trackedParcel.events.push(...newEvents.map(x => new trackingEvent(x)));
-        } else {
-            console.info(`Synced new parcel ${trackingId} to ${owner}`);
-            trackedParcel = new parcel(parcelDto);
-            trackedParcel.owner = owner;
-            trackedParcel.events.forEach(x => new trackingEvent(x));
 
-            // delete queued if required
+        // merge parcels
+        const [newParcel, mergedParcel] = this.mergeParcels(trackedParcel, parcelDto);
+        // delete queued if new parcel is being created 
+        if (newParcel) {
             if (queued) {
                 await queuedDao.delete(queued.id!);
             } else {
                 console.warn(`No queued parcel ${trackingId} existed`);
             }
         }
-        // FIXME: support millisecond accurate date times properly
-        trackedParcel.lastSync = Math.floor(Date.now() / 1000);
 
-        if (trackedParcel.events.length > 0) {
-            const lastEvent = trackedParcel.events[trackedParcel.events.length - 1]
+        mergedParcel.owner = owner;
+
+        if (mergedParcel.events.length > 0) {
+            const lastEvent = mergedParcel.events[mergedParcel.events.length - 1]
             if (lastEvent?.type === 'delivered') {
                 console.debug(`Disabling parcel because last event is delivered, ${lastEvent.externalId}`)
-                // trackedParcel.disabled = true;
+                mergedParcel.disabled = true;
             }
         }
 
         // save parcel 
-        return (await parcelDao.save(trackedParcel)) != undefined;
+        return (await parcelDao.save(mergedParcel)) != undefined;
+    }
+
+    /**
+     * Merge an existing parcel with a new parcel. 
+     * Return true if a new parcel was synced
+     * 
+     * @param trackedParcel 
+     * @param parcelDto 
+     * @returns [boolean,parcel]. true if parcel is new
+     */
+    private mergeParcels(trackedParcel: parcel | undefined, parcelDto: Dto<parcel>): [boolean, parcel] {
+        let newSync: boolean = trackedParcel == undefined;
+        if (trackedParcel) {
+            // merge parcelDto with existing parcel 
+            const newEvents = parcelDto.events.filter(newEvent =>
+                // only return events that aren't in trackedParcel already
+                trackedParcel!.events.find(existingEvent => existingEvent.equals(newEvent)) == undefined
+            )
+            console.info(`Added ${newEvents.length} new events to ${trackedParcel.trackingId}`);
+            trackedParcel.events.push(...newEvents.map(x => new trackingEvent(x)));
+        } else {
+            console.info(`Synced new parcel ${parcelDto.trackingId}`);
+            trackedParcel = new parcel(parcelDto);
+            trackedParcel.events.forEach(x => new trackingEvent(x));
+        }
+        // FIXME: support millisecond accurate date times properly
+        trackedParcel.lastSync = Math.floor(Date.now() / 1000);
+        trackedParcel.events.filter(x => x.dateTime === -1).forEach(x => x.dateTime = trackedParcel!.lastSync);
+        trackedParcel.events.forEach(x => x.dateTime = Math.floor(x.dateTime / 1000));
+        trackedParcel.events.sort((a, b) => a.dateTime - b.dateTime);
+        return [newSync, trackedParcel];
     }
 }

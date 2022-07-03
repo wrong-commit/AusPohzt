@@ -73,13 +73,13 @@ class pirate<T extends object> {
         if (!row) return dto;
 
         for (const field of fields) {
-            console.debug(`Setting field ${field}`);
             // find fieldDef
             const fieldDef: undefined | FieldDef = fieldDefs.find(x => x.name === field.toLowerCase());
             if (!fieldDef) {
                 console.warn(`Could not find returned field for ${field}`);
                 continue;
             }
+            console.debug(`Setting field ${field} to ${row[field.toLowerCase()]}`);
             //@ts-expect-error
             dto[field] = row[field.toLowerCase()];
         }

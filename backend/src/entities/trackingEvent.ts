@@ -38,6 +38,16 @@ class trackingEvent {
     /**
      * Seconds since unix epoch when event occurred .
      */
+    /**
+     * 
+     * FIXME: TrackingEvents are not check for datetime uniqueness if datetime is -1. 
+This change is shit, but justified by setting datetime to -1 before 
+merging so dateTime can reflect either when we saw the event, or use 
+the self-reported event time. 
+....
+Just add a "firstSeen" column to the events that isn't compared. Duh.
+
+     */
     @bind
     dateTime: number;
 
@@ -77,14 +87,15 @@ class trackingEvent {
 
     /**
      * Compare if two trackingEvents are equal. Ignores entity data.
+     * If dateTime of the parameter is -1, dateTime is not compared.
      * @param other 
      * @returns 
      */
 
     equals(other?: Dto<trackingEvent> | trackingEvent): boolean {
         if (!other) return false;
-        return this.dateTime === other.dateTime &&
-            this.type === other.type &&
+        if (other.dateTime !== -1 && this.dateTime !== other.dateTime) return false;
+        return this.type === other.type &&
             this.externalId === other.externalId &&
             this.location === other.location &&
             this.message === other.message;

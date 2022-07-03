@@ -1,6 +1,14 @@
+import { googleMapsMarker } from "../../types/shopifyapi/types";
+export {
+    /**
+     * For simpler tests of location parsing
+     */
+    exampleLocationIframeGoogleMapsMarker,
+}
 /**
  * 2022-04-03: https://counterintuitiverecords.com/57412845776/orders/3d1a0a91a959db21bcfb37bf337de92d
- * authenticated response 
+ * authenticated response
+ * USPS underlying tracking system
  */
 export default `<!DOCTYPE html>
 <html lang="en" dir="ltr" class="no-js mac chrome desktop page--no-banner page--logo-main page--thank-you">
@@ -897,3 +905,28 @@ for (var attr in meta) {
 })();</script>
   </body>
 </html>`;
+
+/**
+ * JSON extracted from the `iframe.map__iframe[data-google-maps][data-google-maps-marker]` attribute
+ */
+const exampleLocationIframeGoogleMapsMarker: googleMapsMarker[] = [
+    {
+        "type": "shipping",
+        "image": "//cdn.shopify.com/shopifycloud/shopify/assets/checkout/shipping-location-pin-6eb96b6a10d2ab4d1c0d55219edd65c905343fd60d2ded24a26c03a368597405.svg",
+        "title": "Shipping address",
+        "position": { "lat": -33.8254752, "lng": 151.0776801 },
+        "marker": true,
+        "lat": -33.8254752,
+        "lng": 151.0776801,
+        "label": "Wentworth Point, New South Wales"
+    }, {
+        "type": "current",
+        "image": "//cdn.shopify.com/shopifycloud/shopify/assets/checkout/current-location-pin-af0917fd023c1d1b6f57cf80e9f7159326c6094baa4dbbe530f954d8266902f3.svg",
+        "title": "Current shipment location",
+        "position": { "lat": 40.8591, "lng": -74.0462 },
+        "marker": true,
+        "lat": 40.8591,
+        "lng": -74.0462,
+        "label": "South Hackensack, NJ"
+    }
+];
