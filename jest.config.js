@@ -8,4 +8,12 @@ module.exports = {
     moduleNameMapper: {
     },
     setupFilesAfterEnv: ["<rootDir>/setupTests.ts"],
+
+    /* Test Configuration Information */
+    collectCoverage: true,
+    coverageDirectory: "../dist/coverage",
+    coverageReporters: [
+        "text",
+        "html",
+    ],
 }
