@@ -5,9 +5,12 @@ import (
 	"flag"
 	"fmt"
 	"net/http"
+	"os"
 )
 
 func main() {
+	const auspohztEnvVar = "AUSPOHZT_DIR"
+	env_eventStorageLoc := os.Getenv(auspohztEnvVar)
 
 	p_printHelp := flag.Bool("h", false, "Display usage information")
 	// location previous parcel event ids are cached, avoids duplicate notification alerts
@@ -23,8 +26,8 @@ func main() {
 	}
 
 	// require -storageDir
-	if *p_eventStorageLoc == "" {
-		fmt.Println("Expected -storageDir=/path/to/dir arg")
+	if *p_eventStorageLoc == "" && env_eventStorageLoc == "" {
+		fmt.Printf("Expected -storageDir=/path/to/dir arg or $%s to be set\n", auspohztEnvVar)
 		return
 	}
 
