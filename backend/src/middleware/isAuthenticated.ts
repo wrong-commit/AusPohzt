@@ -12,7 +12,7 @@ export { isAuthenticatedMiddle, isAuthenticated };
  * @see `./attachToken.ts`
  */
 function isAuthenticatedMiddle(req: express.Request, res: express.Response, next: express.NextFunction) {
-    if (isAuthenticated(req, process.env.ENABLE_AUTH)) {
+    if (!isAuthenticated(req, process.env.ENABLE_AUTH)) {
         console.log('Request is not authenticated ')
         return res.status(401).end();
     }

@@ -20,14 +20,15 @@ import { api } from '@boganpost/backend/src/services/api';
 export { App };
 
 type Props = {
-    userId: number
+    userId: number,
+    api: api,
 }
 const App = (props: Props) => {
-    console.log(props);
+    console.log('App props:', props);
 
     // sync parcels
-    const [queued, fetchQueued, fetchingQueued, setQueued] = useAsync<Dto<queued>[]>(() => getQueued(), undefined);
-    const [parcels, fetchParcels, fetchingParcels, setFetchedParcels] = useAsync<Dto<parcel>[]>(() => getParcels(), undefined);
+    const [queued, fetchQueued, fetchingQueued, setQueued] = useAsync<Dto<queued>[]>(() => getQueued(props.api), undefined);
+    const [parcels, fetchParcels, fetchingParcels, setFetchedParcels] = useAsync<Dto<parcel>[]>(() => getParcels(props.api), undefined);
     const [parcel, setParcel] = useState<Dto<parcel> | undefined>(undefined);
 
     const sync = async () => {
@@ -134,7 +135,7 @@ const App = (props: Props) => {
                     </TaskBarItem>
                     <TaskBarItem hidden={false}
                         onClick={() => {
-                            api.init('http://localhost:3000').post('/v0/auth/logout')
+                            props.api.post('/v0/auth/logout')
                                 .then(() => window.location.href = window.location.href)
                         }}>
                         Logout

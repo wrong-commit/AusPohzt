@@ -32,9 +32,10 @@ router.post('/login', (req, res) => {
         if (username === 'admin' && password === 'nimda') {
             const token = jwt.sign('empty', process.env.HMAC_SECRET);
             // res.cookie(process.env.AUTH_COOKIE_NAME, token);
-            res.setHeader('Set-Cookie', `${process.env.AUTH_COOKIE_NAME}=${token}`)
-            res.status(200)
+            return res.setHeader('Set-Cookie', `${process.env.AUTH_COOKIE_NAME}=${token}`)
+                .status(200)
+                .send({ token: token });
         }
     }
-    res.send();
+    return res.status(401).end()
 })

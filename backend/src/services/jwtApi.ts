@@ -1,3 +1,5 @@
+
+import bent from "bent";
 import { api } from "./api";
 
 export { jwtApi }
@@ -18,9 +20,21 @@ class jwtApi extends api {
         return new jwtApi(host, token);
     }
 
+    async login(user: string, pass: string): Promise<{ token: string } | undefined> {
+        return this.post('/v0/auth/login', {
+            params: {
+                'username': user,
+                'password': pass,
+            },
+        }).then(r => r.json() as Promise<{ token: string }>)
+            .catch(err => {
+                console.error(`Error fetching queued`, err);
+                return undefined;
+            });
+    }
+
     override addDefaultHeaders(headers: Record<string, string | number>): void {
         console.debug(`Adding JWT header`);
         headers[jwtApi.HEADER_JWT] = this.token;
     }
-
 }
