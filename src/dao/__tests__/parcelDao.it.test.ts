@@ -4,7 +4,6 @@ import { daoFactory } from "../daoFactory";
 import { parcelDao } from "../parcelDao";
 
 // initialize decorators for parcelDao 
-new parcelDao(parcel);
 
 let findParcel: number;
 let saveParcel: number;
