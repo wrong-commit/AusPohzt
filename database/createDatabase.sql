@@ -18,3 +18,20 @@ CREATE TABLE parcel (
     -- TODO: use proper datatype here ? 
     lastSync INTEGER
 );
+
+CREATE TABLE trackingEvent ( 
+    -- TODO: understand postgres column definitions
+    ID SERIAL PRIMARY KEY,
+    -- TODO: will this work ? 
+    parcelId SERIAL,
+    -- unix epoch
+    dateTime INTEGER,
+    -- location info attached to event. empty equivalent of NULL
+    location VARCHAR(255),
+    -- event message info
+    message VARCHAR(255),
+    -- see trackingEventStatus type. setup enum mapping ? 
+    type VARCHAR(100), 
+    -- TODO: change to JSON, figure out null support. https://stackoverflow.com/a/45973415
+    raw TEXT NULL
+)
