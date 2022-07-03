@@ -39,6 +39,7 @@ describe("auspost", () => {
                     trackingId,
                     lastSync: -1,
                     owner: -1,
+                    disabled: false,
                     // TODO: figure out which endpoint/property this is stored on - is it user specific ? 
                     nickName: undefined,
                     events: [

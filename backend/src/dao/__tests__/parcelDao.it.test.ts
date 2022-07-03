@@ -11,6 +11,7 @@ let saveParcel: number;
 
 let findParcelEvent1: number;
 let findParcelEvent2: number;
+let disabledParcel1: number;
 
 // TODO: update tests to use expect(...).toStrictEqual<Dto<parcel>>(...) to compare properties
 const pDao = daoFactory(parcel);
@@ -34,6 +35,11 @@ describe("parcelDao", () => {
             `VALUES (${findParcelId}, 2, 'location', 'second message', 'pending', '') RETURNING id`
         )).rows[0]['id'];
 
+        disabledParcel1 = (await pool.query(
+            `INSERT INTO parcel (trackingId, owner, nickname, lastSync, disabled) ` +
+            `VALUES ('disabledParcel', 1, null, 0, 'y') RETURNING id;`
+        )).rows[0]['id'];
+
         /**
          * Setup parcel to test saving against
          */
@@ -48,12 +54,14 @@ describe("parcelDao", () => {
 
     })
     describe("findAll()", () => {
-        test("finds all parcels", async () => {
+        test("finds all enabled parcels", async () => {
             const parcels = await pDao.findAll();
             const findParcel_ = parcels?.find(x => x.id === findParcelId);
             const saveParcel_ = parcels?.find(x => x.id === saveParcel);
+            const disabledParcel_ = parcels?.find(x => x.id === disabledParcel1);
             expect(findParcel_).toBeDefined();
             expect(saveParcel_).toBeDefined();
+            expect(disabledParcel_).toBeUndefined();
             // just check a couple properties
             expect(findParcel_!.trackingId).toBe('findMe');
             expect(saveParcel_!.trackingId).toBe('saveMe');
@@ -92,6 +100,23 @@ describe("parcelDao", () => {
         })
     })
 
+
+
+    describe("findByDisabled()", () => {
+        test("Pass true to find disabled parcels", async () => {
+            console.info('Pass true to find disabled parcels')
+            let parcels = await pDao.findByDisabled(true);
+            console.info('Done %o', parcels)
+            let parcel_ = parcels?.find(x => x.id === disabledParcel1);
+            expect(parcel_).toBeDefined();
+        });
+        test("Pass false to hide disabled parcels", async () => {
+            const parcels = await pDao.findByDisabled(false);
+            const saveParcel_ = parcels?.find(x => x.id === disabledParcel1);
+            expect(saveParcel_).toBeUndefined();
+        });
+    });
+
     describe("findByTrackingId()", () => {
         test("TrackingId does not map to existing parcel", async () => {
             expect(await pDao.findByTrackingId('')).toBeUndefined()
@@ -124,6 +149,8 @@ describe("parcelDao", () => {
             expect(events[1]?.message).toBe('second message');
             expect(events[1]?.type).toBe('pending');
         })
+
+        test.todo("Disabled parcels with tracking Id not found");
     })
 
     describe("delete()", () => {
@@ -153,6 +180,7 @@ describe("parcelDao", () => {
         test("save new", async () => {
             let newParcel: parcel | undefined = new parcel({
                 trackingId: 'newParcelTrkId',
+                disabled: false,
                 owner: 0,
                 events: [{
                     externalId: '0',
@@ -172,6 +200,7 @@ describe("parcelDao", () => {
         test("merge", async () => {
             let newParcel: parcel | undefined = new parcel({
                 trackingId: 'mergeParcelTrkId',
+                disabled: false,
                 owner: 0,
                 events: [],
                 lastSync: 0,
