@@ -14,7 +14,7 @@ class jwtApi extends api {
         this.token = token;
     }
 
-    public static override init(host: string, token?: string): jwtApi {
+    static initWithToken(host: string, token?: string): jwtApi {
         return new jwtApi(host, token);
     }
 
