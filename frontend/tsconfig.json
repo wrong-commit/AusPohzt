@@ -1,8 +1,6 @@
 {
-    "include": [
-        "src"
-    ],
     "compilerOptions": {
+        "rootDir": "src",
         "module": "esnext",
         "target": "esnext",
         "moduleResolution": "node",
@@ -13,7 +11,7 @@
         "allowJs": false,
         "checkJs": false,
         "allowSyntheticDefaultImports": true,
-        "jsx": "preserve",
+        "jsx": "react",
         "downlevelIteration": true,
         "strictNullChecks": true,
         "strictFunctionTypes": true,

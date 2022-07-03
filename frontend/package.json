@@ -4,6 +4,7 @@
     "description": "",
     "main": "build/index.js",
     "private": true,
+    "type": "module",
     "scripts": {
         "start": "snowpack dev",
         "build": "snowpack build --verbose",
@@ -12,6 +13,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "@boganpost/backend": "*",
         "react": "^17.0.2",
         "react-dom": "^17.0.2"
     },

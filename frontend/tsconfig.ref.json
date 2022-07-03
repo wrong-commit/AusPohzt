@@ -5,5 +5,5 @@
     ],
     "compilerOptions": {
         "composite": true,
-    }
+    },
 }
