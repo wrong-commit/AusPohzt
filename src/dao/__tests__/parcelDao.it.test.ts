@@ -197,7 +197,7 @@ describe("parcelDao", () => {
 
             const events = savedParcel.events;
             expect(events).toHaveLength(1);
-            expect(events[0]?.id).toBe(findParcelEvent1);
+            expect(events[0]?.id).toBeDefined();
             expect(events[0]?.parcelId).toBe(newParcel!.id);
             expect(events[0]?.dateTime).toBe(4);
             expect(events[0]?.location).toBe('');
