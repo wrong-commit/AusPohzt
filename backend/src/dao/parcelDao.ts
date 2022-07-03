@@ -43,7 +43,7 @@ class parcelDao extends baseDao<parcel> {
         return this.findByTrackingIdAndDisabled(trackingId, false);
     }
 
-    private async findByTrackingIdAndDisabled(trackingId: string, disabled: boolean): Promise<parcel | undefined> {
+    async findByTrackingIdAndDisabled(trackingId: string, disabled: boolean): Promise<parcel | undefined> {
         try {
             const result = await this.pool.query(`SELECT * FROM ${this.entityName} WHERE trackingId = $1 AND "disabled" = $2`, [trackingId, whereBool(disabled)]);
             this.expectedRows(result, 1);
