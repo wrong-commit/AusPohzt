@@ -1,4 +1,5 @@
 import { pool } from "../../database/database";
+import { parcel } from "../../models/parcel";
 import { parcelDao } from "../parcelDao";
 
 let findParcel: number;
@@ -72,6 +73,20 @@ describe("parcelDao", () => {
             )).rows[0]['id'];
 
             expect(await parcelDao.delete(deleteParcel)).toBeTruthy();
+        })
+    })
+
+    describe("save", () => {
+        test("save new", async () => {
+            let newParcel: parcel | undefined = new parcel({
+                trackingId: 'newParcelTrkId',
+                owner: 0,
+                events: [],
+                lastSync: 0,
+            });
+            newParcel = await parcelDao.save(newParcel);
+            expect(newParcel).toBeDefined();
+            expect(newParcel!.id).toBeDefined();
         })
     })
 })
