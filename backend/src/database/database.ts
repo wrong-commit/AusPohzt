@@ -1,7 +1,7 @@
 import { Client, Pool } from 'pg';
 
 const host = (process.env.PG_HOST ?? '').length === 0 ? 'localhost' : process.env.PG_HOST;
-const port = (process.env.PG_PORT ?? '') === '' ? 0 : process.env.PG_PORT;
+const port = process.env.PG_PORT == undefined ? 5432 : process.env.PG_PORT!;
 
 const config = {
     // TODO: use connectionstring ? 
