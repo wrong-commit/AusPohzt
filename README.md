@@ -23,4 +23,4 @@ API for tracking parcels
 - [ ] Refactor
     - [ ] pirate to support passing results through map() and mapMany()
     - [ ] typing of entityDecorator.getEntityPrototype
-    - [ ] DRY dao code
+    - [x] DRY dao code
