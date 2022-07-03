@@ -24,6 +24,9 @@ To add override methods to a dao class
 1. Setup a unique class that extends baseDao<T>, where T is an entity type.
 2. Decorate the class with dao('entityName'). The entity name should map to an actual entity, beware runtime errors 
 3. Override daoFactory with the entity type, returning the explicit dao type
+4. EXPLICITLY initialize parcel in daoFactory. why ? because ts/js sucks, and decorators aren't processed if a class 
+    isn't "used".
+    - This could likely be worked around by declaring daos within dao.ts, but that would make code maintenance harder
 
 ### Explicit Dao and Integration Tests
 

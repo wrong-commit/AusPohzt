@@ -1,6 +1,6 @@
 import express from 'express';
 import { daoFactory } from '../../dao/daoFactory';
-import { parcel } from '../../models/parcel';
+import { parcel } from '../../entities/parcel';
 import { Dto } from '../../types/Dto';
 import { isObjectEmpty } from '../../util/isObjectEmpty';
 
