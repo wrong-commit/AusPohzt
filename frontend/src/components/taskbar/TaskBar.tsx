@@ -3,16 +3,19 @@ import { useWindowDispatch, useWindowState, WindowState } from '../../context/Wi
 
 import '../../styles/components/taskbar/TaskBar.css';
 
-export { TaskBar }
+export { TaskBar, TaskBarItem }
 
-type Props = {}
+type Props = {
+    children?: React.ReactChild | React.ReactChildren;
+}
 
-const TaskBar = (props: Props) => {
+const TaskBar = ({ children }: Props) => {
 
     const windowState = useWindowState();
     const windowDispatch = useWindowDispatch();
 
     return (<div className={'TaskBar'}>
+        {children}
         {Object.keys(windowState).map((id: keyof WindowState) => (
             <TaskBarItem key={id}
                 hidden={windowState[id]!.hidden}
