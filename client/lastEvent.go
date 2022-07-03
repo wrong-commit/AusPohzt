@@ -6,8 +6,8 @@ import (
 	"os"
 )
 
-func (p Parcel) HasNewEvent() (bool, error) {
-	filename := getEventFilename(p)
+func (p Parcel) HasNewEvent(storageDir string) (bool, error) {
+	filename := getEventFilename(p, storageDir)
 	if _, err := os.Stat(filename); os.IsNotExist(err) {
 		fmt.Printf("[%s] No event data exists\n", p.TrackingId)
 		os.Create(filename)
@@ -22,8 +22,8 @@ func (p Parcel) HasNewEvent() (bool, error) {
 	return recordedEvent != fmt.Sprint(p.Events[len(p.Events)-1].Id), nil
 }
 
-func (p Parcel) WriteNewEvent(event TrackingEvent) error {
-	filename := getEventFilename(p)
+func (p Parcel) WriteNewEvent(event TrackingEvent, storageDir string) error {
+	filename := getEventFilename(p, storageDir)
 	file, err := os.OpenFile(filename, os.O_WRONLY, os.ModePerm)
 	if err != nil {
 		fmt.Printf("[%s] Could not open file <%s> (%s)\n", p.TrackingId, filename, err.Error())
@@ -54,6 +54,6 @@ func readFile(filename string) (string, error) {
 	return string(bytes), nil
 }
 
-func getEventFilename(parcel Parcel) string {
-	return fmt.Sprintf("/tmp/%s", parcel.TrackingId)
+func getEventFilename(parcel Parcel, storageDir string) string {
+	return fmt.Sprintf("/%s/%s", storageDir, parcel.TrackingId)
 }
