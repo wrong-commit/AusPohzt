@@ -53,10 +53,9 @@ class api {
     }
 
     private addDefaultHeaders(headers: Record<string, string | number>): void {
-        console.debug('Adding API_KEY');
+        console.debug(`Adding API_KEY ${process.env.API_KEY}`);
         headers[api.HEADER_API_KEY] = process.env.API_KEY;
         // needed ? 
-        console.debug('Adding AP_CHANNEL_NAME');
         headers[api.HEADER_AP_CHANNEL_NAME] = 'WEB_DETAIL';
         if (!headers['Accept']) {
             console.debug('default Accept header is application/json');

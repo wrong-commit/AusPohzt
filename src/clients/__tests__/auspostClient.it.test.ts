@@ -1,6 +1,5 @@
 import { daoFactory } from '../../dao/daoFactory';
-import { parcel, parcelDto } from '../../entities/parcel';
-import { trackingEvent } from '../../entities/trackingEvent';
+import { parcel } from '../../entities/parcel';
 import { shipmentsResponse } from '../../types/digitalapi/shipmentsgatewayapi/watchlist/shipments/article';
 import exampleJson from '../../types/digitalapi/shipmentsgatewayapi/watchlist/shipments/example.json';
 import { Dto } from '../../types/Dto';
@@ -15,6 +14,7 @@ const client = auspost.init();
 describe("auspost", () => {
 
     describe("sync()", () => {
+        test.todo("throw error on empty trackingId arg")
         test("null response returns undefined", async () => {
             // TODO: mock api.get() to throw error to test client.sync() error handling23
             // TODO: assert API not called. how ? ensure createParcel not called
@@ -32,7 +32,7 @@ describe("auspost", () => {
 
             const events = example.articles[0]!.details[0]!.events!.reverse();
 
-            expect(parcel).toEqual<parcelDto>(
+            expect(parcel).toEqual<Dto<parcel>>(
                 {
                     id: undefined,
                     trackingId,
@@ -44,6 +44,7 @@ describe("auspost", () => {
                         {
                             id: undefined,
                             parcelId: undefined,
+                            externalId: events[0]!.wcid,
                             dateTime: events[0]!.dateTime,
                             location: events[0]!.location ?? '',
                             message: events[0]!.description,
@@ -53,6 +54,7 @@ describe("auspost", () => {
                         {
                             id: undefined,
                             parcelId: undefined,
+                            externalId: events[1]!.wcid,
                             dateTime: events[1]!.dateTime,
                             location: events[1]!.location ?? '',
                             message: events[1]!.description,
@@ -62,6 +64,7 @@ describe("auspost", () => {
                         {
                             id: undefined,
                             parcelId: undefined,
+                            externalId: events[2]!.wcid,
                             dateTime: events[2]!.dateTime,
                             location: events[2]!.location ?? '',
                             message: events[2]!.description,

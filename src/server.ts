@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
-import { buildExpress } from './buildExpress';
 dotenv.config({ path: '.env' })
+import { buildExpress } from './buildExpress';
 
 const app = buildExpress();
 

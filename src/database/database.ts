@@ -1,4 +1,7 @@
+import dotenv from 'dotenv'
 import { Pool, Client } from 'pg';
+
+
 
 const host = (process.env.PG_HOST ?? '').length === 0 ? 'localhost' : process.env.PG_HOST;
 const port = (process.env.PG_PORT ?? '') === '' ? 0 : process.env.PG_PORT;
@@ -14,6 +17,8 @@ const config = {
     // database
     database: process.env.PG_DATABASE,
 }
+
+console.log(`Using Database Config\n${JSON.stringify(config, null, 2)}`)
 
 const pool = new Pool(config);
 
