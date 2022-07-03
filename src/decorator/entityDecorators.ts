@@ -1,8 +1,17 @@
-export { entity, getEntityName, bind, getFields }
+export { entity, getEntityName, getEntityPrototype as getEntity, bind, getFields }
+
+
+/**
+ * Type for returning entity prototype by name
+ */
+interface Constructor {
+    new(...args: any[]): object;
+}
+
 /**
  * Stores a Class type, and the value of the Store Name. 
  */
-const entityNameMap = new Map<object, string>();
+const entityNameMap = new Map<{ constructor: Constructor }, string>();
 const fieldsMap = new Map<object, string[]>();
 
 // 
@@ -48,6 +57,7 @@ const bind = (target: object, field: string) => {
 /**
  * @param target    Class or class Instance to get name for
  * @returns entity name
+ * @throws Error if target is not an entity
  */
 const getEntityName = (target: object): string => {
     //@ts-expect-error
@@ -58,6 +68,19 @@ const getEntityName = (target: object): string => {
     );
     if (!entityNameVal) throw new Error(`${proto} does not have an Entity Name value`);
     return entityNameVal;
+}
+
+/**
+ * Get entity prototype by name.
+ * 
+ * @param entityName 
+ * @returns 
+ * @throws Error if entityName does not exist for any entity
+ */
+const getEntityPrototype = (entityName: string): { constructor: Constructor } => {
+    const entityPrototype = Array.from(entityNameMap.entries()).find((pair => pair['1'] === entityName));
+    if (!entityPrototype) throw new Error(`No entity prototype found for ${entityName}`);
+    return entityPrototype[0];
 }
 
 /**

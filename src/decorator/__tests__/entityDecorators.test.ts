@@ -13,6 +13,14 @@ class _testClassWithNoFields {
 class _testClassWithNoDecerator {
 }
 
+@entityDecorators.entity('lookupByName')
+class _testLookupByName {
+    test: string;
+    constructor(value: string) {
+        this.test = value;
+    }
+}
+
 describe("@entity", () => {
     describe("Get entity name", () => {
         test("No Decorator on class throws an error", () => {
@@ -29,6 +37,19 @@ describe("@entity", () => {
 
         test("entity name returned for type", () => {
             expect(entityDecorators.getEntityName(_testClass)).toBe('test');
+        })
+    })
+
+    describe("Get entity by name", () => {
+        test("Invalid entity name throws error", () => {
+            expect(() => entityDecorators.getEntity('invalid')).toThrowError();
+        })
+        test("Invalid entity name returns entity prototype", () => {
+            const proto = entityDecorators.getEntity('lookupByName');
+            expect(proto).toBe(_testLookupByName.prototype);
+
+            const obj = new proto.constructor('reflection FTW!!') as _testLookupByName;
+            expect(obj.test).toBe('reflection FTW!!')
         })
     })
 
