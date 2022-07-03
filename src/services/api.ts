@@ -19,14 +19,14 @@ class api {
         return new api(host);
     }
 
-    async get(path: string, options?: getOptions): Promise<bent.ValidResponse> {
+    async get(path: string, options?: getOptions): Promise<bent.NodeResponse> {
         const url = this.buildUrl(path, options?.params);
         const request = bent<NodeResponse>('GET');
         const response = await request(url.toString(), undefined, this.buildHeaders(options?.headers));
 
         this.throwErrorOnWrongStatusCode(response, options?.statusCode)
 
-        return response.json();
+        return response;
     }
 
     private throwErrorOnWrongStatusCode(response: NodeResponse, _statusCodes?: number | number[]) {
