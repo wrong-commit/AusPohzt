@@ -8,7 +8,11 @@
     "scripts": {
         "clean": "tsc --build --clean tsconfig.build.json",
         "build": "tsc --build tsconfig.build.json",
-        "watch": "tsc --build --watch"
+        "watch": "tsc --build --watch",
+	"back:server": "cd backend && npm  run server",
+	"back:runner": "cd backend && watch npm run start",
+	"front:site": "cd frontend && npm run start",
+	"start": "npm run back:server & npm run back:runner & npm run front:site"
     },
     "devDependencies": {
         "@types/cors": "^2.8.12",
