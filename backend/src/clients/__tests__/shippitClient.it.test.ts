@@ -13,11 +13,51 @@ describe("shippit", () => {
         jsdom = new JSDOM(exampleHtml)
     })
     describe("createParcel", () => {
+
+        describe("Tracking event properties", () => {
+            test("externalId", async () => {
+                const rawNode = client.getDeliveryTracks(jsdom.window.document).values().next().value;
+                expect(rawNode).toBeDefined();
+                const externalId = client.parseExternalId(rawNode)
+                expect(externalId).toBe('In transit Couriers Please')
+            })
+            test("location", async () => {
+                const rawNode = jsdom.window.document.querySelector('.status-details>.location')
+                expect(rawNode).toBeDefined();
+                const externalId = client.formatLocationNode(rawNode!)
+                expect(externalId).toBe('Brisbane')
+            })
+            test("eventDateTime today", async () => {
+                const rawValue = 'Today    2:44PM AEST';
+                const eventDateTime = client.formatEventNode(rawValue)
+
+                expect(eventDateTime.getHours()).toBe(14)
+                expect(eventDateTime.getMinutes()).toBe(44)
+            })
+            test("eventDateTime specific", async () => {
+                const rawValue = 'Jun 11, 2022 1:20PM AEST';
+                const eventDateTime = client.formatEventNode(rawValue)
+
+                expect(eventDateTime.getHours()).toBe(13)
+                expect(eventDateTime.getMinutes()).toBe(20)
+                expect(eventDateTime.getDate()).toBe(11)
+                expect(eventDateTime.getMonth()).toBe(6)
+                expect(eventDateTime.getFullYear()).toBe(2022)
+            })
+            test("type", async () => {
+                const rawNode = client.getDeliveryTracks(jsdom.window.document).values().next().value;
+                expect(rawNode).toBeDefined();
+                const externalId = client.parseExternalId(rawNode)
+                expect(externalId).toBe('in transit')
+            })
+        })
+
         test("example HTML creates expected parcel", async () => {
             const trackingId = 'ppa2nyz2ynpyi';
 
             const parcel = client.createParcel({ jsdom, trackingId, url: 'https://test.com/' + trackingId })
             parcel?.events.forEach(x => x.raw = '');
+            parcel?.events.filter(x => !Number.isNaN(x.dateTime)).forEach(x => x.dateTime = -1);
 
             expect(parcel).toEqual<Dto<parcel>>(
                 {
@@ -30,24 +70,54 @@ describe("shippit", () => {
                     events: [
                         {
                             dateTime: -1,
-                            externalId: 'In Transit COURIERS PLEASE',
-                            location: 'Brisbane',
-                            message: 'In Transit COURIERS PLEASE',
-                            type: 'in transit',
-                            parcelId: undefined,
+                            externalId: 'In transit Couriers Please',
                             id: undefined,
+                            location: 'Brisbane',
+                            message: 'In transit Couriers Please',
+                            parcelId: undefined,
                             raw: '',
+                            type: 'in transit',
                         },
-                        // {
-                        //     dateTime: -1,
-                        //     externalId: 'On its way',
-                        //     location: JSON.stringify({ lat: 40.8591, lng: -74.0462 }),
-                        //     message: 'On its way September 3',
-                        //     type: 'in transit',
-                        //     parcelId: undefined,
-                        //     id: undefined,
-                        //     raw: '',
-                        // }
+                        {
+                            dateTime: -1,
+                            externalId: 'In transit Couriers Please',
+                            id: undefined,
+                            location: 'Brisbane',
+                            message: 'In transit Couriers Please',
+                            parcelId: undefined,
+                            raw: '',
+                            type: 'in transit',
+                        },
+                        {
+                            dateTime: -1,
+                            externalId: 'Booked for delivery Weaver Green Australia',
+                            id: undefined,
+                            location: 'Noosaville, QLD',
+                            message: 'Booked for delivery Weaver Green Australia',
+                            parcelId: undefined,
+                            raw: '',
+                            type: 'in transit',
+                        },
+                        {
+                            dateTime: -1,
+                            externalId: 'Packing Order Weaver Green Australia',
+                            id: undefined,
+                            location: 'Noosaville, QLD',
+                            message: 'Packing Order Weaver Green Australia',
+                            parcelId: undefined,
+                            raw: '',
+                            type: 'in transit',
+                        },
+                        {
+                            dateTime: -1,
+                            externalId: 'Order placed Weaver Green Australia',
+                            id: undefined,
+                            location: 'Noosaville, QLD',
+                            message: 'Order placed Weaver Green Australia',
+                            parcelId: undefined,
+                            raw: '',
+                            type: 'pending',
+                        },
                     ]
                 }
             );

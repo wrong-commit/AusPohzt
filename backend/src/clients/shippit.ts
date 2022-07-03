@@ -14,6 +14,21 @@ type shippitParcelReq = {
     trackingId: string;
 }
 
+const months: { [x in string]: number } = {
+    Jan: 1,
+    Feb: 2,
+    Mar: 3,
+    Apr: 4,
+    May: 5,
+    Jun: 6,
+    Jul: 7,
+    Aug: 8,
+    Sep: 9,
+    Oct: 10,
+    Nov: 11,
+    Dec: 12,
+};
+
 class shippit implements client<shippitParcelReq> {
     api: api;
     constructor(api: api) {
@@ -53,7 +68,7 @@ class shippit implements client<shippitParcelReq> {
 
         const courierId = jsdom.window.document.querySelector('.delivery-progress>.courier>.courier__details .tracking_id')?.textContent?.split(':')[1];
         if (!courierId) { console.log('Could not find courier Id'); return }
-        console.error('Courier id =', courierId);
+        // console.error('Courier id =', courierId);
 
         const deliveryTracks = this.getDeliveryTracks(jsdom.window.document);
         if (!deliveryTracks) { console.debug('Could not find delivery tracks'); return }
@@ -89,22 +104,29 @@ class shippit implements client<shippitParcelReq> {
      * @returns tracking event
      */
     parseTrackingEvent(node: Element): Dto<trackingEvent> {
+        const externalId = this.parseExternalId(node);
         return {
+            id: undefined,
+            parcelId: undefined,
             dateTime: this.parseEventDateTime(node.querySelector('.time-date')),
-            externalId: this.parseExternalId(node),
+            externalId,
             location: this.parseLocation(node),
             // message: (node.querySelector('.status-details>.status-title')?.textContent ?? '').replaceAll('\n|\t', '').replaceAll('  ', '') ?? '<unknown>',
-            message: '',
+            message: externalId,
             raw: node.innerHTML,
             type: this.parseType(node),
         }
-        throw new Error("Method not implemented.");
     }
 
     parseExternalId(node: Element): string {
         const titleNode = node.querySelector('.status-details>.status-title')?.cloneNode(true);
-        titleNode?.removeChild(titleNode.firstChild!);
-        return titleNode?.textContent ?? '<unknown>';
+        // titleNode?.removeChild(titleNode.firstChild!);
+        return this.formatExternalId(titleNode?.textContent);
+    }
+
+    formatExternalId(value: string | undefined | null): string {
+        if (!value) return '<unknown>';
+        return value.replace(/\u00A0/g, ' ').replace('\n', '').replace(/\s{2,}/, ' ').replace(/\t/, ' ').trim();
     }
 
     /**
@@ -146,14 +168,72 @@ class shippit implements client<shippitParcelReq> {
      * @returns number representing node text
      */
     parseEventDateTime(node: Element | null): number {
-        return node ? 0 : 0;
+        return node ? this.formatEventNode(node.textContent?.trim()?.replace(/\n/, ' ')).getTime() : -1;
+    }
+    /**
+     * Convert formats into Date object
+     * @param value 
+     * @returns 
+     */
+    formatEventNode(value: string | undefined | null): Date {
+        // return '';
+        let date = new Date();
+        if (value?.includes('Today')) {
+            date = new Date(Date.now());
+            // parse time 
+            const timePart = value?.replace(/Today\s*/, '');
+            const [hours, minutes, meridian, timezone] = this.parseTime(timePart);
+            date = new Date(date.setHours((parseInt(hours)) + (meridian === 'PM' ? 12 : 0),
+                parseInt(minutes)))
+        } else {
+            // date = new Date(Date.now());
+            // format Mon DD, YYYYY
+            const datePart = value?.replace(/\d{1,2}:\d{1,2}(AM|PM)\s?\w*/, '')
+            let [month, day, years] = datePart?.split(' ', 4) ?? [];
+            day = day!.replace(',', '')
+            date = new Date(date.setFullYear(parseInt(years!), months[month!]! - 1, parseInt(day!)));
+
+            const timePart = value?.replace(datePart!, '');
+
+            const [hours, minutes, meridian, timezone] = this.parseTime(timePart!);
+            date = new Date(date.setHours((parseInt(hours)) + (meridian === 'PM' ? 12 : 0),
+                parseInt(minutes)))
+        }
+
+        return date;
+    }
+
+    parseTime(timePart: string): [string, string, string, string] {
+        let hours = '0', minutes = '0', meridian = 'AM', timezone = 'AEST';
+        const [hour_, nonHour] = timePart.split(':');
+        if (nonHour) {
+            const minutes_ = nonHour!.match(/\d+/)![0];
+            const meridian_ = nonHour.match(/PM|AM/)![0]
+            const timezone_ = nonHour.split(' ')[1];
+            if (hour_ && minutes_ && meridian_ && timezone_) {
+                hours = hour_;
+                minutes = minutes_;
+                meridian = meridian_;
+                timezone = timezone_;
+            }
+        }
+        return [hours, minutes, meridian, timezone]
     }
 
     parseLocation(node: Element): string {
-        const locationNode = node.querySelector('.status-details>.location')
-        locationNode?.removeChild(locationNode.firstChild!);
+        const locationNode = this.findLocationNode(node);
+        return this.formatLocationNode(locationNode);
+    }
 
-        console.error(locationNode)
-        return locationNode?.textContent ?? '<unknown>';
+    findLocationNode(node: Element) {
+        return node.querySelector('.status-details>.location');
+    }
+    formatLocationNode(locationNode: Element | null | undefined) {
+        if (locationNode?.firstChild) {
+            locationNode.removeChild(locationNode.firstChild)
+        }
+        if (!locationNode?.textContent) return '<unknown>';
+        if (!locationNode?.firstChild?.textContent) return locationNode.textContent;
+        return locationNode.textContent.replace(locationNode.firstChild.textContent, '').replace(/\s{2,}/, ' ').trim();
     }
 } 
