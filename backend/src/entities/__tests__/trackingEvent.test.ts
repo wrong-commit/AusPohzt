@@ -38,10 +38,17 @@ describe("trackingEvent", () => {
                 ...te.toData(),
                 externalId: 'test',
             })).toBeFalsy()
+<<<<<<< HEAD
             // expect(te.equals({
             //     ...te.toData(),
             //     dateTime: -1,
             // })).toBeFalsy()
+=======
+            expect(te.equals({
+                ...te.toData(),
+                dateTime: -1,
+            })).toBeFalsy()
+>>>>>>> master
             expect(te.equals({
                 ...te.toData(),
                 location: 'test',

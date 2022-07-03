@@ -38,6 +38,7 @@ class trackingEvent {
     /**
      * Seconds since unix epoch when event occurred .
      */
+<<<<<<< HEAD
     /**
      * 
      * FIXME: TrackingEvents are not check for datetime uniqueness if datetime is -1. 
@@ -48,6 +49,8 @@ the self-reported event time.
 Just add a "firstSeen" column to the events that isn't compared. Duh.
 
      */
+=======
+>>>>>>> master
     @bind
     dateTime: number;
 
@@ -87,15 +90,23 @@ Just add a "firstSeen" column to the events that isn't compared. Duh.
 
     /**
      * Compare if two trackingEvents are equal. Ignores entity data.
+<<<<<<< HEAD
      * If dateTime of the parameter is -1, dateTime is not compared.
+=======
+>>>>>>> master
      * @param other 
      * @returns 
      */
 
     equals(other?: Dto<trackingEvent> | trackingEvent): boolean {
         if (!other) return false;
+<<<<<<< HEAD
         if (other.dateTime !== -1 && this.dateTime !== other.dateTime) return false;
         return this.type === other.type &&
+=======
+        return this.dateTime === other.dateTime &&
+            this.type === other.type &&
+>>>>>>> master
             this.externalId === other.externalId &&
             this.location === other.location &&
             this.message === other.message;
