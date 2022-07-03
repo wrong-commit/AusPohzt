@@ -57,7 +57,6 @@ class shopify implements client<shopifyParcelReq> {
             console.error(`Error syncing shopify data for ${trackingId}, ${urlOfOrder}`, err);
             return undefined;
         });
-
         return shopifyHtml ? {
             jsdom: shopifyHtml,
             trackingId,
