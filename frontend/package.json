@@ -4,7 +4,6 @@
     "description": "",
     "main": "build/index.js",
     "private": true,
-    "type": "module",
     "scripts": {
         "check-types": "tsc --build",
         "start": "snowpack dev",
