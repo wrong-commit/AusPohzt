@@ -2,18 +2,22 @@
 .TaskBar {
     /* dimensions */
     height: 2rem;
-    width: 100vw;
+    min-width: 100vw;
+    width: 100%;
 
     background-color: var(--BACKGROUND);
 
-    padding: 0.1rem;
+    padding: 0.1rem 0.1rem 0.4rem 0.2rem;
+
+    /* avoid y-overflow because of border */
+    margin-bottom: 0.2rem;
 
     /* add border */
     border-top: 0.1rem solid var(--TEXT);
     box-sizing: border-box;
 
-    /* always on bottom */
-    position: absolute;
+    /* always on bottom, always vsibile */
+    position: fixed;
     bottom: 0;
 
     /*  */
@@ -23,6 +27,8 @@
 
 
 .TaskBarItem {
+    /* space between previous item */
+    margin-left: 0.4rem;
     /* pad horizontal */
     padding: 0 1rem 0 1rem;
     /* center text */

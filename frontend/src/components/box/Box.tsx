@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from "react"
 import { useWindowDispatch } from "../../context/WindowContext";
 import { useDraggable } from "../../hooks/useDraggable";
-import { useResizable } from "../../hooks/useResizable";
 
 import '../../styles/components/Box.css';
 import '../../styles/components/draggable.css';
@@ -33,7 +32,6 @@ const Box = (props: Props) => {
         x: props.defaultX,
         y: props.defaultY,
     });
-
 
     useEffect(() => {
         windowDispatch({
