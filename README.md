@@ -20,4 +20,7 @@ API for tracking parcels
 - [ ] Misc
     - [ ] Convert semi-JavaDocs to JSDocs 
     - [ ] Setup Github Actions
-
+- [ ] Refactor
+    - [ ] pirate to support passing results through map() and mapMany()
+    - [ ] typing of entityDecorator.getEntityPrototype
+    - [ ] DRY dao code
