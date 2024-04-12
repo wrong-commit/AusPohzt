@@ -10,7 +10,7 @@ const config = {
     port,
     // user details
     user: process.env.PG_USER,
-    password: process.env.PG_PASSWORD,
+    password: process.env.PG_PASSWORD+"",
     // database
     database: process.env.PG_DATABASE,
 }
