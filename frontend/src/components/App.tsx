@@ -16,8 +16,13 @@ import { useTimer } from '../hooks/useTimer';
 import { TaskBar, TaskBarItem } from './taskbar/TaskBar';
 import { RenameParcel } from './parcel/RenameParcel';
 import { api } from '@boganpost/backend/src/services/api';
+import { WindowProvider } from '../context/WindowContext';
+import { Login } from './Login';
 
-export { App };
+export { 
+    App, 
+    AppWrapper
+ };
 
 type Props = {
     userId: number,
@@ -144,4 +149,19 @@ const App = (props: Props) => {
             </div >
         </>
     )
+}
+
+function AppWrapper() { 
+return ( 
+    <React.StrictMode>
+        <WindowProvider>
+            <Login>
+                {(userId, api) => ( 
+                    <App userId={userId}
+                    api={api} />
+                )}
+            </Login>
+        </WindowProvider>
+    </React.StrictMode>
+)
 }

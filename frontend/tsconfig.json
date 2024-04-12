@@ -1,10 +1,14 @@
 {
     "extends": "../tsconfig.json",
     "compilerOptions": {
-        "rootDir": "src",
+        "target": "ES5",
+        "module": "ES6",
+        "rootDir": "../",
         "outDir": "lib",
         /* Support JSX in FE package */
-        "jsx": "preserve",
+        "jsx": "react",
+        "moduleResolution": "Node",
+        
     },
     "references": [
         {

@@ -7,7 +7,7 @@ body {
     height: 100vh;
 
     background-color: var(--BACKGROUND);
-    background-image: url('/dot square.svg');
+    /* background-image: url('/dot square.svg'); */
     /* TODO: scale to resolution ? */
     background-size: 8px;
     background-repeat: space;

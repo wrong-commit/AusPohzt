@@ -22,7 +22,7 @@ class jwtApi extends api {
 
     async login(user: string, pass: string): Promise<{ token: string } | undefined> {
         return this.post('/v0/auth/login', {
-            params: {
+            body: {
                 'username': user,
                 'password': pass,
             },
