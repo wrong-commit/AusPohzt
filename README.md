@@ -2,6 +2,18 @@
 
 API, Front End, and Notification Clients for tracking parcels 
 
+## How to run 
+
+1. Run `npm install` in the root directory
+2. Setup postgresql database using `backend/database` scripts
+3. Run `npm run build`
+4. Configure `.env` file from `test.env`
+5. Run `npm run back:server` in a new terminal to start the API
+6. Run `npm run front:site` in a new terminal to server front end files
+7. Run `npm run back:runner` periodically to sync tracking data from remote systems
+
+## 
+
 ## TODO 
 
 - [ ] Tracking 

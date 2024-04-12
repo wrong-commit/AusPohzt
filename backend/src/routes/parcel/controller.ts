@@ -28,7 +28,7 @@ router.get('/', async (req, res) => {
             console.debug('Finding all non deleted parcels')
             parcelsPromise = parcelDao.findAll();
         } else {
-            console.debug('Finding all disabled parcels')
+            console.debug(`Finding all ${!disabled ? 'non' : ''}disabled parcels`)
             parcelsPromise = parcelDao.findByDisabled(true)
             // console.debug('Disabled is invalid ' + typeof disabled)
             // return res.status(400).send('what you playin at ? -_0');

@@ -33,7 +33,7 @@ const App = (props: Props) => {
 
     // sync parcels
     const [queued, fetchQueued, fetchingQueued, setQueued] = useAsync<Dto<queued>[]>(() => getQueued(props.api), undefined);
-    const [parcels, fetchParcels, fetchingParcels, setFetchedParcels] = useAsync<Dto<parcel>[]>(() => getParcels(props.api, true), undefined);
+    const [parcels, fetchParcels, fetchingParcels, setFetchedParcels] = useAsync<Dto<parcel>[]>(() => getParcels(props.api, false), undefined);
     const [parcel, setParcel] = useState<Dto<parcel> | undefined>(undefined);
 
     const sync = async () => {
@@ -73,8 +73,8 @@ const App = (props: Props) => {
             <div className={'App'}>
                 <Box id={'parcels'}
                     title={`Parcels ${fetchingParcels ? 'Loading' : ''}`}
-                    defaultX={50}
-                    defaultY={200}>
+                    defaultX={20}
+                    defaultY={250}>
                     <div>
                         {/* {fetchingParcels && (
                             <span>Loading Parcels...</span>
@@ -100,6 +100,7 @@ const App = (props: Props) => {
                                 renamedParcel={(success, newName) => {
                                     if (success) {
                                         parcel.nickName = newName;
+                                        sync()
                                     }
                                 }} />
                         )}
@@ -113,8 +114,8 @@ const App = (props: Props) => {
 
                 <Box id={'queued'}
                     title={`Queued Parcels ${fetchingQueued ? 'Loading' : ''}`}
-                    defaultX={800}
-                    defaultY={250}>
+                    defaultX={20}
+                    defaultY={20}>
                     {!fetchingQueued && !queued && (
                         <span style={{ color: 'red' }}>Error</span>
                     )}
@@ -125,8 +126,10 @@ const App = (props: Props) => {
 
                 {parcel && (
                     <Box id={'events'}
-                        title={`${parcel.trackingId}: Events`}
-                        onClose={() => setParcel(undefined)}>
+                        title={`${parcel.nickName ?? parcel.trackingId}: Events`}
+                        onClose={() => setParcel(undefined)}
+                        defaultX={300}
+                        defaultY={20}>
                         {/* todo: is this a crap way to refresh components ?  */}
                         <ListEvents key={parcel.id! + parcel.events.length}
                             events={parcel.events} />

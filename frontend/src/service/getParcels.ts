@@ -4,10 +4,13 @@ import { Dto } from "@boganpost/backend/src/types/Dto";
 
 export { getParcels };
 
-async function getParcels(client: api, disabled: boolean): Promise<Dto<parcel>[] | undefined> {
+async function getParcels(client: api, disabled: boolean= false): Promise<Dto<parcel>[] | undefined> {
+    if(disabled) { 
+        return;
+    }
     let resp = await await client.get('/v0/parcel', {
         params: {
-            'disabled': disabled,
+            // 'disabled': undefined,
         },
     }).catch(err => {
         console.error(`Error fetching parcels`, err);
