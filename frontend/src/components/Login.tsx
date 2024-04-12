@@ -50,19 +50,47 @@ const Login = ({ children }: Props) => {
     });
 
     return (
+        <LoginUi apiRef={apiRef}
+        children={children}
+        loading={loading}
+        pass={pass}
+        result={result}
+        setPass={setPass}
+        setUser={setUser}
+        trigger={trigger}
+        user={user}
+        userId={userId}
+        />
+    )
+}
+
+type UIProps = { 
+userId: number | null;
+apiRef: React.MutableRefObject<jwtApi>,
+children: (userId: number, client: api) => React.ReactChildren | React.ReactChild;
+user: string;
+pass: string;
+setUser: (x:string)=>void;
+setPass: (x:string)=>void;
+trigger: () => void;
+loading: boolean;
+result:{ token: string; } | undefined
+}
+function LoginUi(props:UIProps) { 
+    return (
         <>
-            {userId != null && children(userId, apiRef.current)}
-            {userId == null && (
+            {props.userId != null && props.children(props.userId, props.apiRef.current)}
+            {props.userId == null && (
                 <div className={'login'}>
-                    <input type={'text'} value={user} onChange={e => setUser(e.target.value)} />
-                    <input type={'password'} value={pass} onChange={e => setPass(e.target.value)} />
-                    <button onClick={() => trigger()}>
+                    <input type={'text'} value={props.user} onChange={e => props.setUser(e.target.value)} />
+                    <input type={'password'} value={props.pass} onChange={e => props.setPass(e.target.value)} />
+                    <button onClick={() => props.trigger()}>
                         sign in
                     </button>
-                    {loading && (
+                    {props.loading && (
                         <span>waiting...</span>
                     )}
-                    {result && (
+                    {props.result && (
                         <span>AUTHENTICATED</span>
                     )}
                 </div>

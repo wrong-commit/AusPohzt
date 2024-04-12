@@ -6,9 +6,9 @@
 body {
     height: 100vh;
 
-    background-color: var(--BACKGROUND);
+    background-color: #161616;
     /* background-image: url('/dot square.svg'); */
     /* TODO: scale to resolution ? */
-    background-size: 8px;
-    background-repeat: space;
+    /* background-size: 8px; */
+    /* background-repeat: space; */
 }
