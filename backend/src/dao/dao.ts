@@ -116,7 +116,9 @@ class baseDao<T extends daoEntity> implements dao<T> {
                     console.debug(`Deleting joined entity ${jEntityName} where ${joinColumn} = ${id}`);
                     const deleteResult = await this.pool.query(`DELETE FROM ${jEntityName} WHERE ${joinColumn} = $1`,
                         [id]);
-                    deleted += deleteResult.rowCount;
+                    if(deleteResult.rowCount != null) {
+                        deleted += deleteResult.rowCount;
+                    }
                     console.debug(`Deleted x${deleteResult.rowCount} joined entity ${jEntityName}`);
                 }
                 console.debug(`Deleted ${deleted} joined entities for ${this.entity} ${id}`)
