@@ -39,10 +39,9 @@ router.get('/', async (req, res) => {
         return res.status(500).end();
     }
     if (parcels) {
-        res.status(200).json(parcels.map(x => x.toData()))
-    } else {
-        res.status(500).send('could not load parcels');
+        return res.status(200).json(parcels.map(x => x.toData()))
     }
+    return res.status(500).send('could not load parcels');
 });
 
 router.get('/:id', (req, res) => {

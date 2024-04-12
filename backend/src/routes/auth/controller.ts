@@ -25,7 +25,8 @@ router.get('/',).get('/', (req, res) => {
  */
 router.post('/login', (req, res) => {
     console.log('Login User');
-    const { username, password } = req.query;
+    const { username, password } = req.body;
+    console.log(req.body)
     if (username && password) {
         // TODO: authenticate against DB
         // TODO: populate JWT with some basic claims, userId to start with
