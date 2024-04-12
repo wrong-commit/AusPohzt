@@ -42,7 +42,7 @@ const App = (props: Props) => {
     }
     // ignore callback, this is just triggering useAsync calls
     const lastUpdated = useTimer(async () => {
-        await sync()
+        // await sync()
         return 1;
     }, 5000, () => null, [])
 
@@ -136,7 +136,7 @@ const App = (props: Props) => {
                 <TaskBar>
                     <TaskBarItem hidden={false}
                         onClick={sync}>
-                        ...
+                        Refresh
                     </TaskBarItem>
                     <TaskBarItem hidden={false}
                         onClick={() => {

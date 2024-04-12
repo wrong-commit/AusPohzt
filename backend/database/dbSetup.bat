@@ -23,5 +23,9 @@ psql -c "DROP DATABASE IF EXISTS %DATABASE%;" "postgresql://localhost/postgres" 
 psql -c "CREATE DATABASE %DATABASE%;" "postgresql://%USER%:%PASSWORD%@localhost/postgres"
 :: Grant admin privileges
 psql -c "GRANT ALL privileges on DATABASE %DATABASE% to %USER%;" "postgresql://localhost/postgres" postgres 
+psql -c "GRANT ALL on queued to %USER%;" "postgresql://localhost/postgres" postgres 
+:: Grant privileges for dao usage 
+
+psql -c "GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO %USER%;" "postgresql://localhost/postgres" postgres 
 :: run createDatabase.sql to setup tables
 psql -f "createDatabase.sql" "postgresql://%USER%:%PASSWORD%@localhost/%DATABASE%"
