@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # probably not needed if using docker
-USER="bogan"
+USER="postgres"
 # probably not needed if using docker
-PASSWORD="123"
+PASSWORD="toor"
 DATABASE="auspohzt_test"
 
 if [ $# -gt 0 ] 
