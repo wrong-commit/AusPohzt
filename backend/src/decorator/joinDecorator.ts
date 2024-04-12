@@ -31,7 +31,7 @@ const join = (targetEntity: string, opt: { association?: association, joinColumn
     // see: https://github.com/microsoft/TypeScript/issues/19528#issuecomment-339945044
     return function (target: object, field: string) {
         let proto = target.constructor.prototype;
-        console.debug(`Target = ${proto} / Field = ${field}, JoinEntity = ${targetEntity}`);
+        // console.debug(`Target = ${proto} / Field = ${field}, JoinEntity = ${targetEntity}`);
         // get id property, if exists
         let joinFields = entityJoinDatasMap.get(proto);
 
@@ -53,12 +53,12 @@ const join = (targetEntity: string, opt: { association?: association, joinColumn
  * @throws Error if target is not an entity 
  */
 const getJoinData = (target: object | string): joinData[] | undefined => {
-    console.debug(`Getting join fields for ${target}`);
+    // console.debug(`Getting join fields for ${target}`);
     if (typeof target === 'object' || typeof target === 'function') {
         //@ts-expect-error
         let proto = target.prototype;
         const entityName = getEntityName(target)
-        console.debug(`Getting join data for ${entityName}`);
+        // console.debug(`Getting join data for ${entityName}`);
         return entityJoinDatasMap.get(proto);
     }
 

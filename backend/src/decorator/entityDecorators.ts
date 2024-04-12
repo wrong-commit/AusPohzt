@@ -42,7 +42,7 @@ const entity = (name: string) => {
  * @param field 
  */
 const bind = (target: object, field: string) => {
-    console.debug(`Target = ${target} / Key = ${field}`);
+    // console.debug(`Target = ${target} / Key = ${field}`);
     // get id property, if exists
     let fields: string[] | undefined = fieldsMap.get(target);
 
@@ -65,7 +65,7 @@ const getEntityName = (target: object): string => {
     if (entityNameVal) return entityNameVal;
     //@ts-expect-error
     let proto = target.prototype ?? target.__proto__;
-    console.debug(`Getting Entity Name of target.prototype = ${proto}`);
+    // console.debug(`Getting Entity Name of target.prototype = ${proto}`);
     entityNameVal = entityNameMap.get(proto);
     if (!entityNameVal) throw new Error(`${proto} does not have an Entity Name value`);
     return entityNameVal;
@@ -99,7 +99,7 @@ const getFields = (target: object): string[] => {
     if (fields) return fields;
     //@ts-expect-error
     let proto = target.prototype ?? target.__proto__;
-    console.debug(`Getting Fields of target = ${proto}`);
+    // console.debug(`Getting Fields of target = ${proto}`);
     fields = fieldsMap.get(proto);
     if (fields == undefined) throw new Error(`${proto} is not an entity`);
     return fields;
