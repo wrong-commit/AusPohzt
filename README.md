@@ -12,7 +12,10 @@ API, Front End, and Notification Clients for tracking parcels
 6. Run `npm run front:site` in a new terminal to server front end files
 7. Run `npm run back:runner` periodically to sync tracking data from remote systems
 
-## 
+## Screenshots
+
+Parcel tracking UI showing delivery events for delivered package 
+![Parcel program - REAL DATA](https://github.com/wrong-commit/AusPohzt/assets/44012200/10bf6fb4-62fd-421e-b93e-9f5534bde268)
 
 ## TODO 
 
@@ -33,7 +36,7 @@ API, Front End, and Notification Clients for tracking parcels
     - [x] Authentication
     - [ ] Add User
     - [ ] Remove User
-    - [ ] Authorization for runner, probably with signed tokens
+    - [ ] Authorization for runner, with signed tokens
 - [ ] System
     - [ ] Setup daemon scripts
         - [ ] node systemctl script
