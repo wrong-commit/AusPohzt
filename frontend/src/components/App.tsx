@@ -69,71 +69,86 @@ const App = (props: Props) => {
         }
     }, [parcels, queued])
 
+    return (<AppUI
+        api={props.api}
+        fetchingParcels={fetchingParcels} 
+        parcels={parcels} 
+        parcel={parcel} 
+        setParcel={setParcel}
+        fetchQueued={fetchQueued}
+        fetchingQueued={fetchingQueued}
+        fetchParcels={fetchParcels}
+        queued={queued}
+        setFetchedParcels={setFetchedParcels}
+        sync={sync}
+        />
+    )
+}
+
+type UIProps = {
+    fetchingQueued:boolean;
+    fetchingParcels:boolean;
+    parcels:Dto<parcel>[] | undefined
+    parcel:Dto<parcel>|undefined;
+    setParcel:(x: Dto<parcel> | undefined) => void;
+    setFetchedParcels:(x: Dto<parcel>[] | undefined) => void;
+    sync: VoidFunction;
+    fetchParcels: VoidFunction;
+    fetchQueued: VoidFunction;
+    queued: Dto<queued>[]|undefined;
+    api: Props['api']
+} 
+function AppUI(props: UIProps) { 
     return (
         <>
             <div className={'App'}>
                 <div className={'Boxes'}>
                 <BoxUI id={'parcels'}
-                    title={`Parcels ${fetchingParcels ? 'Loading' : ''}`}
-                    // minHeight={document.body.clientHeight / 2 + 40 }
-                    // minWidth={document.body.clientWidth / 3 - 40}
-                    >
+                    title={`Parcels ${props.fetchingParcels ? 'Loading' : ''}`}>
                     <div>
-                        {/* {fetchingParcels && (
-                            <span>Loading Parcels...</span>
-                        )} */}
-                        {!fetchingParcels && !parcels && (
+                        {!props.fetchingParcels && !props.parcels && (
                             <span style={{ color: 'red' }}>Error</span>
                         )}
                     </div>
                     <div>
-                        <span style={{ userSelect: 'text' }}>Selected: <span className="/*PUT SOMETHING HERE*/">{parcel ? parcel.trackingId : 'None'}</span></span>
+                        <span style={{ userSelect: 'text' }}>Selected: <span className="/*PUT SOMETHING HERE*/">{props.parcel ? props.parcel.trackingId : 'None'}</span></span>
                        
-                        {parcel && (
-                            <RenameParcel id={parcel.id!}
-                                name={parcel.nickName}
+                        {props.parcel && (
+                            <RenameParcel id={props.parcel.id!}
+                                name={props.parcel.nickName}
                                 renamedParcel={(success, newName) => {
-                                    if (success) {
-                                        parcel.nickName = newName;
-                                        sync()
+                                    if (success && props.parcel) {
+                                        props.parcel.nickName = newName;
+                                        props.sync()
                                     }
                                 }} />
                         )}
                     </div>
-                    <AddParcel addedParcel={() => { fetchQueued() }} />
-                    {parcels && (
-                        <ListParcels parcels={parcels!}
-                            onClick={id => setParcel(parcels.find(p => p.id === id))} />
+                    <AddParcel addedParcel={() => { props.fetchQueued() }} />
+                    {props.parcels && (
+                        <ListParcels parcels={props.parcels!}
+                            onClick={id => props.setParcel(props.parcels!.find(p => p.id === id))} />
                     )}
                 </BoxUI>
                 <BoxUI id={'queued'}
-                    title={`Queued Parcels ${fetchingQueued ? 'Loading' : ''}`}
-                    // minHeight={document.body.clientHeight / 4}
-                    // minWidth={document.body.clientWidth / 3 - 40}
-                    >
-                    {!fetchingQueued && !queued && (
+                    title={`Queued Parcels ${props.fetchingQueued ? 'Loading' : ''}`}>
+                    {!props.fetchingQueued && !queued && (
                         <span style={{ color: 'red' }}>Error</span>
                     )}
-                    {queued && (
-                        <ListQueued queued={queued} />
+                    {props.queued && (
+                        <ListQueued queued={props.queued} />
                     )}
                 </BoxUI>
-                {/* {parcel && ( */}
                     <BoxUI id={'events'}
-                        title={`${parcel?.nickName ?? parcel?.trackingId}: Events`}
-                        onClose={() => setParcel(undefined)}
-                        // minWidth={document.body.clientWidth / 1.8 }
-                        // minHeight={document.body.clientHeight / 1.3}
-                        >
-                        {/* todo: is this a crap way to refresh components ?  */}
-                        <ListEvents key={parcel ? (parcel.id! + parcel.events.length) : undefined}
-                            events={parcel?.events?? []} />
+                        title={`${props.parcel?.nickName ?? props.parcel?.trackingId}: Events`}
+                        onClose={() => props.setParcel(undefined)}>
+                        <ListEvents key={props.parcel ? (props.parcel.id! + props.parcel.events.length) : undefined}
+                            events={props.parcel?.events?? []} />
                     </BoxUI>
-                {/* )} */}
                 </div>
                 <TaskBar>
                     <TaskBarItem hidden={false}
-                        onClick={sync}>
+                        onClick={props.sync}>
                         Refresh
                     </TaskBarItem>
                     <TaskBarItem hidden={false}
@@ -143,19 +158,19 @@ const App = (props: Props) => {
                         }}>
                         Logout
                     </TaskBarItem>
-                    {parcel && (
+                    {props.parcel && (
                         <TaskBarItem hidden={false}
                         onClick={() => {
                             // Delete package
-                            deleteParcel(parcel.id!).then(() => {
+                            deleteParcel(props.parcel!.id!).then(() => {
                                 // Remove package from UI, resync parcels 
-                                setFetchedParcels(undefined);
-                                setParcel(undefined);
-                                setFetchedParcels(parcels?.filter(x=> x.id != parcel.id))
-                                fetchParcels()
+                                props.setFetchedParcels(undefined);
+                                props.setParcel(undefined);
+                                props.setFetchedParcels(props.parcels!.filter(x=> x.id != props.parcel!.id))
+                                props.fetchParcels()
                             })
                         }}
-                        children={`Delete '${parcel?.nickName ?? parcel?.trackingId}'`} /> 
+                        children={`Delete '${props.parcel?.nickName ?? props.parcel?.trackingId}'`} /> 
                         )}
                 </TaskBar>
             </div >
