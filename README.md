@@ -14,11 +14,11 @@ API, Front End, and Notification Clients for tracking parcels
 
 ## Screenshots
 
-Parcel tracking UI showing delivery events for delivered package 
-![Parcel program - REAL DATA](https://github.com/wrong-commit/AusPohzt/assets/44012200/10bf6fb4-62fd-421e-b93e-9f5534bde268)
+Parcel tracking UI showing delivery events for delivered package
+![image](https://github.com/wrong-commit/AusPohzt/assets/44012200/afd41c29-eda0-49de-a7f2-bd8e83203440)
 
 ## TODO 
-
+General todo list. Some far fetched things like multi-user support
 - [ ] Tracking 
     - [ ] Sync Tracking Data from UI
     - [x] Add Tracking ID
