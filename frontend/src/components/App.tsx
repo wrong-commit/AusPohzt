@@ -74,7 +74,9 @@ const App = (props: Props) => {
                 <Box id={'parcels'}
                     title={`Parcels ${fetchingParcels ? 'Loading' : ''}`}
                     defaultX={20}
-                    defaultY={250}>
+                    defaultY={document.body.clientHeight / 4 + 40}
+                    minHeight={document.body.clientHeight / 2 + 40 }
+                    minWidth={document.body.clientWidth / 3 - 40}>
                     <div>
                         {/* {fetchingParcels && (
                             <span>Loading Parcels...</span>
@@ -115,7 +117,9 @@ const App = (props: Props) => {
                 <Box id={'queued'}
                     title={`Queued Parcels ${fetchingQueued ? 'Loading' : ''}`}
                     defaultX={20}
-                    defaultY={20}>
+                    defaultY={20}
+                    minHeight={document.body.clientHeight / 4}
+                    minWidth={document.body.clientWidth / 3 - 40}>
                     {!fetchingQueued && !queued && (
                         <span style={{ color: 'red' }}>Error</span>
                     )}
@@ -128,8 +132,11 @@ const App = (props: Props) => {
                     <Box id={'events'}
                         title={`${parcel.nickName ?? parcel.trackingId}: Events`}
                         onClose={() => setParcel(undefined)}
-                        defaultX={300}
-                        defaultY={20}>
+                        defaultX={document.body.clientWidth / 3}
+                        defaultY={20}
+                        minWidth={document.body.clientWidth / 2 }
+                        minHeight={document.body.clientHeight / 1.3}
+                        >
                         {/* todo: is this a crap way to refresh components ?  */}
                         <ListEvents key={parcel.id! + parcel.events.length}
                             events={parcel.events} />

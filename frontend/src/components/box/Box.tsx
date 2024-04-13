@@ -44,15 +44,15 @@ const Box = (props: Props) => {
         })
     }, [ref]);
 
-    useEffect(() => {
-        if (position.x && position.y) {
-            windowDispatch({
-                id: props.id,
-                type: 'position',
-                pos: [position.x, position.y],
-            })
-        }
-    }, [position])
+    // useEffect(() => {
+    //     if (position.x && position.y) {
+    //         windowDispatch({
+    //             id: props.id,
+    //             type: 'position',
+    //             pos: [position.x, position.y],
+    //         })
+    //     }
+    // }, [position])
 
     const close = () => {
         windowDispatch({
@@ -70,6 +70,10 @@ const Box = (props: Props) => {
             style={{
                 left: position.x ?? 0,
                 top: position.y ?? 0,
+                minWidth: props.minWidth,
+                minHeight:props.minHeight,
+                maxWidth: props.minWidth,
+                maxHeight:props.minHeight,
             }}>
             <div data-box-header>
                 <h3>{props.title}</h3>
