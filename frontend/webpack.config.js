@@ -12,6 +12,7 @@ module.exports = {
   },
   module: {
     rules: [
+      // Load ts and tsx files with ts-loader
       {
         test: /\.tsx?$/,
         use: 'ts-loader',

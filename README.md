@@ -20,6 +20,7 @@ Parcel tracking UI showing delivery events for delivered package
 ## TODO 
 
 - [ ] Tracking 
+    - [ ] Sync Tracking Data from UI
     - [x] Add Tracking ID
     - [x] Remove Tracking ID 
     - [x] Set nickname for Tracking ID 
@@ -37,6 +38,7 @@ Parcel tracking UI showing delivery events for delivered package
     - [ ] Add User
     - [ ] Remove User
     - [ ] Authorization for runner, with signed tokens
+    - [ ] User owns parcel
 - [ ] System
     - [ ] Setup daemon scripts
         - [ ] node systemctl script
@@ -55,13 +57,12 @@ Parcel tracking UI showing delivery events for delivered package
     - [ ] Setup Github Actions
 - [ ] Refactor
     - [x] pirate to support passing results through map() and mapMany()
-    - [ ] typing of entityDecorator.getEntityPrototype
+    - [x] typing of entityDecorator.getEntityPrototype
     - [x] DRY dao code
     - [x] pirate.map() accepts row arg as array instead of single instance, see dao.find() comment
-    - [ ] controller code should use async/await instead of promise callbacks
+    - [x] controller code should use async/await instead of promise callbacks
     - [ ] use proper go fmt methods for logging ( unnecessary \n everywhere )
     - [ ] parcel dao should be rewritten, needs to support most parcel methods returning a list
 - [ ] Documentation
-    - [ ] Explain typescript setup: https://2ality.com/2021/07/simple-monorepos.html (no longer correct, using amalgamatioin of various configs)
-    - [ ] Explain package.json setup
-    - [ ] Explain snowpack setup ( easy )
+    - [ ] Detail package.json setup
+    - [x] Detail webpack config
