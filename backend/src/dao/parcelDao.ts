@@ -14,7 +14,20 @@ class parcelDao extends baseDao<parcel> {
      * Get active parcels
      */
     override async findAll(): Promise<parcel[] | undefined> {
-        return this.findByDisabled(false);
+        try {
+            // TODO: support JOIN queries ? 
+            const result = await this.pool.query(`SELECT * FROM ${this.entityName}`);
+            const joinRows = [];
+            console.debug(`DEBUG Got ${result.rowCount} results`)
+            for (const row of result.rows) {
+                const rowJoinData: JoinQueryResult[] = await this.join(row);
+                joinRows.push(rowJoinData);
+            }
+            return new pirate<parcel>(this.entity).mapMany(result.rows, result.fields, joinRows);
+        } catch (e) {
+            console.error(`Could not find all ${this.entityName}`, e);
+            return undefined;
+        }
     }
 
     async findByDisabled(disabled: boolean): Promise<parcel[] | undefined> {
@@ -29,7 +42,7 @@ class parcelDao extends baseDao<parcel> {
             }
             return new pirate<parcel>(this.entity).mapMany(result.rows, result.fields, joinRows);
         } catch (e) {
-            console.error(`Could not find all ${this.entityName} with disabled ${disabled}`, e);
+            console.error(`Could not find all disabled=${disabled} ${this.entityName} `, e);
             return undefined;
         }
     }
