@@ -28,9 +28,19 @@ describe("parcel controller", () => {
 
     describe("get active parcels", () => {
         // FIXME: wtf, why is async jest broken in this version ? need to reread documentation so --forceExit isn't required
-        test("get all non-deleted parcels", async () => {
+        test("get all parcels", async () => {
             await request(app)
                 .get('/v0/parcel/')
+                .expect('Content-Type', /json/)
+                .expect(200)
+                .then(resp => {
+                    expect(resp.body.map((x: Dto<parcel>) => x.trackingId)).toContain('findParcelTrkId');
+                    expect(resp.body.map((x: Dto<parcel>) => x.trackingId)).toContain('deletedParcelTrkId');
+                })
+        });
+        test("get all non-deleted parcels", async () => {
+            await request(app)
+                .get('/v0/parcel?disabled=false')
                 .expect('Content-Type', /json/)
                 .expect(200)
                 .then(resp => {
