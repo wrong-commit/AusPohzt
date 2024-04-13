@@ -43,7 +43,11 @@ async function main() {
     await startQueuedIds(client);
     // iterate over other parcels, check when last synced
 
-    const resp = await client.get('/v0/parcel');
+    const resp = await client.get('/v0/parcel',{
+        params:{
+            'disabled':'false',
+        }
+    });
 
     const parcels = await (resp.json() as Promise<Dto<parcel>[]>);
 
@@ -56,7 +60,7 @@ async function main() {
             const didSync = await syncTrackingId(p.trackingId, p.owner);
             console.log(`Parcel ${p.trackingId} synced ${didSync}`);
         } else {
-            console.info(`Not syncing ${p.trackingId} because only ${delta} seconds has ellapsed.`)
+            console.info(`Not syncing ${p.trackingId} because only ${delta} seconds has ellapsed of ${syncInterval/1000}.`)
         }
     }
 }

@@ -101,7 +101,7 @@ class runner<T> {
             // merge parcelDto with existing parcel 
             const newEvents = parcelDto.events.filter(newEvent =>
                 // only return events that aren't in trackedParcel already
-                trackedParcel!.events.find(existingEvent => existingEvent.equals(newEvent)) == undefined
+                trackedParcel!.events.find(existingEvent => newEvent?.externalId == existingEvent?.externalId) == undefined
             )
             console.info(`Added ${newEvents.length} new events to ${trackedParcel.trackingId}`);
             trackedParcel.events.push(...newEvents.map(x => new trackingEvent(x)));
