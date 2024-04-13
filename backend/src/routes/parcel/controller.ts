@@ -29,7 +29,7 @@ router.get('/', async (req, res) => {
             parcelsPromise = parcelDao.findAll();
         } else {
             console.debug(`Finding all ${!disabled ? 'non' : ''}disabled parcels`)
-            parcelsPromise = parcelDao.findByDisabled(true)
+            parcelsPromise = parcelDao.findByDisabled(disabled === 'true')
             // console.debug('Disabled is invalid ' + typeof disabled)
             // return res.status(400).send('what you playin at ? -_0');
         }
