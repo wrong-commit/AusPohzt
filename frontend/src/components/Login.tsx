@@ -28,7 +28,6 @@ const Login = ({ children }: Props) => {
     useEffect(() => {
         if (result) {
             setUserId(0);
-            alert('token ' + result.token);
         }
     }, [result]);
 
@@ -88,10 +87,10 @@ function LoginUi(props:UIProps) {
                         sign in
                     </button>
                     {props.loading && (
-                        <span>waiting...</span>
+                        <span style={{color:'white'}}>waiting...</span>
                     )}
                     {props.result && (
-                        <span>AUTHENTICATED</span>
+                        <span style={{color:'white'}}>AUTHENTICATED</span>
                     )}
                 </div>
             )}

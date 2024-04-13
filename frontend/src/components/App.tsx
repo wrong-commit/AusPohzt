@@ -134,7 +134,7 @@ const App = (props: Props) => {
                         onClose={() => setParcel(undefined)}
                         defaultX={document.body.clientWidth / 3}
                         defaultY={20}
-                        minWidth={document.body.clientWidth / 2 }
+                        minWidth={document.body.clientWidth / 1.8 }
                         minHeight={document.body.clientHeight / 1.3}
                         >
                         {/* todo: is this a crap way to refresh components ?  */}
