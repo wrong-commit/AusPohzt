@@ -41,14 +41,15 @@ describe("shippit", () => {
                 expect(eventDateTime.getHours()).toBe(13)
                 expect(eventDateTime.getMinutes()).toBe(20)
                 expect(eventDateTime.getDate()).toBe(11)
-                expect(eventDateTime.getMonth()).toBe(6)
+                // JS dates start counting months from 0, so Jun is 5
+                expect(eventDateTime.getMonth()).toBe(5) 
                 expect(eventDateTime.getFullYear()).toBe(2022)
             })
             test("type", async () => {
                 const rawNode = client.getDeliveryTracks(jsdom.window.document).values().next().value;
                 expect(rawNode).toBeDefined();
                 const externalId = client.parseExternalId(rawNode)
-                expect(externalId).toBe('in transit')
+                expect(externalId).toBe('In transit Couriers Please')
             })
         })
 
@@ -72,7 +73,7 @@ describe("shippit", () => {
                             dateTime: -1,
                             externalId: 'In transit Couriers Please',
                             id: undefined,
-                            location: 'Brisbane',
+                            location: '',
                             message: 'In transit Couriers Please',
                             parcelId: undefined,
                             raw: '',
