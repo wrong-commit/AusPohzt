@@ -10,6 +10,7 @@
         "start": "node lib/index.js",
         "server": "node lib/server.js",
         "test": "jest --notify",
+        "it-test-cmd": "jest --forceExit --notify --runInBand --config jest.it.config.js",
         "it-test": "bash ./database/dbClear.sh && bash ./database/dbSetup.sh && jest --forceExit --notify --runInBand --config jest.it.config.js"
     },
     "author": "",

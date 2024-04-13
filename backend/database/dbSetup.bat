@@ -30,6 +30,6 @@ psql -c "GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO %USER%;" "post
 psql -f "createDatabase.sql" "postgresql://%USER%:%PASSWORD%@localhost/%DATABASE%"
 
  
-psql -c "GRANT ALL on queued to %USER%;" "postgresql://localhost/postgres" postgres 
-psql -c "GRANT ALL on parcel to %USER%;" "postgresql://localhost/postgres" postgres 
-psql -c "GRANT ALL on trackingevent to %USER%;" "postgresql://localhost/postgres" postgres 
+psql -c "GRANT ALL on queued to %USER%;" "postgresql://localhost/%DATABASE%" postgres 
+psql -c "GRANT ALL on parcel to %USER%;" "postgresql://localhost/%DATABASE%" postgres 
+psql -c "GRANT ALL on trackingevent to %USER%;" "postgresql://localhost/%DATABASE%" postgres 
