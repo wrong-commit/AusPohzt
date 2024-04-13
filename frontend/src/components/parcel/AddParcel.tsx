@@ -16,6 +16,7 @@ const AddParcel = (props: Props) => {
     useEffect(() => {
         if (added) {
             props.addedParcel(trackingId);
+            setTrackingId('')
         }
     }, [added])
 
@@ -28,7 +29,9 @@ const AddParcel = (props: Props) => {
             />
             {!loading && (
                 <button disabled={trackingId.length === 0}
-                    onClick={() => trigger()}>
+                    onClick={() => {
+                        trigger();
+                    }}>
                     Add
                 </button>
             )}

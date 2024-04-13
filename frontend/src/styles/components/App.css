@@ -1,5 +1,5 @@
 .App {
-    /* Set <App> to 100% of */
+    /* Set <App> to 100% of screen */
     min-height: 100vh;
     max-height: 100vh;
     min-width: 100%;
@@ -7,6 +7,29 @@
 
     /* padding: 2rem; */
     /* padding: 1rem; */
-
     color: var(--TEXT);
+}
+
+
+/*  Style CSS Grid to split view into 2 x 2 grid */
+.App .Boxes { 
+    display: grid;
+    min-height: calc(100vh - 2rem);
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+}
+
+/* Assign parcels to top left of grid */
+.App .Box[data-box-id="parcels"] { 
+    grid-area: 1 / 1 / 2 / 2;
+}
+/* Assign queued parcels to bottom left of grid */
+.App .Box[data-box-id="queued"] { 
+    grid-area: 2 / 1 / 3 / 2;
+}
+/* Assign events to right vertical of grid */
+.App .Box[data-box-id="events"] { 
+    grid-area: 1 / 2 / 3 / 3;
 }

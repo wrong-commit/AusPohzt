@@ -5,7 +5,7 @@ import { useDraggable } from "../../hooks/useDraggable";
 import '../../styles/components/Box.css';
 import '../../styles/components/draggable.css';
 
-export { Box }
+export { Box, BoxUI}
 
 type Props = {
     id: string;
@@ -44,15 +44,15 @@ const Box = (props: Props) => {
         })
     }, [ref]);
 
-    // useEffect(() => {
-    //     if (position.x && position.y) {
-    //         windowDispatch({
-    //             id: props.id,
-    //             type: 'position',
-    //             pos: [position.x, position.y],
-    //         })
-    //     }
-    // }, [position])
+    useEffect(() => {
+        if (position.x && position.y) {
+            windowDispatch({
+                id: props.id,
+                type: 'position',
+                pos: [position.x, position.y],
+            })
+        }
+    }, [position])
 
     const close = () => {
         windowDispatch({
@@ -64,12 +64,33 @@ const Box = (props: Props) => {
 
     // TODO: save positions
     return (
-        <div {...draggableProps}
-            ref={r => ref.current = r}
-            className={'Box draggable'}
+        <BoxUI children={props.children}
+        id={props.id}
+        title={props.title}
+        minHeight={props.minHeight}
+        minWidth={props.minWidth}
+        onClose={close} 
+        // x={position.x}
+        // y={position.y}
+        />
+    )
+}
+
+type UIProps = { 
+    id:string;
+    children: React.ReactNode
+    title:string;
+    onClose?: VoidFunction
+    
+    minWidth?: number;
+    minHeight?: number;
+}
+function BoxUI(props:UIProps) { 
+    return (
+        <div
+            className={'Box'}
+            data-box-id={props.id}
             style={{
-                left: position.x ?? 0,
-                top: position.y ?? 0,
                 minWidth: props.minWidth,
                 minHeight:props.minHeight,
                 maxWidth: props.minWidth,
@@ -77,14 +98,14 @@ const Box = (props: Props) => {
             }}>
             <div data-box-header>
                 <h3>{props.title}</h3>
-                {props.onClose && (
+                {/* {props.onClose && (
                     <span onClick={close}
                         style={{
                             width: '1rem',
                             height: '1rem',
                             cursor: 'pointer'
                         }}>X</span>
-                )}
+                )} */}
             </div>
             <div data-box-body>
                 {props.children}

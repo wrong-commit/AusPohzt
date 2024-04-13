@@ -16,7 +16,7 @@ const TaskBar = ({ children }: Props) => {
 
     return (<div className={'TaskBar'}>
         {children}
-        {Object.keys(windowState).map((id: keyof WindowState) => (
+        {/* {Object.keys(windowState).map((id: keyof WindowState) => (
             <TaskBarItem key={id}
                 hidden={windowState[id]!.hidden}
                 onClick={(show) =>
@@ -27,7 +27,7 @@ const TaskBar = ({ children }: Props) => {
                 }>
                 {windowState[id]!.name}
             </TaskBarItem>
-        ))}
+        ))} */}
     </div>)
 };
 

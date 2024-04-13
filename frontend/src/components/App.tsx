@@ -3,7 +3,7 @@ import { Dto } from '@boganpost/backend/src/types/Dto';
 import React, { useEffect, useRef, useState } from 'react';
 import { useAsync } from '../hooks/useAsync';
 import { getParcels } from '../service/getParcels';
-import { Box } from './box/Box';
+import { Box , BoxUI } from './box/Box';
 import { ListEvents } from './events/ListEvents';
 import { AddParcel } from './parcel/AddParcel';
 import { DeleteParcel } from './parcel/DeleteParcel';
@@ -18,6 +18,8 @@ import { RenameParcel } from './parcel/RenameParcel';
 import { api } from '@boganpost/backend/src/services/api';
 import { WindowProvider } from '../context/WindowContext';
 import { Login } from './Login';
+
+import { deleteParcel } from '../service/deleteParcel';
 
 export { 
     App, 
@@ -53,7 +55,6 @@ const App = (props: Props) => {
         }
     }, []);
 
-
     // fetch parcels on first render, unless already fetching (unnecessary ?)
     useEffect(() => {
         if (!queued && !fetchingQueued) {
@@ -71,12 +72,12 @@ const App = (props: Props) => {
     return (
         <>
             <div className={'App'}>
-                <Box id={'parcels'}
+                <div className={'Boxes'}>
+                <BoxUI id={'parcels'}
                     title={`Parcels ${fetchingParcels ? 'Loading' : ''}`}
-                    defaultX={20}
-                    defaultY={document.body.clientHeight / 4 + 40}
-                    minHeight={document.body.clientHeight / 2 + 40 }
-                    minWidth={document.body.clientWidth / 3 - 40}>
+                    // minHeight={document.body.clientHeight / 2 + 40 }
+                    // minWidth={document.body.clientWidth / 3 - 40}
+                    >
                     <div>
                         {/* {fetchingParcels && (
                             <span>Loading Parcels...</span>
@@ -87,15 +88,7 @@ const App = (props: Props) => {
                     </div>
                     <div>
                         <span style={{ userSelect: 'text' }}>Selected: <span className="/*PUT SOMETHING HERE*/">{parcel ? parcel.trackingId : 'None'}</span></span>
-                        {parcel && (
-                            <DeleteParcel id={parcel.id!} deletedParcel={() => {
-                                setFetchedParcels(undefined);
-                                setParcel(undefined);
-                                fetchParcels()
-                            }} />
-                        )}
-
-
+                       
                         {parcel && (
                             <RenameParcel id={parcel.id!}
                                 name={parcel.nickName}
@@ -112,37 +105,32 @@ const App = (props: Props) => {
                         <ListParcels parcels={parcels!}
                             onClick={id => setParcel(parcels.find(p => p.id === id))} />
                     )}
-                </Box>
-
-                <Box id={'queued'}
+                </BoxUI>
+                <BoxUI id={'queued'}
                     title={`Queued Parcels ${fetchingQueued ? 'Loading' : ''}`}
-                    defaultX={20}
-                    defaultY={20}
-                    minHeight={document.body.clientHeight / 4}
-                    minWidth={document.body.clientWidth / 3 - 40}>
+                    // minHeight={document.body.clientHeight / 4}
+                    // minWidth={document.body.clientWidth / 3 - 40}
+                    >
                     {!fetchingQueued && !queued && (
                         <span style={{ color: 'red' }}>Error</span>
                     )}
                     {queued && (
                         <ListQueued queued={queued} />
                     )}
-                </Box>
-
-                {parcel && (
-                    <Box id={'events'}
-                        title={`${parcel.nickName ?? parcel.trackingId}: Events`}
+                </BoxUI>
+                {/* {parcel && ( */}
+                    <BoxUI id={'events'}
+                        title={`${parcel?.nickName ?? parcel?.trackingId}: Events`}
                         onClose={() => setParcel(undefined)}
-                        defaultX={document.body.clientWidth / 3}
-                        defaultY={20}
-                        minWidth={document.body.clientWidth / 1.8 }
-                        minHeight={document.body.clientHeight / 1.3}
+                        // minWidth={document.body.clientWidth / 1.8 }
+                        // minHeight={document.body.clientHeight / 1.3}
                         >
                         {/* todo: is this a crap way to refresh components ?  */}
-                        <ListEvents key={parcel.id! + parcel.events.length}
-                            events={parcel.events} />
-                    </Box>
-                )}
-
+                        <ListEvents key={parcel ? (parcel.id! + parcel.events.length) : undefined}
+                            events={parcel?.events?? []} />
+                    </BoxUI>
+                {/* )} */}
+                </div>
                 <TaskBar>
                     <TaskBarItem hidden={false}
                         onClick={sync}>
@@ -155,6 +143,20 @@ const App = (props: Props) => {
                         }}>
                         Logout
                     </TaskBarItem>
+                    {parcel && (
+                        <TaskBarItem hidden={false}
+                        onClick={() => {
+                            // Delete package
+                            deleteParcel(parcel.id!).then(() => {
+                                // Remove package from UI, resync parcels 
+                                setFetchedParcels(undefined);
+                                setParcel(undefined);
+                                setFetchedParcels(parcels?.filter(x=> x.id != parcel.id))
+                                fetchParcels()
+                            })
+                        }}
+                        children={`Delete '${parcel?.nickName ?? parcel?.trackingId}'`} /> 
+                        )}
                 </TaskBar>
             </div >
         </>
