@@ -5,7 +5,7 @@
 
 .Box>[data-box-header] {
     padding: 0.25rem;
-    /* width: 100%; */
+    padding-left: 0.5rem;
     display: flex;
     flex-direction: row;
     justify-content: space-between;

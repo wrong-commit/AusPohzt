@@ -40,7 +40,13 @@ const Login = ({ children }: Props) => {
                 .catch(e => {
                     console.error(`Error fetching queued`, e);
                     return false;
-                });
+                }).then(resp => { 
+                    if(typeof resp === 'boolean' && resp) { 
+                        if(mountRef.current == false) { 
+                            setUserId(0)
+                        }
+                    }
+                })
             if (typeof resp === 'boolean' && resp) {
                 setUserId(0);
             }

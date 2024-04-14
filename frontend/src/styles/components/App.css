@@ -10,15 +10,14 @@
     color: var(--TEXT);
 }
 
-
 /*  Style CSS Grid to split view into 2 x 2 grid */
 .App .Boxes { 
     display: grid;
     min-height: calc(100vh - 2rem);
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 1fr);
-    grid-column-gap: 0px;
-    grid-row-gap: 0px;
+    grid-column-gap: 2rem;
+    grid-row-gap: 1rem;
 }
 
 /* Assign parcels to top left of grid */
