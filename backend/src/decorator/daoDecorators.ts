@@ -1,4 +1,5 @@
-import { dao, daoEntity } from "../dao/dao";
+import { dao } from "../dao/dao";
+import { daoEntity } from "../dao/daoEntity";
 import { Newable } from "../types/Newable";
 import { getEntityName } from "./entityDecorators";
 

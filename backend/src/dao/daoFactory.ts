@@ -4,9 +4,11 @@ import { getDao } from "../decorator/daoDecorators";
 import { parcel } from "../entities/parcel";
 import { queued } from "../entities/queued";
 import { Newable } from "../types/Newable";
-import { baseDao, dao, daoEntity } from "./dao";
+import { dao } from "./dao";
 import { parcelDao } from "./parcelDao";
 import { queuedDao } from "./queuedDao";
+import { daoEntity } from "./daoEntity";
+import { baseDao } from "./baseDao";
 
 export { daoFactory }
 

@@ -1,8 +1,7 @@
 import { dao } from '../decorator/daoDecorators';
-
 import { JoinQueryResult, pirate } from "../mapping/pirate";
 import { parcel } from "../entities/parcel";
-import { baseDao } from "./dao";
+import { baseDao } from "./baseDao";
 import { whereBool } from './where';
 
 export { parcelDao }

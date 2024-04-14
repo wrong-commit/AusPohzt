@@ -1,8 +1,7 @@
 import { dao } from '../decorator/daoDecorators';
 import { queued } from "../entities/queued";
 import { pirate } from '../mapping/pirate';
-import { baseDao } from "./dao";
-
+import { baseDao } from "./baseDao";
 
 export { queuedDao };
 
