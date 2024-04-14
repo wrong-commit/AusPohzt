@@ -140,7 +140,9 @@ function AppUI(props: UIProps) {
                     )}
                 </BoxUI>
                     <BoxUI id={'events'}
-                        title={`${props.parcel?.nickName ?? props.parcel?.trackingId}: Events`}
+                        title={props.parcel ? `
+                        ${props.parcel?.nickName ?? props.parcel?.trackingId}: Events` : 
+                        'Select a parcel' }
                         onClose={() => props.setParcel(undefined)}>
                         <ListEvents key={props.parcel ? (props.parcel.id! + props.parcel.events.length) : undefined}
                             events={props.parcel?.events?? []} />

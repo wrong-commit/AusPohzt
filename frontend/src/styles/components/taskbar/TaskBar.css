@@ -5,15 +5,14 @@
     min-width: 100vw;
     width: 100%;
 
-    background-color: var(--BACKGROUND);
+    /* background-color: var(--BACKGROUND); */
 
     padding: 0.1rem 0.1rem 0.4rem 0.2rem;
 
     /* avoid y-overflow because of border */
     margin-bottom: 0.2rem;
 
-    /* add border */
-    border-top: 0.1rem solid var(--TEXT);
+    /* remove border */
     box-sizing: border-box;
 
     /* always on bottom, always vsibile */
