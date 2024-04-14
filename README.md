@@ -1,6 +1,8 @@
 # AusPohzt 
 
-API, Front End, and Notification Clients for tracking parcels 
+API, Front End, and Notification Clients for tracking Australia Post and other parcels
+
+Postgresql database using custom built ORM for Typescript entity mapping. 
 
 ## How to run 
 
@@ -15,10 +17,10 @@ API, Front End, and Notification Clients for tracking parcels
 ## Screenshots
 
 Parcel tracking UI showing delivery events for delivered package
-![image](https://github.com/wrong-commit/AusPohzt/assets/44012200/afd41c29-eda0-49de-a7f2-bd8e83203440)
+![auspost_screenshot](https://github.com/wrong-commit/AusPohzt/assets/44012200/43e2fc00-4dea-489d-9098-48f061859f9b)
 
 ## TODO 
-General todo list. Some far fetched things like multi-user support
+General todo list. Some far fetched things like multi-user support, multiple package providers, etc
 - [ ] Tracking 
     - [ ] Sync Tracking Data from UI
     - [x] Add Tracking ID
@@ -62,7 +64,7 @@ General todo list. Some far fetched things like multi-user support
     - [x] pirate.map() accepts row arg as array instead of single instance, see dao.find() comment
     - [x] controller code should use async/await instead of promise callbacks
     - [ ] use proper go fmt methods for logging ( unnecessary \n everywhere )
-    - [ ] parcel dao should be rewritten, needs to support most parcel methods returning a list
+    - [x] parcel dao should be rewritten, needs to support most parcel methods returning a list
 - [ ] Documentation
-    - [ ] Detail package.json setup
+    - [x] Simple package.json/tsconfig setup
     - [x] Detail webpack config
