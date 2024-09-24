@@ -67,5 +67,5 @@ declare global {
         }
     }
 }
-
+declare module 'pg';
 export { }

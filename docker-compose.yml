@@ -1,0 +1,73 @@
+version: '3'
+services:
+  # aus-frontend:
+  #   build: 
+  #     context: .
+  #     dockerfile: Dockerfile.frontend
+  #     args:
+  #       - API_HOST=aus-api:4000
+  #   ports:
+  #     - '5000:5000'
+  #   environment:
+  #     - ENABLE_AUTH=false
+  #     - AUTH_COOKIE_NAME=penlicence
+  #     - HMAC_SECRET=test
+  #     - DIGITAL_API=
+  #     - API_KEY=
+  #     - PORT=4000
+  #     - PG_HOST=aus-db
+  #     - PG_PORT=5432
+  #     - PG_USER=bogan
+  #     - PG_PASSWORD=123
+  #     - PG_DATABASE=auspohzt
+  #   networks:
+  #     - auspohzt
+  aus-api:
+    build: 
+      context: .
+      dockerfile: Dockerfile.api
+    ports:
+      - '4000:4000'
+    depends_on:
+      - aus-db
+    environment:
+      - ENABLE_AUTH=false
+      - AUTH_COOKIE_NAME=penlicence
+      - HMAC_SECRET=test
+      - DIGITAL_API=
+      - API_KEY=
+      - PORT=4000
+      - PG_HOST=aus-db
+      - PG_PORT=5432
+      - PG_USER=bogan
+      - PG_PASSWORD=123
+      - PG_DATABASE=auspohzt
+    networks:
+      - auspohzt
+  aus-db:
+    image: postgres
+    restart: always
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=bogan
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_DB=auspohzt
+    networks:
+      - auspohzt
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+      - ./backend/database/createDatabase.sql:/docker-entrypoint-initdb.d/init.sql:ro
+  aus-metabase:
+    image: metabase/metabase:latest
+    depends_on:
+      - aus-db
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - auspohzt
+networks:
+  auspohzt:
+volumes:
+  dbdata:
