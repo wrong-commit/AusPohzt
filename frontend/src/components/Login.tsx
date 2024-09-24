@@ -14,7 +14,9 @@ type Props = {
     children: (userId: number, client: api) => React.ReactChildren | React.ReactChild;
 }
 const Login = ({ children }: Props) => {
-    const apiRef = useRef(jwtApi.initWithToken('http://localhost:3000/', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.95BEPOhEI6NVx-QD3Ssikum3qQuvTRdSBoQr7aAuDHA'));
+    // FIXME: this should be set by a Webpack environment variable
+    const apiRef = useRef<jwtApi>(jwtApi.init(process.env.API_HOST) as jwtApi);
+    // const apiRef = useRef(jwtApi.initWithToken('http://localhost:3000/', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.95BEPOhEI6NVx-QD3Ssikum3qQuvTRdSBoQr7aAuDHA'));
     const mountRef = useRef<any>(undefined);
     const [userId, setUserId] = useState<null | number>(null);
 

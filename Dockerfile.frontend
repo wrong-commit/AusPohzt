@@ -1,0 +1,31 @@
+# Stage 1: Alpine Linux with Node JS
+FROM node:21.7.2-alpine as builder
+WORKDIR /usr/src
+# Defaults to production, docker-compose overrides this to development on build and run.
+ARG NODE_ENV=production
+ENV NODE_ENV $NODE_ENV
+# ! Copy root Node JS package objects to folder above Node build folder
+COPY ./tsconfig.build.json ./tsconfig.json ./package.json /usr/src/ 
+# Install custom backend library
+COPY ./backend/ /usr/src/backend/
+# RUN npm install --include dev
+# Reset working directory
+WORKDIR /usr/src/frontend
+# Copy build files into app folder
+COPY ./frontend/package.json /usr/src/frontend/
+# Install node modules
+RUN npm install --include dev 
+# Copy build files and execute tests and build
+COPY ./frontend/webpack.config.js ./frontend/tsconfig.json /usr/src/frontend/
+COPY ./frontend/src/ /usr/src/frontend/src
+COPY ./frontend/public/ /usr/src/frontend/public
+RUN npm run build 
+# Stage 2: Nginx image for serving static files
+FROM nginx:latest
+# Copy custom configuration file from the current directory
+COPY nginx.conf /etc/nginx/nginx.conf
+# Copy static assets into var/www
+COPY --from=builder /usr/src/frontend/dist /var/www
+COPY --from=builder /usr/src/frontend/public /var/www
+# Start up nginx server
+CMD ["nginx"]
