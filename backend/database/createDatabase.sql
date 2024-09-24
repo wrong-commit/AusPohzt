@@ -49,9 +49,6 @@ CREATE TABLE trackingEvent (
     raw TEXT NULL
 );
 
- GRANT ALL privileges on DATABASE auspohzt_test to boganpost;
-
-
 -- IF (SELECT 1 
 --     FROM information_schema.columns 
 --     WHERE 
