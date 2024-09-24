@@ -7,7 +7,7 @@ declare global {
              * Enable or disable authentication.
              */
             ENABLE_AUTH: 'true' | 'false';
-            API_HOST: string;
+            API_URL: string;
         }
     }
 }
