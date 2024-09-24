@@ -2,6 +2,7 @@
 FROM node:21.7.2-alpine as builder
 WORKDIR /usr/src
 # Defaults to production, docker-compose overrides this to development on build and run.
+ARG API_HOST
 ARG NODE_ENV=production
 ENV NODE_ENV $NODE_ENV
 # ! Copy root Node JS package objects to folder above Node build folder
