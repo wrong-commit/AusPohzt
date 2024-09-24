@@ -15,7 +15,7 @@ type Props = {
 }
 const Login = ({ children }: Props) => {
     // FIXME: this should be set by a Webpack environment variable
-    const apiRef = useRef((jwtApi.init(process.env.API_URL) as jwtApi));
+    const apiRef = useRef((jwtApi.init(API_URL) as jwtApi));
     // const apiRef = useRef(jwtApi.initWithToken('http://localhost:3000/', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.95BEPOhEI6NVx-QD3Ssikum3qQuvTRdSBoQr7aAuDHA'));
     const mountRef = useRef<any>(undefined);
     const [userId, setUserId] = useState<null | number>(null);
@@ -36,7 +36,7 @@ const Login = ({ children }: Props) => {
     useEffect(() => {
         if (!mountRef.current) {
             // check if use authed
-            const client = jwtApi.init(process.env.API_URL);
+            const client = jwtApi.init(API_URL);
             let resp = client.get('/v0/auth')
                 .then(r => r.json())
                 .catch(e => {
