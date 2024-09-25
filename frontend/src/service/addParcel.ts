@@ -1,7 +1,7 @@
 export { addParcel }
 
 async function addParcel(trackingId: string): Promise<boolean | undefined> {
-    const request = new Request(`http://localhost:3000/v0/queue/${trackingId}`);
+    const request = new Request(`${API_URL}/v0/queue/${trackingId}`);
     return await fetch(request, {
         method: 'POST'
     }).then(res => {

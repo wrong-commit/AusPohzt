@@ -6,7 +6,7 @@ export { renameParcel };
  * @returns 
  */
 async function renameParcel(id: number, nickname: string): Promise<boolean> {
-    const request = new Request(`http://localhost:3000/v0/parcel/${id}/nickname?nickname=${nickname}`);
+    const request = new Request(`${API_URL}/v0/parcel/${id}/nickname?nickname=${nickname}`);
     return fetch(request, {
         method: 'PUT',
     }).then(res => {

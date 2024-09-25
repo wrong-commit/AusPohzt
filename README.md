@@ -4,6 +4,11 @@ API, Front End, and Notification Clients for tracking Australia Post and other p
 
 Postgresql database using custom built ORM for Typescript entity mapping. 
 
+## How to run in Docker
+Run the application under docker 
+1. Run `docker compose build`
+2. Run `docker compose up -d`
+
 ## How to run 
 
 1. Run `npm install` in the root directory
@@ -46,6 +51,7 @@ General todo list. Some far fetched things like multi-user support, multiple pac
         - [ ] node systemctl script
         - [ ] node macos service script
         - [ ] cronjob example for notifications
+    - [x] Configure Docker
     - [ ] Setup multiple workers
     - [ ] Default nginx config for workers
 - [ ] Notifications
