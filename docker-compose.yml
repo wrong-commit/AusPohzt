@@ -33,9 +33,9 @@ services:
       - AUTH_COOKIE_NAME=bogan-auth
       - HMAC_SECRET=correct battery horse staple
       - API_URL=http://auspost-api.localhost:4000
-      - API_TOKEN=
+      - API_TOKEN=eyJhbGciOiJIUzI1NiJ9.YWRtaW4.FeUPkoBVJl6ja_oogZ1GZ-X0lkOyTTPJ_YipSEj8-9E
       - WEB_PASSWORD=test password
-      - DIGITAL_API=
+      - DIGITAL_API=https://digitalapi.auspost.com.au
       - API_KEY=
       - PORT=4000
       - PG_HOST=aus-db
