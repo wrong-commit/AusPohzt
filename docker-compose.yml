@@ -1,5 +1,14 @@
 version: '3'
 services:
+  # aus-runner:
+  #   build: 
+  #     context: .
+  #     dockerfile: Dockerfile.runner
+  #     args:
+  #       - API_URL=http://auspost-api.localhost:4000
+  #       - API_TOKEN=test
+  #       - DIGITAL_API=https://digitalapi.auspost.com.au
+  #       - API_KEY=https://digitalapi.auspost.com.au
   aus-frontend:
     build: 
       context: .
@@ -21,8 +30,11 @@ services:
       - aus-db
     environment:
       - ENABLE_AUTH=false
-      - AUTH_COOKIE_NAME=penlicence
-      - HMAC_SECRET=test
+      - AUTH_COOKIE_NAME=bogan-auth
+      - HMAC_SECRET=correct battery horse staple
+      - API_URL=http://auspost-api.localhost:4000
+      - API_TOKEN=
+      - WEB_PASSWORD=test password
       - DIGITAL_API=
       - API_KEY=
       - PORT=4000
@@ -58,6 +70,5 @@ services:
   #     - auspohzt
 networks:
   auspohzt:
-    driver: host
 volumes:
   dbdata:
