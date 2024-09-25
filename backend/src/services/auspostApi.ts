@@ -19,8 +19,8 @@ class auspostApi extends api {
     }
 
     override addDefaultHeaders(headers: Record<string, string | number>): void {
-        console.debug(`Adding API_KEY ${process.env.API_KEY}`);
-        headers[auspostApi.HEADER_API_KEY] = process.env.API_KEY;
+        // console.debug(`Adding API_KEY ${process.env.API_KEY}`);
+        // headers[auspostApi.HEADER_API_KEY] = process.env.API_KEY;
         // needed ? 
         headers[auspostApi.HEADER_AP_CHANNEL_NAME] = 'WEB_DETAIL';
         if (!headers['Accept']) {
