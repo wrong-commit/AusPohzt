@@ -20,15 +20,15 @@ class jwtApi extends api {
         return new jwtApi(host, token);
     }
 
-    async login(user: string, pass: string): Promise<{ token: string } | undefined> {
-        return this.post('/v0/auth/login', {
+    static async login(host:string, user: string, pass: string): Promise<{ token: string } | undefined> {
+        return new api(host).post('/v0/auth/login', {
             body: {
                 'username': user,
                 'password': pass,
             },
         }).then(r => r.json() as Promise<{ token: string }>)
             .catch(err => {
-                console.error(`Error fetching queued`, err);
+                console.error(`Error logging in`, err);
                 return undefined;
             });
     }

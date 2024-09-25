@@ -6,7 +6,7 @@ export { deleteParcel };
  * @returns 
  */
 async function deleteParcel(id: number): Promise<boolean> {
-    const request = new Request(`http://localhost:3000/v0/parcel/${id}`);
+    const request = new Request(`${API_URL}/v0/parcel/${id}`);
     return fetch(request, {
         method: 'DELETE'
     }).then(res => {

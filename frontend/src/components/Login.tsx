@@ -15,8 +15,7 @@ type Props = {
 }
 const Login = ({ children }: Props) => {
     // FIXME: this should be set by a Webpack environment variable
-    const apiRef = useRef((jwtApi.init(API_URL) as jwtApi));
-    // const apiRef = useRef(jwtApi.initWithToken('http://localhost:3000/', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.95BEPOhEI6NVx-QD3Ssikum3qQuvTRdSBoQr7aAuDHA'));
+    const apiRef = useRef<jwtApi | null>(null);
     const mountRef = useRef<any>(undefined);
     const [userId, setUserId] = useState<null | number>(null);
 
@@ -24,37 +23,39 @@ const Login = ({ children }: Props) => {
     const [pass, setPass] = useState('nimda');
 
     const [result, trigger, loading] = useAsync(async () => {
-        return (apiRef.current).login(user, pass);
+        return jwtApi.login(API_URL, user, pass);
     }, undefined);
 
     useEffect(() => {
         if (result) {
             setUserId(0);
+            // Assign api.re
+            apiRef.current = jwtApi.initWithToken(API_URL, result.token);
         }
     }, [result]);
 
-    useEffect(() => {
-        if (!mountRef.current) {
-            // check if use authed
-            const client = jwtApi.init(API_URL);
-            let resp = client.get('/v0/auth')
-                .then(r => r.json())
-                .catch(e => {
-                    console.error(`Error fetching queued`, e);
-                    return false;
-                }).then(resp => { 
-                    if(typeof resp === 'boolean' && resp) { 
-                        if(mountRef.current == false) { 
-                            setUserId(0)
-                        }
-                    }
-                })
-            if (typeof resp === 'boolean' && resp) {
-                setUserId(0);
-            }
-        }
-        return function () { mountRef.current = true };
-    });
+    // useEffect(() => {
+    //     if (!mountRef.current) {
+    //         // check if use authed
+    //         const client = jwtApi.init(API_URL);
+    //         let resp = client.get('/v0/auth')
+    //             .then(r => r.json())
+    //             .catch(e => {
+    //                 console.error(`Error fetching queued`, e);
+    //                 return false;
+    //             }).then(resp => { 
+    //                 if(typeof resp === 'boolean' && resp) { 
+    //                     if(mountRef.current == false) { 
+    //                         setUserId(0)
+    //                     }
+    //                 }
+    //             })
+    //         if (typeof resp === 'boolean' && resp) {
+    //             setUserId(0);
+    //         }
+    //     }
+    //     return function () { mountRef.current = true };
+    // });
 
     return (
         <LoginUi apiRef={apiRef}
@@ -73,7 +74,7 @@ const Login = ({ children }: Props) => {
 
 type UIProps = { 
 userId: number | null;
-apiRef: React.MutableRefObject<jwtApi>,
+apiRef: React.MutableRefObject<jwtApi|null>,
 children: (userId: number, client: api) => React.ReactChildren | React.ReactChild;
 user: string;
 pass: string;
@@ -86,7 +87,7 @@ result:{ token: string; } | undefined
 function LoginUi(props:UIProps) { 
     return (
         <>
-            {props.userId != null && props.children(props.userId, props.apiRef.current)}
+            {props.userId != null && props.apiRef.current != null && props.children(props.userId, props.apiRef.current)}
             {props.userId == null && (
                 <div className={'login'}>
                     <input type={'text'} value={props.user} onChange={e => props.setUser(e.target.value)} />

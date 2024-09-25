@@ -5,9 +5,10 @@ services:
       context: .
       dockerfile: Dockerfile.frontend
       args:
-        - API_URL=http://127.0.0.1:4000
+        # Define auspost-api.localhost as 127.0.0.1 in /etc/host
+        - API_URL=http://auspost-api.localhost:4000
     ports:
-      - '5000:5000'
+      - '80:5000'
     networks:
       - auspohzt
   aus-api:
@@ -57,5 +58,6 @@ services:
   #     - auspohzt
 networks:
   auspohzt:
+    driver: host
 volumes:
   dbdata:
