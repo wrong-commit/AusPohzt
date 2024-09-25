@@ -26,9 +26,25 @@ declare global {
              */
             PORT: number;
             /**
+             * AusPohzt API, used by runner
+             */
+            API_URL: string;
+            /**
+             * AusPohzt API token, used by runner
+             */
+            API_TOKEN: string;
+            /**
              * auspozt secretz
              */
             API_KEY: string;
+            /**
+             * AusPohzt Web User
+             */
+            WEB_USER: string;
+            /**
+             * AusPohzt Web Password
+             */
+            WEB_PASSWORD: string;
             /**
              * AusPost API in format `protocol://hostname:port/`.
              */

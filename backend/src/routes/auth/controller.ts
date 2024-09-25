@@ -30,7 +30,7 @@ router.post('/login', (req, res) => {
     if (username && password) {
         // TODO: authenticate against DB
         // TODO: populate JWT with some basic claims, userId to start with
-        if (username === 'admin' && password === 'nimda') {
+        if (username === 'admin' && password === process.env.WEB_PASSWORD) {
             const token = jwt.sign('empty', process.env.HMAC_SECRET);
             // res.cookie(process.env.AUTH_COOKIE_NAME, token);
             return res.setHeader('Set-Cookie', `${process.env.AUTH_COOKIE_NAME}=${token}`)
