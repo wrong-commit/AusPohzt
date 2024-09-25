@@ -2,6 +2,7 @@ import express from 'express';
 import { daoFactory } from '../../dao/daoFactory';
 import { parcel } from '../../entities/parcel';
 import { queued } from '../../entities/queued';
+import { main as runnerMain } from '../../runner'
 
 const router = express.Router();
 export default router;
@@ -82,7 +83,9 @@ router.post('/:trackingId', async (req, res) => {
         return res.status(500).send({ message: 'Could not queue Parcel' });
     }
 
-    return res.status(200).json(savedQueued.toData());
+    const resp = res.status(200).json(savedQueued.toData());
+    runnerMain()
+    return resp;
 })
 
 /**

@@ -102,9 +102,8 @@ router.post('/', async (req, res) => {
             dto.owner = -1;
             // set last sync to -1 to indicate sync required
             dto.lastSync = -1;
-            // yuck ! 
             const savedParcel = await parcelDao.save(new parcel(dto));
-            console.log('could not save parcel')
+
             if (!savedParcel) {
                 res.status(500).send(JSON.stringify({ msg: 'Could not create Parcel' }));
             } else {
