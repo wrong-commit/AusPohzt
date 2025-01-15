@@ -15,4 +15,8 @@ export default function setupRoutes(app: express.Express) {
     app.use('/v0/auth', auth);
     app.use('/v0/parcel', isAuthenticatedMiddle, parcel);
     app.use('/v0/queue', isAuthenticatedMiddle, queue);
+         
+    app.get('/healthcheck', async (_, res) => {
+        return res.status(200).json({ status: "OK" })
+    });
 }

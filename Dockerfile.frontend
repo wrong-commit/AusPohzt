@@ -32,3 +32,4 @@ COPY --from=builder /usr/src/frontend/dist /var/www
 COPY --from=builder /usr/src/frontend/public /var/www
 # Start up nginx server
 CMD ["nginx"]
+HEALTHCHECK CMD curl --fail http://localhost:5000/healthcheck || exit 1
