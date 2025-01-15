@@ -19,7 +19,12 @@ COPY ./backend/jest.config.js ./backend/jest.it.config.js ./backend/tsconfig.jso
 COPY ./backend/src/ /usr/src/app/src
 RUN npm run test
 RUN npm run build 
-# TODO: create a new stage to run the lib folder
+# Broken - running with below commented out returns
+# Error: Cannot find module 'dotenv' 
+    # Stage 2: Alpine Linux with Node JS 
+    # FROM node:21.7.2-alpine as runner
+    # WORKDIR /usr/src/app
+    # COPY --from=builder /usr/src/app/lib /usr/src/app/lib
 # Run the final server
 CMD ["node", "lib/server.js"]
 HEALTHCHECK CMD curl --fail http://localhost:$PORT/healthcheck || exit 1
