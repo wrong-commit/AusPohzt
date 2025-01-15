@@ -20,7 +20,7 @@ const Login = ({ children }: Props) => {
     const [userId, setUserId] = useState<null | number>(null);
 
     const [user, setUser] = useState('admin');
-    const [pass, setPass] = useState('nimda');
+    const [pass, setPass] = useState('test password');
 
     const [result, trigger, loading] = useAsync(async () => {
         return jwtApi.login(API_URL, user, pass);
@@ -91,7 +91,12 @@ function LoginUi(props:UIProps) {
             {props.userId == null && (
                 <div className={'login'}>
                     <input type={'text'} value={props.user} onChange={e => props.setUser(e.target.value)} />
-                    <input type={'password'} value={props.pass} onChange={e => props.setPass(e.target.value)} />
+                    <input type={'password'} value={props.pass} onChange={e => props.setPass(e.target.value)} 
+                        onKeyUp={e=> {
+                            if(e.key === 'Enter') {
+                                props.trigger();
+                            }
+                        }} />
                     <button onClick={() => props.trigger()}>
                         sign in
                     </button>
