@@ -10,6 +10,7 @@ services:
   #       - DIGITAL_API=https://digitalapi.auspost.com.au
   #       - API_KEY=https://digitalapi.auspost.com.au
   aus-frontend:
+    restart: unless-stopped
     build: 
       context: .
       dockerfile: Dockerfile.frontend
@@ -21,6 +22,7 @@ services:
     networks:
       - auspohzt
   aus-api:
+    restart: unless-stopped
     build: 
       context: .
       dockerfile: Dockerfile.api
@@ -47,7 +49,7 @@ services:
       - auspohzt
   aus-db:
     image: postgres
-    restart: always
+    restart: unless-stopped
     ports:
       - '5432:5432'
     environment:
