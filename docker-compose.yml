@@ -18,7 +18,7 @@ services:
         # Define auspost-api.localhost as 127.0.0.1 in /etc/host
         - API_URL=http://auspost-api.localhost:4000
     ports:
-      - '80:5000'
+      - '5000:5000'
     networks:
       - auspohzt
   aus-api:
