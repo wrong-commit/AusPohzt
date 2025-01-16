@@ -4,6 +4,17 @@ API, Front End, and Notification Clients for tracking Australia Post and other p
 
 Postgresql database using custom built ORM for Typescript entity mapping. 
 
+# DB Migrations   
+DB Migrations are handled by the `db-migrate` npm package.   
+Migrations should be run 
+- during development docker-compose startup, before API starts
+
+Steps to run them   
+1. `db-migrate db:create auspohzt`
+2. `db-migrate up`  
+
+Running DB Migrations requires the PG_ environment variables to be set.
+
 ## How to run in Docker
 Run the application under docker 
 1. Run `docker compose build`

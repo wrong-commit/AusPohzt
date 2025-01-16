@@ -1,0 +1,22 @@
+{
+    "defaultEnv": "local",
+    "local": {
+        "driver": "pg",
+        "user": "bogan",
+        "password": "123",
+        "host": "aus-db",
+        "database": "auspohzt",
+        "port": "5432"
+    },
+    "target": {
+        "driver": "pg",
+        "user": {"ENV": "PG_USER"},
+        "password": {"ENV": "PG_PASS"},
+        "host": {"ENV": "PG_HOST"},
+        "database": "auspohzt",
+        "port": {"ENV": "PG_PORT"},
+        "ssl": { 
+            "rejectUnauthorized": false
+        }
+    }
+}
