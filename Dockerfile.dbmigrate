@@ -17,4 +17,4 @@ RUN npm install --include dev
 # Copy DB migration files
 COPY ./backend/migrations /usr/src/app/migrations
 COPY ./backend/database.json ./backend/.db-migraterc  /usr/src/app/
-CMD npm run migrate --env local --verbose
+CMD npm run migrate

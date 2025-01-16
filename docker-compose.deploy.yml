@@ -5,7 +5,7 @@
 # export INJECT_PG_PORT=
 # export INJECT_PG_USER=
 # export INJECT_PG_PASS=
-# envsubst < docker-compose.deploy.yml
+# envsubst < docker-compose.deploy.yml > docker-compose.yml
 version: '3'
 services:
   aus-frontend:
@@ -20,6 +20,9 @@ services:
     networks:
       - auspohzt
   aus-api:
+    depends_on: 
+      aus-db-migrate:
+        condition: service_started
     restart: unless-stopped
     build: 
       context: .
@@ -36,6 +39,18 @@ services:
       - DIGITAL_API=https://digitalapi.auspost.com.au
       - API_KEY=
       - PORT=4000
+      - PG_HOST=$INJECT_DB_HOST
+      - PG_PORT=$INJECT_DB_PORT
+      - PG_USER=$INJECT_DB_USER
+      - PG_PASSWORD=$INJECT_DB_PASS
+      - PG_DATABASE=auspohzt
+    networks:
+      - auspohzt
+  aus-db-migrate:
+    build: 
+      context: .
+      dockerfile: Dockerfile.dbmigrate
+    environment:
       - PG_HOST=$INJECT_DB_HOST
       - PG_PORT=$INJECT_DB_PORT
       - PG_USER=$INJECT_DB_USER

@@ -16,7 +16,3 @@ jobs:
         run: |
           npm run-script test
       - run: echo "Status after unit-tests ${{ job.status }}."
-      # - name: Run Integration Tests
-      #   run: |
-      #     npm run-script it-test
-      # - run: echo "Status after integration-tests ${{ job.status }}."
