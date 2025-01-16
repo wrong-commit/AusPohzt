@@ -13,6 +13,9 @@ const config = {
     password: process.env.PG_PASSWORD+"",
     // database
     database: process.env.PG_DATABASE,
+    ssl: { 
+        rejectUnauthorized: false
+    }
 }
 
 // TODO: specific debug property ? 
