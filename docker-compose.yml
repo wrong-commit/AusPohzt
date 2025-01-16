@@ -63,8 +63,6 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile.dbmigrate
-    # Override default migration against local host DB
-    # command: npm run migrate --env local
     depends_on: 
       aus-db: 
         condition: service_healthy

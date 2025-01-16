@@ -47,6 +47,7 @@ services:
     networks:
       - auspohzt
   aus-db-migrate:
+    command: npm run migrate --env target
     build: 
       context: .
       dockerfile: Dockerfile.dbmigrate
