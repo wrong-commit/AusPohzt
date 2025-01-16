@@ -21,5 +21,9 @@
         "jsdom": "^16.7.0",
         "snowpack-plugin-esbuild": "^1.0.0",
         "typescript": "^4.3.5"
+    },
+    "dependencies": {
+        "db-migrate": "^0.11.14",
+        "db-migrate-pg": "^1.5.2"
     }
 }

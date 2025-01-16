@@ -1,14 +1,5 @@
 version: '3'
 services:
-  # aus-runner:
-  #   build: 
-  #     context: .
-  #     dockerfile: Dockerfile.runner
-  #     args:
-  #       - API_URL=http://auspost-api.localhost:4000
-  #       - API_TOKEN=test
-  #       - DIGITAL_API=https://digitalapi.auspost.com.au
-  #       - API_KEY=https://digitalapi.auspost.com.au
   aus-frontend:
     restart: unless-stopped
     build: 
@@ -56,20 +47,35 @@ services:
       - POSTGRES_USER=bogan
       - POSTGRES_PASSWORD=123
       - POSTGRES_DB=auspohzt
+      # For health check
+      # - PGUSER=bogan
     networks:
       - auspohzt
     volumes:
       - dbdata:/var/lib/postgresql/data
-      - ./backend/database/createDatabase.sql:/docker-entrypoint-initdb.d/init.sql:ro
-  # aus-metabase:
-  #   image: metabase/metabase:latest
-  #   depends_on:
-  #     - aus-db
-  #   restart: always
-  #   ports:
-  #     - 8080:8080
-  #   networks:
-  #     - auspohzt
+    # Wait for DB 
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d auspohzt -U bogan"]
+      interval: 5s
+      timeout: 2s
+      retries: 5
+  aus-db-migrate:
+    build: 
+      context: .
+      dockerfile: Dockerfile.dbmigrate
+    # Override default migration against local host DB
+    # command: npm run migrate --env local
+    depends_on: 
+      aus-db: 
+        condition: service_healthy
+    environment:
+      - PG_HOST=aus-db
+      - PG_PORT=5432
+      - PG_USER=bogan
+      - PG_PASSWORD=123
+      - PG_DATABASE=auspohzt
+    networks:
+      - auspohzt
 networks:
   auspohzt:
 volumes:
