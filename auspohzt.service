@@ -1,0 +1,15 @@
+[Unit]
+Description=Fetch secrets and start Docker Compose
+After=network.target
+Wants=docker.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/app
+ExecStart=/bin/bash fetch-secrets.sh
+ExecStartPost=/usr/bin/docker compose up -d
+RemainAfterExit=true
+Environment="AWS_REGION=ap-southeast-2"
+
+[Install]
+WantedBy=multi-user.target

@@ -29,6 +29,7 @@ services:
       dockerfile: Dockerfile.api
     ports:
       - '4000:4000'
+    env_file: .env
     environment:
       - ENABLE_AUTH=false
       - AUTH_COOKIE_NAME=bogan-auth
@@ -39,10 +40,6 @@ services:
       - DIGITAL_API=https://digitalapi.auspost.com.au
       - API_KEY=
       - PORT=4000
-      - PG_HOST=$INJECT_DB_HOST
-      - PG_PORT=$INJECT_DB_PORT
-      - PG_USER=$INJECT_DB_USER
-      - PG_PASSWORD=$INJECT_DB_PASS
       - PG_DATABASE=auspohzt
     networks:
       - auspohzt
@@ -51,11 +48,8 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile.dbmigrate
+    env_file: .env
     environment:
-      - PG_HOST=$INJECT_DB_HOST
-      - PG_PORT=$INJECT_DB_PORT
-      - PG_USER=$INJECT_DB_USER
-      - PG_PASSWORD=$INJECT_DB_PASS
       - PG_DATABASE=auspohzt
     networks:
       - auspohzt
