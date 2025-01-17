@@ -6,8 +6,10 @@ Wants=docker.service
 [Service]
 Type=oneshot
 WorkingDirectory=/opt/app
+# Populate .env with AWS secrets
 ExecStart=/bin/bash fetch-secrets.sh
-ExecStartPost=/usr/bin/docker compose up -d
+# Force rebuild of aus-frontend when environment varibles change.
+ExecStartPost=/usr/bin/docker compose up --build --force-recreate --no-deps aus-frontend
 RemainAfterExit=true
 Environment="AWS_REGION=ap-southeast-2"
 

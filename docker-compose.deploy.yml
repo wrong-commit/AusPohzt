@@ -10,6 +10,7 @@ version: '3'
 services:
   aus-frontend:
     restart: unless-stopped
+    env_file: .env
     build: 
       context: .
       dockerfile: Dockerfile.frontend
@@ -36,7 +37,7 @@ services:
       - HMAC_SECRET=correct battery horse staple
       - API_URL=$INJECT_API_URL
       - API_TOKEN=eyJhbGciOiJIUzI1NiJ9.YWRtaW4.FeUPkoBVJl6ja_oogZ1GZ-X0lkOyTTPJ_YipSEj8-9E
-      - WEB_PASSWORD=$INJECT_ADMIN_PASS
+      - WEB_PASSWORD=test password
       - DIGITAL_API=https://digitalapi.auspost.com.au
       - API_KEY=
       - PORT=4000
