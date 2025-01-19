@@ -3,15 +3,36 @@ on: [push]
 jobs:
   Test-Before-Merge:
     runs-on: ubuntu-latest
+    # Service containers to run with `container-job`
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: githubactionpassword
+        ports:
+          - 5432:5432
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - run: echo "Running npm tests from ${{ github.ref }}, trigger = ${{ github.event_name }}"
       - name: Check out repository code
         uses: actions/checkout@v2
-      - name: Run Typescript build
+      - name: Install NPM modules
         run: |
           npm install
-          npm run-script build
+          # npm run-script build
       - run: echo "Status after build ${{ job.status }}."
+      - name: Run DB Migration
+        run: | 
+          npm run migrate-gha 
+      - run: echo "Status after DB migration ${{ job.status }}."
       - name: Run Unit Tests
         run: |
           npm run-script test

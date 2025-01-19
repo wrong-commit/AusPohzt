@@ -42,16 +42,24 @@ services:
       - API_KEY=
       - PORT=4000
       - PG_DATABASE=auspohzt
+      - PG_HOST=$INJECT_DB_HOST
+      - PG_USER=$INJECT_DB_USER
+      - PG_PASSWORD=$INJECT_DB_PASS
+      - PG_PORT=$INJECT_DB_PORT
     networks:
       - auspohzt
   aus-db-migrate:
-    command: npm run migrate --env target
+    command: npm run migrate -- --env target
     build: 
       context: .
       dockerfile: Dockerfile.dbmigrate
     env_file: .env
     environment:
       - PG_DATABASE=auspohzt
+      - PG_HOST=$INJECT_DB_HOST
+      - PG_USER=$INJECT_DB_USER
+      - PG_PASS=$INJECT_DB_PASS
+      - PG_PORT=$INJECT_DB_PORT
     networks:
       - auspohzt
 networks:

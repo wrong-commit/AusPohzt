@@ -16,7 +16,8 @@
         "front:test": "cd frontend && npm run test",
         "start": "npm run back:server & npm run back:runner & npm run front:site",
         "site": "npm run back:server & npm run front:site",
-        "test": "npm run front:test & npm run back:test"
+        "test": "npm run front:test & npm run back:test",
+        "migrate-gha": "cd backend && npm run migrate -- --env gha --verbose"
     },
     "devDependencies": {
         "@types/cors": "^2.8.12",

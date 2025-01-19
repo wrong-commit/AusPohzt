@@ -8,6 +8,14 @@
         "database": "auspohzt",
         "port": "5432"
     },
+    "gha": {
+        "driver": "pg",
+        "user": "postgres",
+        "password": "githubactionpassword",
+        "host": "localhost",
+        "database": "postgres",
+        "port": "5432"
+    },
     "target": {
         "driver": "pg",
         "user": {"ENV": "PG_USER"},

@@ -8,8 +8,8 @@ Type=oneshot
 WorkingDirectory=/opt/app
 # Populate .env with AWS secrets
 ExecStart=/bin/bash fetch-secrets.sh
-# Force rebuild of aus-frontend when environment varibles change.
-ExecStartPost=/usr/bin/docker compose up --build --force-recreate --no-deps aus-frontend
+# Force rebuild of application when environment varibles change. Rebuilds API, reruns DB migrations
+ExecStartPost=/usr/bin/docker compose up --build --force-recreate -d
 RemainAfterExit=true
 Environment="AWS_REGION=ap-southeast-2"
 

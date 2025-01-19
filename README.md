@@ -6,6 +6,7 @@ Postgresql database using custom built ORM for Typescript entity mapping.
 
 # CI/CD  
 A GitHub Action pipeline is configured to build, test, and deploy the application.  
+DB Migrations are tested before releasing the application. 
 
 # DB Migrations   
 DB Migrations are handled by the `db-migrate` npm package.   
