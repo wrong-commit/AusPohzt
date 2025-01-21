@@ -16,7 +16,7 @@ const runnerInterval = process.env.RUNNER_INTERVAL_MS ?? 60000;
 const syncInterval = process.env.SYNC_INTERVAL_MS ?? 600000;
 
 function syncTrackingId(ourApi: api, id: string, owner: number): Promise<boolean> {
-    const runn = new runner(new auspost(auspostApi.init('https://digitalapi.auspost.com.au/')), ourApi)
+    const runn = new runner(new auspost(auspostApi.init('https://auspost.com.au/')), ourApi)
     return runn.sync(id, owner);
 }
 

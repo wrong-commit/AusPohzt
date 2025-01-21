@@ -2,7 +2,9 @@
 
 API, Front End, and Notification Clients for tracking Australia Post and other parcels
 
-Postgresql database using custom built ORM for Typescript entity mapping. 
+Postgresql database using custom built ORM for Typescript entity mapping.   
+
+Uses Selenium Chrome Web Driver to avoid the AusPost Digital API from blocking our scraping attempts.
 
 # CI/CD  
 A GitHub Action pipeline is configured to build, test, and deploy the application.  
