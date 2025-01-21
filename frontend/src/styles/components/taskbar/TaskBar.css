@@ -1,4 +1,3 @@
-/* FIXME: don't let border shift .Taskbar into overflow */
 .TaskBar {
     /* dimensions */
     height: 2rem;
@@ -10,20 +9,14 @@
     padding: 0.1rem 0.1rem 0.4rem 0.2rem;
 
     /* avoid y-overflow because of border */
-    margin-bottom: 0.2rem;
+    margin-top: 0.5rem;
 
     /* remove border */
     box-sizing: border-box;
 
-    /* always on bottom, always vsibile */
-    position: fixed;
-    bottom: 0;
-
-    /*  */
     display: flex;
     flex-direction: row;
 }
-
 
 .TaskBarItem {
     /* space between previous item */

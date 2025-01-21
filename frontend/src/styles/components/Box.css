@@ -24,3 +24,14 @@
 .Box [data-box-body]>* {
     margin-bottom: 1rem;
 }
+
+.Box [data-box-body]>table { 
+    width: 100%; 
+    border-collapse: collapse;
+}
+.Box [data-box-body]>table th,
+.Box [data-box-body]>table td { 
+    border: 1px solid white;
+    padding: 8px; 
+    text-align: left;
+}

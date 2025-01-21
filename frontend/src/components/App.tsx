@@ -102,6 +102,33 @@ function AppUI(props: UIProps) {
     return (
         <>
             <div className={'App'}>
+                <TaskBar>
+                    <TaskBarItem hidden={false}
+                        onClick={props.sync}>
+                        Refresh
+                    </TaskBarItem>
+                    <TaskBarItem hidden={false}
+                        onClick={() => {
+                            props.api.post('/v0/auth/logout')
+                                .then(() => window.location.href = window.location.href)
+                        }}>
+                        Logout
+                    </TaskBarItem>
+                    {props.parcel && (
+                        <TaskBarItem hidden={false}
+                        onClick={() => {
+                            // Delete package
+                            deleteParcel(props.parcel!.id!).then(() => {
+                                // Remove package from UI, resync parcels 
+                                props.setFetchedParcels(undefined);
+                                props.setParcel(undefined);
+                                props.setFetchedParcels(props.parcels!.filter(x=> x.id != props.parcel!.id))
+                                props.fetchParcels()
+                            })
+                        }}
+                        children={`Delete '${props.parcel?.nickName ?? props.parcel?.trackingId}'`} /> 
+                        )}
+                </TaskBar>
                 <div className={'Boxes'}>
                 <BoxUI id={'parcels'}
                     title={`Parcels ${props.fetchingParcels ? 'Loading' : ''}`}>
@@ -148,33 +175,6 @@ function AppUI(props: UIProps) {
                             events={props.parcel?.events?? []} />
                     </BoxUI>
                 </div>
-                <TaskBar>
-                    <TaskBarItem hidden={false}
-                        onClick={props.sync}>
-                        Refresh
-                    </TaskBarItem>
-                    <TaskBarItem hidden={false}
-                        onClick={() => {
-                            props.api.post('/v0/auth/logout')
-                                .then(() => window.location.href = window.location.href)
-                        }}>
-                        Logout
-                    </TaskBarItem>
-                    {props.parcel && (
-                        <TaskBarItem hidden={false}
-                        onClick={() => {
-                            // Delete package
-                            deleteParcel(props.parcel!.id!).then(() => {
-                                // Remove package from UI, resync parcels 
-                                props.setFetchedParcels(undefined);
-                                props.setParcel(undefined);
-                                props.setFetchedParcels(props.parcels!.filter(x=> x.id != props.parcel!.id))
-                                props.fetchParcels()
-                            })
-                        }}
-                        children={`Delete '${props.parcel?.nickName ?? props.parcel?.trackingId}'`} /> 
-                        )}
-                </TaskBar>
             </div >
         </>
     )
