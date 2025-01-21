@@ -1,0 +1,44 @@
+/* Place Login page in center of screen */
+.LoginContainer { 
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+/* Style centered login div */
+.Login { 
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+/* Style inputs */
+.Login>input {
+    margin-bottom: 10px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+/* Login button */
+.Login>button {
+    padding: 10px;
+    font-size: 16px;
+    background-color: white;
+    color: black;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+/* Make button gray on hover */
+.Login>button:hover {
+    background-color: #ccc;
+}
+/* Login status text */
+.Login>span { 
+    margin-top: 0.5rem;
+    align-self: center;
+}

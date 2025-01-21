@@ -3,6 +3,7 @@ import { api } from "@boganpost/backend/src/services/api";
 import { jwtApi } from "@boganpost/backend/src/services/jwtApi";
 import React, { useEffect, useRef, useState } from "react"
 import { useAsync } from "../hooks/useAsync";
+import '../styles/components/Login.css'
 
 export { Login }
 
@@ -89,23 +90,25 @@ function LoginUi(props:UIProps) {
         <>
             {props.userId != null && props.apiRef.current != null && props.children(props.userId, props.apiRef.current)}
             {props.userId == null && (
-                <div className={'login'}>
-                    <input type={'text'} value={props.user} onChange={e => props.setUser(e.target.value)} />
-                    <input type={'password'} value={props.pass} onChange={e => props.setPass(e.target.value)} 
-                        onKeyUp={e=> {
-                            if(e.key === 'Enter') {
-                                props.trigger();
-                            }
-                        }} />
-                    <button onClick={() => props.trigger()}>
-                        sign in
-                    </button>
-                    {props.loading && (
-                        <span style={{color:'white'}}>waiting...</span>
-                    )}
-                    {props.result && (
-                        <span style={{color:'white'}}>AUTHENTICATED</span>
-                    )}
+                <div className={'LoginContainer'}>
+                    <div className={'Login'}>
+                        <input type={'text'} value={props.user} onChange={e => props.setUser(e.target.value)} />
+                        <input type={'password'} value={props.pass} onChange={e => props.setPass(e.target.value)} 
+                            onKeyUp={e=> {
+                                if(e.key === 'Enter') {
+                                    props.trigger();
+                                }
+                            }} />
+                        <button onClick={() => props.trigger()}>
+                            sign in
+                        </button>
+                        {props.loading && (
+                            <span style={{color:'white'}}>Authenticating...</span>
+                        )}
+                        {props.result && (
+                            <span style={{color:'white'}}>Success</span>
+                        )}
+                    </div>
                 </div>
             )}
         </>
