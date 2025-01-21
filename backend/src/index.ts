@@ -1,3 +1,4 @@
+//@ts-nocheck
 import dotenv from 'dotenv';
 dotenv.config({ path: '.env' })
 import { auspost } from './clients/auspost';

@@ -1,6 +1,7 @@
 import { daoFactory } from '../../dao/daoFactory';
 import { parcel } from '../../entities/parcel';
 import { queued } from '../../entities/queued';
+import { api } from '../../services/api';
 import { runner } from '../runner';
 import { mockClientFactory } from './mockClient';
 
@@ -16,7 +17,7 @@ describe("runner", () => {
             _createParcel: mockCreateParcel,
         });
 
-        const r = new runner(mockClient);
+        const r = new runner(mockClient, new api(''));
         await r.sync('test', 0);
 
         expect(mockCreateParcel).not.toBeCalled();
@@ -51,7 +52,7 @@ describe("runner", () => {
                 return savedParcel.toData();
             }),
         });
-        const r = new runner(mockClient);
+        const r = new runner(mockClient, new api(''));
         await r.sync(TRACKING_ID, 0);
         // expect both events to be saved
         const afterSyncParcel = (await parcelDao.findByTrackingIdAndDisabled(TRACKING_ID, true))!;
@@ -96,7 +97,7 @@ describe("runner", () => {
                 return pDto;
             }),
         });
-        const r = new runner(mockClient);
+        const r = new runner(mockClient, new api(''));
         await r.sync(TRACKING_ID, 0);
 
         // expect both events to be saved
@@ -145,7 +146,7 @@ describe("runner", () => {
                 return pDto;
             }),
         });
-        const r = new runner(mockClient);
+        const r = new runner(mockClient, new api(''));
         await r.sync(TRACKING_ID, 0);
 
         // expect both events to be saved
@@ -174,7 +175,7 @@ describe("runner", () => {
                 return undefined;
             }),
         });
-        const r = new runner(mockClient);
+        const r = new runner(mockClient, new api(''));
         const syncResp = await r.sync(QUEUED_ID, 0);
         expect(syncResp).toBeFalsy();
         // expect both events to be saved

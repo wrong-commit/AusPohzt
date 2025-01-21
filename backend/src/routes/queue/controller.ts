@@ -89,6 +89,42 @@ router.post('/:trackingId', async (req, res) => {
 })
 
 /**
+ * Add a new parcel to the queue
+ *  * TODO: throw error if parcel already queued
+ *  * TODO: throw error if parcel already exists
+ * TODO: set queued.owner from request
+ * @returns queued object if successful, otherwise 500
+ */
+router.patch('/:trackingId/increment', async (req, res) => {
+    console.debug(`Incrementing queued parcel status with trackingId ${req.params.trackingId}`);
+
+    if (req.params.trackingId.trim().length === 0) {
+        console.warn(`Tried to queue invalid tracking id ${req.params.trackingId}`)
+        return res.status(500).json({ message: 'Tracking Id invalid' });
+    }
+    // check if parcel already exists
+    const alreadyTracked = await queuedDao.findByTrackingId(req.params.trackingId);
+    if (!alreadyTracked) {
+        console.warn(`Tried to update missing parcel ${req.params.trackingId}`)
+        return res.status(500).json({ message: 'Parcel not tracked' });
+    }
+    alreadyTracked.checked++;
+
+    let savedQueued = undefined
+    try {
+        savedQueued = await queuedDao.save(alreadyTracked)
+    } catch (err) {
+        console.error('Could not update queue', err);
+    }
+    if (!savedQueued) {
+        console.error(`could not save queued ${req.params.trackingId}`);
+        return res.status(500).send({ message: 'Could not update queued parcel' });
+    }
+
+    return res.status(200).json(savedQueued.toData());
+})
+
+/**
  * Delete a queued parcel.
  * 
  * TODO: restrict to runner

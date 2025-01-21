@@ -15,8 +15,8 @@ const runnerInterval = process.env.RUNNER_INTERVAL_MS ?? 60000;
 // 600,000 ms/10 mins
 const syncInterval = process.env.SYNC_INTERVAL_MS ?? 600000;
 
-function syncTrackingId(id: string, owner: number): Promise<boolean> {
-    const runn = new runner(new auspost(auspostApi.init()))
+function syncTrackingId(client: api, id: string, owner: number): Promise<boolean> {
+    const runn = new runner(new auspost(auspostApi.init('https://auspost.com.au/')), client)
     return runn.sync(id, owner);
 }
 
@@ -27,7 +27,7 @@ async function startQueuedIds(client: api): Promise<string[]> {
     const queuedParcels = await (response.json() as Promise<Dto<queued>[]>);
 
     for (const x of queuedParcels) {
-        const synced = await syncTrackingId(x.trackingId, x.owner);
+        const synced = await syncTrackingId(client, x.trackingId, x.owner);
         console.log(`Tracking Id ${x.trackingId} synced ${synced}`);
         // TODO: increment hashmap of trackingIds that counts sync failures. disable parcel at 3rd retry
     }
@@ -42,24 +42,21 @@ async function main() {
     await startQueuedIds(client);
     // iterate over other parcels, check when last synced
 
-    const resp = await client.get('/v0/parcel',{
-        params:{
-            'disabled':'false',
-        }
-    });
+    // const resp = await client.get('/v0/parcel?disabled=true');
 
-    const parcels = await (resp.json() as Promise<Dto<parcel>[]>);
+    // const parcels = await (resp.json() as Promise<Dto<parcel>[]>);
 
-    for (const p of parcels) {
-        const currentTime = Math.floor(Date.now() / 1000);
-        // delta in seconds
-        const delta: number = (currentTime - p.lastSync);
-        console.log(`${currentTime} - ${p.lastSync} = ${delta}`);
-        if (delta * 1000 >= syncInterval) {
-            const didSync = await syncTrackingId(p.trackingId, p.owner);
-            console.log(`Parcel ${p.trackingId} synced ${didSync}`);
-        } else {
-            console.info(`Not syncing ${p.trackingId} because only ${delta} seconds has ellapsed of ${syncInterval/1000}.`)
-        }
-    }
+    // for (const p of parcels) {
+    //     const currentTime = Math.floor(Date.now() / 1000);
+    //     // delta in seconds
+    //     const delta: number = (currentTime - p.lastSync);
+    //     console.log(`${currentTime} - ${p.lastSync} = ${delta}`);
+    //     if (delta * 1000 >= syncInterval) {
+    //         const didSync = await syncTrackingId(client, p.trackingId, p.owner);
+    //         console.log(`Parcel ${p.trackingId} synced ${didSync}`);
+    //     } else {
+    //         console.info(`Not syncing ${p.trackingId} because only ${delta} seconds has ellapsed of ${syncInterval/1000}.`)
+    //     }
+    // }
 }
+main()

@@ -10,7 +10,7 @@
         "build": "tsc --build tsconfig.build.json",
         "watch": "tsc --build --watch",
         "back:server": "cd backend && npm run server",
-        "back:runner": "cd backend && npm run start",
+        "back:runner": "cd backend && npm run runner",
         "back:test": "cd backend && npm run test",
         "front:site": "cd frontend && npm run dev",
         "front:test": "cd frontend && npm run test",

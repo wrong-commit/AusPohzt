@@ -97,4 +97,17 @@ describe("queue controller", () => {
                 .expect(404);
         })
     })
+    describe("update queued parcel", () => {
+        test("increment actual queued parcel by tracking id", async () => {
+            await pool.query(`INSERT INTO queued (trackingId, owner) VALUES ('updateActual', 8) RETURNING id;`);
+            await request(app)
+                .patch(`/v0/queue/updateActual/increment`)
+                .expect(200);
+        })
+        test("increment missing queued parcel by tracking id", async () => {
+            await request(app)
+                .delete(`/v0/queue/this_doesnt_actually_exist/increment`)
+                .expect(404);
+        })
+    })
 })

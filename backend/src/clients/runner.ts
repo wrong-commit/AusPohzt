@@ -2,6 +2,7 @@ import { daoFactory } from "../dao/daoFactory";
 import { parcel } from "../entities/parcel";
 import { queued } from "../entities/queued";
 import { trackingEvent } from "../entities/trackingEvent";
+import { api } from "../services/api";
 import { Dto } from "../types/Dto";
 import { client as clientType } from "./client";
 
@@ -17,11 +18,16 @@ class runner<T> {
      * Client used to determine current event information. The client implementation can 
      */
     client: clientType<T>;
+    /**
+     * API Client used by the runner to update our parcel information
+     */
+    api: api;
 
     MAX_QUEUED_RETRIES: number = 3;
 
-    constructor(client: clientType<T>) {
+    constructor(client: clientType<T>, _api: api) {
         this.client = client;
+        this.api = _api;
         console.log(`runner() with client ${JSON.stringify(this.client, null, 2)}`)
     }
 
@@ -33,10 +39,34 @@ class runner<T> {
      * @param trackingId 
      */
     async sync(trackingId: string, owner: number): Promise<boolean> {
-        let disabledParcel = await parcelDao.findByTrackingIdAndDisabled(trackingId, true);
-        let trackedParcel = await parcelDao.findByTrackingId(trackingId);
-        const queued = await queuedDao.findByTrackingId(trackingId);
-        if (disabledParcel) {
+        console.log(`Syncing ${trackingId}...`)
+        // Does disabled parcel exist
+        let disabledParcel = (await this.api.get(`/v0/parcel?disabled=true`)
+            .then(x => x.json())
+            //@ts-expect-error
+            .then(x => x.map(dto => new parcel(dto as any).toData()))
+            .catch(e => {
+                console.log("Could not map disabled parcel dto", e)
+            }) ?? [])
+            //@ts-expect-error
+            .filter(x => x.trackingId === trackingId);
+        let trackedParcel = await this.api.get(`/v0/parcel/${trackingId}`).catch(() => undefined)
+            .then(x => x?.json())
+            .then(x => {if(x != undefined) return new parcel(x as any).toData(); return undefined})
+            .catch(e => {
+                console.log("Could not map parcel dto", e)
+            }) ?? undefined;
+        let queuedParcels = await this.api.get(`/v0/queue`).catch(() => undefined)
+            .then(x => x?.json())
+            //@ts-expect-error
+            .then(x => x?.map(dto => new queued(dto as any).toData()))
+            .catch(e => {
+                console.log("Could not map parcel dto", e)
+            }) as Dto<queued>[] ?? [];
+        let alreadyQueued = queuedParcels.find(x => x.trackingId === trackingId)
+        if (disabledParcel.length > 0) {
+            console.log(JSON.stringify(disabledParcel))
+            console.log('Parcel is disabled');
             return false;
         }
         if (trackedParcel && trackedParcel.owner !== owner) {
@@ -45,33 +75,28 @@ class runner<T> {
         const response = await this.client.sync(trackingId);
         if (!response) {
             console.debug(`Invalid response returned syncing ${trackingId} with client ${this.client}`)
-            if (queued && queued.checked++ >= this.MAX_QUEUED_RETRIES) {
-                console.debug('Deleted queuedDao')
-                queuedDao.delete(queued.id!);
-            } else if (queued) {
+            if (alreadyQueued && alreadyQueued.checked++ >= this.MAX_QUEUED_RETRIES) {
+                console.debug('Deleting queued parcel: ' + alreadyQueued.id)
+                this.api.delete(`/v0/queue/${trackingId}`)
+            } else if (alreadyQueued) {
                 console.debug('Incremented queuedDao')
-                queuedDao.save(queued);
+                // queuedDao.save(queued);
+                this.api.patch(`/v0/queue/${alreadyQueued.id}/increment`)
             }
             return false;
         }
 
         // convert client response to a parcel
-        const parcelDto = this.client.createParcel(response);
+        console.debug('Creating parcel object from HTML response')
+        const parcelDto = await this.client.createParcel(response);
         if (!parcelDto) {
             console.warn(`Could not create parcel dto from response for ${trackingId}`);
             return false;
         }
 
         // merge parcels
+        console.debug('Merging parcels with DB objects')
         const [newParcel, mergedParcel] = this.mergeParcels(trackedParcel, parcelDto);
-        // delete queued if new parcel is being created 
-        if (newParcel) {
-            if (queued) {
-                await queuedDao.delete(queued.id!);
-            } else {
-                console.warn(`No queued parcel ${trackingId} existed`);
-            }
-        }
 
         mergedParcel.owner = owner;
 
@@ -84,7 +109,26 @@ class runner<T> {
         }
 
         // save parcel 
-        return (await parcelDao.save(mergedParcel)) != undefined;
+        console.debug('Saved and synced parcel, deleting from queue')
+        const savedParcel = await this.api.post(`/v0/parcel`, {
+            body: mergedParcel,
+            statusCode: 200,
+        }).catch(err => { 
+            console.log("Could not save synced parcel ", err)
+            return undefined;
+        })
+
+        // delete queued if new parcel is being created 
+        if (newParcel) {
+            if (alreadyQueued) {
+                console.debug('Saved and synced parcel, deleting from queue')
+                this.api.delete(`/v0/queue/${trackingId}`)
+            } else {
+                console.warn(`No queued parcel ${trackingId} existed`);
+            }
+        }
+
+        return savedParcel != undefined;
     }
 
     /**
@@ -95,7 +139,7 @@ class runner<T> {
      * @param parcelDto 
      * @returns [boolean,parcel]. true if parcel is new
      */
-    private mergeParcels(trackedParcel: parcel | undefined, parcelDto: Dto<parcel>): [boolean, parcel] {
+    private mergeParcels(trackedParcel: Dto<parcel> | undefined, parcelDto: Dto<parcel>): [boolean, Dto<parcel>] {
         let newSync: boolean = trackedParcel == undefined;
         if (trackedParcel) {
             // merge parcelDto with existing parcel 
