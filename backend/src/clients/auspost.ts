@@ -19,20 +19,19 @@ class auspost implements client<shipmentsResponse> {
 
     async sync(trackingId: string): Promise<shipmentsResponse | undefined> {
         console.debug(`Syncing auspost info for ${trackingId}`);
-        const response = await this.api.get(`shipmentsgatewayapi/watchlist/shipments/${trackingId}`,
+        const response = await this.api.get(`shipments-gateway/v1/watchlist/shipments/${trackingId}`,
             {
                 headers: {
-                    Origin: 'https://auspost.com.au',
-                    'accept-encoding': 'gzip, deflate, br',
-                    Referer: 'https://auspost.com.au/',
                     Host: 'digitalapi.auspost.com.au',
-                    Connection: 'keep-alive',
+                    'User-Agent' :'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:124.0) Gecko/20100101 Firefox/124.0',
                     Accept: 'application/json, text/plain, */*',
                     'Accept-Language': 'en-US,en;q=0.5',
-                    'Accept-Encoding':'gzip, deflate, br',
-                    'AP_CHANNEL_NAME': 'WEB_DETAIL',
+                    'Accept-Encoding': 'gzip, deflate, br, zstd',
                     'api-key': 'd11f9456-11c3-456d-9f6d-f7449cb9af8e',
-                    'User-Agent' :'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:124.0) Gecko/20100101 Firefox/124.0'
+                    'AP_CHANNEL_NAME': 'WEB_DETAIL',
+                    Origin: 'https://auspost.com.au',
+                    Connection: 'keep-alive',
+                    Referer: 'https://auspost.com.au/',
                 },
                 // error if 200 not received
                 statusCode: 200,

@@ -1,6 +1,6 @@
 import bent, { NodeResponse } from 'bent';
 
-export { api }
+export { api, getOptions }
 
 class api {
     host: string;
@@ -14,6 +14,7 @@ class api {
     }
 
     async get(path: string, options?: getOptions): Promise<bent.NodeResponse> {
+        console.debug(`GET: HOST=${this.host} PATH=${path}`)
         const url = this.buildUrl(path, options?.params);
         const request = bent<NodeResponse>('GET');
         const response = await request(url.toString(), undefined, this.buildHeaders(options?.headers));
@@ -53,7 +54,7 @@ class api {
         return response;
     }
 
-    private throwErrorOnWrongStatusCode(response: NodeResponse, _statusCodes?: number | number[]) {
+    protected throwErrorOnWrongStatusCode(response: NodeResponse, _statusCodes?: number | number[]) {
         if (_statusCodes) {
             const statusCodes: number[] = Array.isArray(_statusCodes) ? _statusCodes : [_statusCodes];
             if (!statusCodes.includes(response.statusCode)) {
@@ -68,7 +69,7 @@ class api {
      * @param headerKeyVal 
      * @returns 
      */
-    private buildHeaders(headerKeyVal?: { [key in string]: string | number }): Record<string, string | number> | undefined {
+    protected buildHeaders(headerKeyVal?: { [key in string]: string | number }): Record<string, string | number> | undefined {
         if (!headerKeyVal) return undefined;
 
         const headers: Record<string, string | number> = headerKeyVal ?? {}
@@ -81,7 +82,7 @@ class api {
         headers; // TS config complains that headers is unused otherwise
     }
 
-    private buildUrl(path: string, urlParams?: urlParams): URL {
+    protected buildUrl(path: string, urlParams?: urlParams): URL {
         let url: URL = new URL(path, this.host);
 
         if (urlParams) {

@@ -1,4 +1,6 @@
-import { api } from "./api";
+// import { HttpsProxyAgent } from "https-proxy-agent";
+import { api, getOptions } from "./api";
+import bent, { NodeResponse } from "bent";
 
 export { auspostApi }
 
@@ -23,14 +25,32 @@ class auspostApi extends api {
         // headers[auspostApi.HEADER_API_KEY] = process.env.API_KEY;
         // needed ? 
         headers[auspostApi.HEADER_AP_CHANNEL_NAME] = 'WEB_DETAIL';
-        if (!headers['Accept']) {
-            console.debug('default Accept header is application/json');
-            headers['Accept'] = 'application/json';
-        }
+        // if (!headers['Accept']) {
+        //     console.debug('default Accept header is application/json');
+        //     headers['Accept'] = 'application/json';
+        // }
         if (!headers['User-Agent']) {
             console.debug('Adding default User-Agent');
             headers['User-Agent'] = auspostApi.DEF_USER_AGENT;
         }
     }
+
+    // override async get<T>(path:string, options: getOptions | undefined) : Promise<T> { 
+    //     console.debug(`USING PROXY GET: HOST=${this.host} PATH=${path}`)
+    //     const url = this.buildUrl(path, options?.params);
+                
+    //     // Define the proxy URL
+    //     const proxyUrl = 'http://199.21.172.114:3128'; // Replace with your proxy details
+    //     const agent = new HttpsProxyAgent(proxyUrl);
+
+    //     const request = bent<NodeResponse>('GET', { 
+    //         agent
+    //     });
+    //     const response = await request(url.toString(), undefined, this.buildHeaders(options?.headers));
+
+    //     this.throwErrorOnWrongStatusCode(response, options?.statusCode)
+
+    //     return response as any as T;
+    // }
 
 }

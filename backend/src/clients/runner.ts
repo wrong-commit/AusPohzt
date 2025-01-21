@@ -8,8 +8,6 @@ import { client as clientType } from "./client";
 
 export { runner }
 
-const parcelDao = daoFactory(parcel);
-const queuedDao = daoFactory(queued);
 /**
  * Runner created to fetch data from generic client object
  */
@@ -21,13 +19,13 @@ class runner<T> {
     /**
      * API Client used by the runner to update our parcel information
      */
-    api: api;
+    ourApi: api;
 
     MAX_QUEUED_RETRIES: number = 3;
 
     constructor(client: clientType<T>, _api: api) {
         this.client = client;
-        this.api = _api;
+        this.ourApi = _api;
         console.log(`runner() with client ${JSON.stringify(this.client, null, 2)}`)
     }
 
@@ -41,7 +39,7 @@ class runner<T> {
     async sync(trackingId: string, owner: number): Promise<boolean> {
         console.log(`Syncing ${trackingId}...`)
         // Does disabled parcel exist
-        let disabledParcel = (await this.api.get(`/v0/parcel?disabled=true`)
+        let disabledParcel = (await this.ourApi.get(`/v0/parcel?disabled=true`)
             .then(x => x.json())
             //@ts-expect-error
             .then(x => x.map(dto => new parcel(dto as any).toData()))
@@ -50,13 +48,13 @@ class runner<T> {
             }) ?? [])
             //@ts-expect-error
             .filter(x => x.trackingId === trackingId);
-        let trackedParcel = await this.api.get(`/v0/parcel/${trackingId}`).catch(() => undefined)
+        let trackedParcel = await this.ourApi.get(`/v0/parcel/${trackingId}`).catch(() => undefined)
             .then(x => x?.json())
             .then(x => {if(x != undefined) return new parcel(x as any).toData(); return undefined})
             .catch(e => {
                 console.log("Could not map parcel dto", e)
             }) ?? undefined;
-        let queuedParcels = await this.api.get(`/v0/queue`).catch(() => undefined)
+        let queuedParcels = await this.ourApi.get(`/v0/queue`).catch(() => undefined)
             .then(x => x?.json())
             //@ts-expect-error
             .then(x => x?.map(dto => new queued(dto as any).toData()))
@@ -77,11 +75,11 @@ class runner<T> {
             console.debug(`Invalid response returned syncing ${trackingId} with client ${this.client}`)
             if (alreadyQueued && alreadyQueued.checked++ >= this.MAX_QUEUED_RETRIES) {
                 console.debug('Deleting queued parcel: ' + alreadyQueued.id)
-                this.api.delete(`/v0/queue/${trackingId}`)
+                this.ourApi.delete(`/v0/queue/${trackingId}`)
             } else if (alreadyQueued) {
                 console.debug('Incremented queuedDao')
                 // queuedDao.save(queued);
-                this.api.patch(`/v0/queue/${alreadyQueued.id}/increment`)
+                this.ourApi.patch(`/v0/queue/${alreadyQueued.id}/increment`)
             }
             return false;
         }
@@ -110,7 +108,7 @@ class runner<T> {
 
         // save parcel 
         console.debug('Saved and synced parcel, deleting from queue')
-        const savedParcel = await this.api.post(`/v0/parcel`, {
+        const savedParcel = await this.ourApi.post(`/v0/parcel`, {
             body: mergedParcel,
             statusCode: 200,
         }).catch(err => { 
@@ -122,7 +120,7 @@ class runner<T> {
         if (newParcel) {
             if (alreadyQueued) {
                 console.debug('Saved and synced parcel, deleting from queue')
-                this.api.delete(`/v0/queue/${trackingId}`)
+                this.ourApi.delete(`/v0/queue/${trackingId}`)
             } else {
                 console.warn(`No queued parcel ${trackingId} existed`);
             }

@@ -15,19 +15,20 @@ const runnerInterval = process.env.RUNNER_INTERVAL_MS ?? 60000;
 // 600,000 ms/10 mins
 const syncInterval = process.env.SYNC_INTERVAL_MS ?? 600000;
 
-function syncTrackingId(client: api, id: string, owner: number): Promise<boolean> {
-    const runn = new runner(new auspost(auspostApi.init('https://auspost.com.au/')), client)
+function syncTrackingId(ourApi: api, id: string, owner: number): Promise<boolean> {
+    const runn = new runner(new auspost(auspostApi.init('https://digitalapi.auspost.com.au/')), ourApi)
     return runn.sync(id, owner);
 }
 
 // get trackingIds from API 
-async function startQueuedIds(client: api): Promise<string[]> {
-    const response = await client.get('/v0/queue');
+async function startQueuedIds(ourApi: api): Promise<string[]> {
+    const response = await ourApi.get('/v0/queue');
+    // console.log(JSON.stringify(response))
 
-    const queuedParcels = await (response.json() as Promise<Dto<queued>[]>);
+    const queuedParcels = (await response.json() as Dto<queued>[]);
 
     for (const x of queuedParcels) {
-        const synced = await syncTrackingId(client, x.trackingId, x.owner);
+        const synced = await syncTrackingId(ourApi, x.trackingId, x.owner);
         console.log(`Tracking Id ${x.trackingId} synced ${synced}`);
         // TODO: increment hashmap of trackingIds that counts sync failures. disable parcel at 3rd retry
     }
@@ -37,9 +38,9 @@ async function startQueuedIds(client: api): Promise<string[]> {
 
 async function main() {
     // crappy, api class enforces auspost headers on all requests
-    const client = jwtApi.initWithToken(process.env.API_URL, process.env.API_TOKEN);
+    const ourApi = jwtApi.initWithToken(process.env.API_URL, process.env.API_TOKEN);
 
-    await startQueuedIds(client);
+    await startQueuedIds(ourApi);
     // iterate over other parcels, check when last synced
 
     // const resp = await client.get('/v0/parcel?disabled=true');
