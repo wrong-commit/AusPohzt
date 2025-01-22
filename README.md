@@ -37,7 +37,7 @@ Run the application under docker
 ## Screenshots
 
 Parcel tracking UI showing delivery events for delivered package
-![auspost_screenshot](https://github.com/wrong-commit/AusPohzt/assets/44012200/43e2fc00-4dea-489d-9098-48f061859f9b)
+![auspost_screenshot](./screenshots/ui.png)
 
 ## TODO 
 General todo list. Some far fetched things like multi-user support, multiple package providers, etc
